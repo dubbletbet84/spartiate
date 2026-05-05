@@ -194,7 +194,7 @@
 
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supa.js"></script>
+  <script src="js/firebase.js"></script>
 </head>
 <body>
 
@@ -453,14 +453,9 @@
   <script>
 
     async function loadHomeHistorique() {
-      const { data, error } = await supa
-        .from('historique')
-        .select('date_match, sport, match, prono, cote, resultat')
-        .order('date_match', { ascending: false })
-        .limit(5);
-
       const tbody = document.getElementById('home-histo-body');
-      if (error || !data?.length) {
+      const { data, error } = await supa.from('historique').select('*').order('date_match', { ascending: false }).limit(5);
+      if (error || !data.length) {
         tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:1.5rem;color:var(--text-muted);font-size:.85rem;">Aucun résultat disponible.</td></tr>';
         return;
       }

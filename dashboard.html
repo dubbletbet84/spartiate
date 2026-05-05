@@ -16,7 +16,7 @@
 
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supa.js"></script>
+  <script src="js/firebase.js"></script>
 </head>
 <body>
 
@@ -247,18 +247,16 @@
     // ── Pronos du jour ──
     async function loadPronos() {
       const today = new Date().toISOString().slice(0,10);
-      const { data, error } = await supa
-        .from('pronos')
-        .select('*')
-        .eq('date_match', today)
-        .order('created_at', { ascending: true });
-
-      const grid = document.getElementById('prono-grid');
-      if (error || !data?.length) {
+      const grid  = document.getElementById('prono-grid');
+      const { data, error } = await supa.from('pronos').select('*').eq('date_match', today);
+      if (error) {
+        grid.innerHTML = '<p style="color:var(--red);padding:1rem;">Erreur de chargement.</p>';
+        return;
+      }
+      if (!data.length) {
         grid.innerHTML = '<p style="color:var(--text-muted);padding:1rem;">Aucun pronostic pour aujourd\'hui.</p>';
         return;
       }
-
       grid.innerHTML = data.map(p => {
         const equipes = p.match.split(/\s+[-—vs]+\s+/i);
         const eq1 = equipes[0] || p.match;
@@ -292,18 +290,16 @@
 
     // ── Historique récent ──
     async function loadHistorique() {
-      const { data, error } = await supa
-        .from('historique')
-        .select('*')
-        .order('date_match', { ascending: false })
-        .limit(5);
-
       const tbody = document.getElementById('dash-histo-body');
-      if (error || !data?.length) {
+      const { data, error } = await supa.from('historique').select('*').order('date_match', { ascending: false }).limit(5);
+      if (error) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:1rem;color:var(--red);">Erreur de chargement.</td></tr>';
+        return;
+      }
+      if (!data.length) {
         tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:1rem;color:var(--text-muted);">Aucun historique disponible.</td></tr>';
         return;
       }
-
       tbody.innerHTML = data.map(r => {
         const icon = SPORT_ICON[r.sport] || '🏅';
         const res  = r.resultat === 'gagné'

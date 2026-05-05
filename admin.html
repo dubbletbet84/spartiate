@@ -7,7 +7,7 @@
   <meta name="robots" content="noindex, nofollow">
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supa.js"></script>
+  <script src="js/firebase.js"></script>
   <style>
     body { background: #0F172A; min-height: 100vh; }
 
@@ -265,27 +265,22 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    // ── Auth Supabase réelle (plus de mot de passe en clair) ──
-    async function checkPassword() {
+    const ADMIN_USER = 'sodim84';
+    const ADMIN_PWD  = 'thube.spart84';
+
+    function checkPassword() {
       const user = document.getElementById('admin-user').value.trim();
       const pwd  = document.getElementById('admin-pwd').value;
-      const btn  = document.querySelector('.btn-admin');
-      btn.disabled = true; btn.textContent = 'Connexion…';
-
-      // L'identifiant sodim84 est mappé à l'email admin Supabase
-      const email = user === 'sodim84' ? 'admin@spartiate-prono.fr' : user;
-      const { data, error } = await supa.auth.signInWithPassword({ email, password: pwd });
-
-      btn.disabled = false; btn.textContent = 'Entrer';
-      if (error || !data.session) {
+      if (user === ADMIN_USER && pwd === ADMIN_PWD) {
+        sessionStorage.setItem('admin_ok', '1');
+        showPanel();
+      } else {
         document.getElementById('pwd-error').style.display = 'block';
-        return;
       }
-      showPanel();
     }
 
-    async function logout() {
-      await supa.auth.signOut();
+    function logout() {
+      sessionStorage.removeItem('admin_ok');
       location.reload();
     }
 
@@ -295,6 +290,8 @@
       document.getElementById('f-date').value = new Date().toISOString().slice(0, 10);
       loadPronos();
     }
+
+    if (sessionStorage.getItem('admin_ok') === '1') showPanel();
 
     // ── Toast ──
     function showToast(msg, type = 'success') {
@@ -306,35 +303,31 @@
 
     // ── Charger pronos ──
     async function loadPronos() {
-      const { data, error } = await supa
-        .from('pronos').select('*').order('date_match', { ascending: false });
-
       const tbody = document.getElementById('admin-tbody');
+      const { data, error } = await supa.from('pronos').select('*').order('date_match', { ascending: false });
       if (error) {
         tbody.innerHTML = `<tr><td colspan="7" style="color:#EF4444;padding:1rem;">Erreur : ${esc(error.message)}</td></tr>`;
         return;
       }
-
       document.getElementById('prono-count').textContent = data.length;
       const catClass = { Safe:'ba-safe', Risqué:'ba-risque', Jackpot:'ba-jackpot' };
-
-      tbody.innerHTML = data.map(p => `
+      tbody.innerHTML = data.length ? data.map(p => `
         <tr id="row-${p.id}">
           <td style="white-space:nowrap;">${new Date(p.date_match).toLocaleDateString('fr-FR')}</td>
           <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${esc(p.match)}">${esc(p.match)}</td>
           <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${esc(p.prono)}">${esc(p.prono)}</td>
           <td>${esc(String(p.cote ?? '—'))}</td>
-          <td><span class="badge-admin ${catClass[p.categorie] || ''}">${esc(p.categorie)}</span></td>
+          <td><span class="badge-admin ${catClass[p.categorie]||''}">${esc(p.categorie)}</span></td>
           <td>
-            <select class="status-select status-${esc(p.statut)}" onchange="updateStatut(${p.id}, this)">
-              <option value="en_attente" ${p.statut === 'en_attente' ? 'selected' : ''}>⏳ En attente</option>
-              <option value="validé"     ${p.statut === 'validé'     ? 'selected' : ''}>✅ Validé</option>
-              <option value="refusé"     ${p.statut === 'refusé'     ? 'selected' : ''}>❌ Refusé</option>
+            <select class="status-select status-${esc(p.statut)}" onchange="updateStatut('${p.id}', this)">
+              <option value="en_attente" ${p.statut==='en_attente'?'selected':''}>⏳ En attente</option>
+              <option value="validé"     ${p.statut==='validé'    ?'selected':''}>✅ Validé</option>
+              <option value="refusé"     ${p.statut==='refusé'    ?'selected':''}>❌ Refusé</option>
             </select>
           </td>
-          <td><button class="btn-del" onclick="deleteProno(${p.id})">Suppr.</button></td>
-        </tr>
-      `).join('');
+          <td><button class="btn-del" onclick="deleteProno('${p.id}')">Suppr.</button></td>
+        </tr>`).join('')
+        : '<tr><td colspan="7" style="text-align:center;padding:2rem;color:#64748B;">Aucun pronostic.</td></tr>';
     }
 
     // ── Ajouter prono ──
@@ -342,7 +335,6 @@
       e.preventDefault();
       const btn = e.submitter;
       btn.disabled = true; btn.textContent = 'Publication…';
-
       const payload = {
         date_match:        document.getElementById('f-date').value,
         sport:             document.getElementById('f-sport').value,
@@ -354,15 +346,18 @@
         abonnement_requis: [...document.querySelectorAll('.f-abo:checked')].map(c => c.value).join(',') || 'spartiate_starter',
         notes:             document.getElementById('f-notes').value.trim() || null,
         statut:            'en_attente',
+        created_at:        new Date().toISOString(),
       };
-
       const { error } = await supa.from('pronos').insert([payload]);
+      if (error) {
+        showToast('Erreur : ' + error.message, 'error');
+      } else {
+        showToast('✅ Pronostic publié !');
+        document.getElementById('prono-form').reset();
+        document.getElementById('f-date').value = new Date().toISOString().slice(0, 10);
+        loadPronos();
+      }
       btn.disabled = false; btn.textContent = 'Publier le pronostic';
-      if (error) { showToast('Erreur : ' + error.message, 'error'); return; }
-      showToast('✅ Pronostic publié !');
-      document.getElementById('prono-form').reset();
-      document.getElementById('f-date').value = new Date().toISOString().slice(0, 10);
-      loadPronos();
     }
 
     // ── Mettre à jour le statut ──
@@ -370,21 +365,21 @@
       const newStatut = sel.value;
       sel.className = `status-select status-${newStatut}`;
       const { error } = await supa.from('pronos').update({ statut: newStatut }).eq('id', id);
-      if (error) { showToast('Erreur mise à jour', 'error'); return; }
-
-      // Archivage automatique dans historique
+      if (error) { showToast('Erreur : ' + error.message, 'error'); return; }
       if (newStatut === 'validé' || newStatut === 'refusé') {
-        const { data } = await supa.from('pronos').select('*').eq('id', id).single();
-        if (data) {
+        const { data: rows } = await supa.from('pronos').select('*').eq('id', id).single();
+        const p = rows;
+        if (p) {
           const resultat = newStatut === 'validé' ? 'gagné' : 'perdu';
-          const miseVal  = parseFloat(data.mise) || 2;
+          const miseVal  = parseFloat(p.mise) || 2;
           const gain     = newStatut === 'validé'
-            ? parseFloat(((parseFloat(data.cote) - 1) * miseVal).toFixed(2))
+            ? parseFloat(((parseFloat(p.cote) - 1) * miseVal).toFixed(2))
             : -miseVal;
           await supa.from('historique').insert([{
-            prono_id: data.id, date_match: data.date_match, sport: data.sport,
-            match: data.match, prono: data.prono, cote: data.cote, mise: data.mise,
-            resultat, gain_unites: gain, categorie: data.categorie,
+            prono_id: id, date_match: p.date_match, sport: p.sport,
+            match: p.match, prono: p.prono, cote: p.cote, mise: p.mise,
+            resultat, gain_unites: gain, categorie: p.categorie,
+            created_at: new Date().toISOString(),
           }]);
         }
       }
@@ -402,10 +397,6 @@
       count.textContent = parseInt(count.textContent) - 1;
     }
 
-    // ── Vérification session au chargement ──
-    supa.auth.getSession().then(({ data: { session } }) => {
-      if (session) showPanel();
-    });
   </script>
 
 </body>

@@ -335,7 +335,7 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supa.js"></script>
+  <script src="js/firebase.js"></script>
   <script>
     const SPORT_MAP = {
       Football:   { key:'foot', pill:'pill-foot', icon:'⚽' },
@@ -358,21 +358,15 @@
 
     async function loadHistorique() {
       const tbody = document.getElementById('histo-body');
-      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:2rem; color:var(--text-muted);">Chargement…</td></tr>';
-
-      const { data, error } = await supa
-        .from('historique')
-        .select('*')
-        .order('date_match', { ascending: false });
-
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-muted);">Chargement…</td></tr>';
+      const { data, error } = await supa.from('historique').select('*').order('date_match', { ascending: false });
       if (error) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:2rem; color:var(--red);">Erreur de chargement.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--red);">Erreur de chargement.</td></tr>';
         return;
       }
-
       allRows = data;
-      updateKPIs(data);
-      renderRows(data);
+      updateKPIs(allRows);
+      renderRows(allRows);
     }
 
     function updateKPIs(data) {
