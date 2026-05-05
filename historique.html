@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Historique des Pronostics — SPARTIATE</title>
+  <meta name="description" content="Consultez l'historique complet de tous les pronostics SPARTIATE : résultats, taux de réussite, sports et analyses passées.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://www.spartiate-prono.fr/historique.html">
+  <meta name="theme-color" content="#CC1414">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Historique des Pronostics — SPARTIATE",
+    "url": "https://www.spartiate-prono.fr/historique.html",
+    "description": "Historique complet des pronostics sportifs SPARTIATE avec résultats et statistiques.",
+    "inLanguage": "fr-FR",
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil",    "item": "https://www.spartiate-prono.fr/" },
+        { "@type": "ListItem", "position": 2, "name": "Historique", "item": "https://www.spartiate-prono.fr/historique.html" }
+      ]
+    }
+  }
+  </script>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .filters { display:flex; gap:.8rem; flex-wrap:wrap; margin-bottom:2rem; align-items:center; }
+    .filter-btn {
+      padding:.42rem 1.1rem; border-radius:20px; border:1px solid var(--border);
+      background:var(--white); color:var(--text-muted); font-family:inherit;
+      font-size:.82rem; font-weight:600; cursor:pointer; transition:all .18s;
+    }
+    .filter-btn:hover, .filter-btn.active { background:var(--blue-btn); color:#fff; border-color:var(--blue-btn); }
+    .filter-btn.sport-active { background:var(--red); border-color:var(--red); color:#fff; }
+
+    .histo-table { width:100%; border-collapse:collapse; }
+    .histo-table thead th {
+      background:#F8FAFC; padding:.75rem 1rem; text-align:left;
+      font-size:.76rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:.5px; color:var(--text-muted);
+      border-bottom:2px solid var(--border); white-space:nowrap;
+    }
+    .histo-table thead th.sortable { cursor:pointer; user-select:none; }
+    .histo-table thead th.sortable:hover { color:var(--blue-title); }
+    .histo-table tbody td { padding:.8rem 1rem; font-size:.86rem; border-bottom:1px solid #F1F5F9; color:var(--text); vertical-align:middle; }
+    .histo-table tbody tr:hover td { background:#FAFBFF; }
+
+    .result-won  { color:var(--green); font-weight:700; }
+    .result-lost { color:var(--red);   font-weight:700; }
+    .result-push { color:var(--gold);  font-weight:700; }
+
+    .sport-pill {
+      display:inline-flex; align-items:center; gap:.3rem;
+      padding:.22rem .7rem; border-radius:12px; font-size:.74rem; font-weight:600;
+    }
+    .pill-foot { background:#EFF6FF; color:#1D4ED8; }
+    .pill-bask { background:#FFF7ED; color:#C2410C; }
+    .pill-tenn { background:#F0FDF4; color:#15803D; }
+    .pill-rugy { background:#FDF4FF; color:#7E22CE; }
+    .pill-hock { background:#F0F9FF; color:#0369A1; }
+    .pill-boxe { background:#FFF1F2; color:#BE123C; }
+
+    .kpi-band {
+      display:grid; grid-template-columns:repeat(auto-fit, minmax(160px,1fr));
+      gap:1.2rem; margin-bottom:3rem;
+    }
+    .kpi {
+      background:var(--white); border:1px solid var(--border); border-radius:12px;
+      padding:1.3rem 1.5rem; box-shadow:0 1px 4px rgba(0,0,0,.05);
+    }
+    .kpi .kpi-val { font-size:2rem; font-weight:900; color:var(--blue-title); line-height:1; }
+    .kpi .kpi-val.green { color:var(--green); }
+    .kpi .kpi-val.red   { color:var(--red); }
+    .kpi .kpi-label { font-size:.74rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:.8px; margin-top:.3rem; }
+
+    .pagination { display:flex; justify-content:center; gap:.5rem; margin-top:2rem; flex-wrap:wrap; }
+    .page-btn {
+      width:36px; height:36px; border-radius:6px; border:1px solid var(--border);
+      background:var(--white); color:var(--text-muted); font-family:inherit;
+      font-size:.84rem; font-weight:600; cursor:pointer; transition:all .18s;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .page-btn:hover, .page-btn.active { background:var(--blue-btn); color:#fff; border-color:var(--blue-btn); }
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-box"><img src="logo.svg" alt="SPARTIATE — Pronostics Sportifs Premium"></div>
+      </a>
+      <nav class="nav">
+        <a href="historique.html"  class="nav-btn active">Historique</a>
+        <a href="affiliation.html" class="nav-btn">Affiliation</a>
+      </nav>
+      <div class="search-wrap">
+        <input type="text" placeholder="Rechercher un sport, un prono…">
+        <span class="search-icon">🔍</span>
+      </div>
+      <a href="login.html" class="btn-connect">Se Connecter</a>
+    </div>
+  </header>
+
+  <!-- ── HERO BAND ── -->
+  <div style="background:linear-gradient(135deg,#0D1B3E,#0F172A); padding:50px 0 40px;">
+    <div style="max-width:1180px; margin:0 auto; padding:0 2rem;">
+      <span class="hero-tag">📊 Transparence totale</span>
+      <h1 style="font-size:2.4rem; font-weight:900; color:#fff; margin:.8rem 0 .6rem; max-width:620px; line-height:1.2;">
+        Historique des <em style="color:var(--red); font-style:normal;">Pronostics</em>
+      </h1>
+      <p style="color:#94A3B8; font-size:1rem; max-width:520px; line-height:1.65;">
+        Retrouvez tous nos pronostics passés avec leurs résultats. Chez SPARTIATE, la transparence est au cœur de notre démarche.
+      </p>
+    </div>
+  </div>
+
+  <!-- ── MAIN ── -->
+  <main style="background:var(--section-alt); padding:60px 0;">
+    <div class="container">
+
+      <!-- KPI -->
+      <div class="kpi-band">
+        <div class="kpi">
+          <div class="kpi-val">342</div>
+          <div class="kpi-label">Pronos publiés</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-val green">297</div>
+          <div class="kpi-label">Gagnants</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-val red">45</div>
+          <div class="kpi-label">Perdants</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-val">87%</div>
+          <div class="kpi-label">Taux de réussite</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-val" style="color:var(--gold);">+218u</div>
+          <div class="kpi-label">Unités gagnées</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-val">1.94</div>
+          <div class="kpi-label">Cote moyenne</div>
+        </div>
+      </div>
+
+      <!-- Filtres -->
+      <div class="filters">
+        <span style="font-size:.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.5px;">Filtrer :</span>
+        <button class="filter-btn active" onclick="filterSport('tous', this)">Tous</button>
+        <button class="filter-btn" onclick="filterSport('foot', this)">⚽ Football</button>
+        <button class="filter-btn" onclick="filterSport('bask', this)">🏀 Basketball</button>
+        <button class="filter-btn" onclick="filterSport('tenn', this)">🎾 Tennis</button>
+        <button class="filter-btn" onclick="filterSport('rugy', this)">🏉 Rugby</button>
+        <button class="filter-btn" onclick="filterSport('hock', this)">🏒 Hockey</button>
+        <button class="filter-btn" onclick="filterSport('boxe', this)">🥊 Boxe/MMA</button>
+        <div style="margin-left:auto; display:flex; gap:.6rem;">
+          <button class="filter-btn" onclick="filterResult('tous', this)">Tous résultats</button>
+          <button class="filter-btn" onclick="filterResult('won', this)">✅ Gagnés</button>
+          <button class="filter-btn" onclick="filterResult('lost', this)">❌ Perdus</button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div style="background:var(--white); border:1px solid var(--border); border-radius:14px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.06);">
+        <table class="histo-table" id="histo-table">
+          <thead>
+            <tr>
+              <th class="sortable" onclick="sortTable(0)">Date ↕</th>
+              <th>Sport</th>
+              <th>Match</th>
+              <th>Pronostic</th>
+              <th class="sortable" onclick="sortTable(4)">Cote ↕</th>
+              <th>Statut</th>
+              <th class="sortable" onclick="sortTable(6)">Résultat ↕</th>
+            </tr>
+          </thead>
+          <tbody id="histo-body">
+            <tr data-sport="foot" data-result="won">
+              <td>03/05/2026</td>
+              <td><span class="sport-pill pill-foot">⚽ Football</span></td>
+              <td>Real Madrid — Barcelone</td>
+              <td>Plus de 2,5 buts</td>
+              <td>1.75</td>
+              <td><span class="badge badge-safe" style="font-size:.7rem;">Safe</span></td>
+              <td class="result-won">✓ Gagné</td>
+            </tr>
+            <tr data-sport="bask" data-result="lost">
+              <td>02/05/2026</td>
+              <td><span class="sport-pill pill-bask">🏀 Basketball</span></td>
+              <td>Miami Heat — Chicago Bulls</td>
+              <td>Miami -3,5</td>
+              <td>1.90</td>
+              <td><span class="badge badge-risky" style="font-size:.7rem;">Risqué</span></td>
+              <td class="result-lost">✗ Perdu</td>
+            </tr>
+            <tr data-sport="tenn" data-result="won">
+              <td>01/05/2026</td>
+              <td><span class="sport-pill pill-tenn">🎾 Tennis</span></td>
+              <td>Sinner — Zverev</td>
+              <td>Sinner en 3 sets</td>
+              <td>2.20</td>
+              <td><span class="badge badge-jackpot" style="font-size:.7rem;">Jackpot</span></td>
+              <td class="result-won">✓ Gagné</td>
+            </tr>
+            <tr data-sport="foot" data-result="won">
+              <td>30/04/2026</td>
+              <td><span class="sport-pill pill-foot">⚽ Football</span></td>
+              <td>Bayern — Dortmund</td>
+              <td>Victoire Bayern</td>
+              <td>1.55</td>
+              <td><span class="badge badge-safe" style="font-size:.7rem;">Safe</span></td>
+              <td class="result-won">✓ Gagné</td>
+            </tr>
+            <tr data-sport="rugy" data-result="won">
+              <td>29/04/2026</td>
+              <td><span class="sport-pill pill-rugy">🏉 Rugby</span></td>
+              <td>Toulouse — La Rochelle</td>
+              <td>Toulouse -5</td>
+              <td>1.80</td>
+              <td><span class="badge badge-safe" style="font-size:.7rem;">Safe</span></td>
+              <td class="result-won">✓ Gagné</td>
+            </tr>
+            <tr data-sport="bask" data-result="won">
+              <td>28/04/2026</td>
+              <td><span class="sport-pill pill-bask">🏀 Basketball</span></td>
+              <td>Boston Celtics — NY Knicks</td>
+              <td>Boston Victoire</td>
+              <td>1.65</td>
+              <td><span class="badge badge-safe" style="font-size:.7rem;">Safe</span></td>
+              <td class="result-won">✓ Gagné</td>
+            </tr>
+            <tr data-sport="hock" data-result="won">
+              <td>27/04/2026</td>
+              <td><span class="sport-pill pill-hock">🏒 Hockey</span></td>
+              <td>Tampa Bay — Florida</td>
+              <td>Plus de 5,5 buts</td>
+              <td>2.10</td>
+              <td><span class="badge badge-risky" style="font-size:.7rem;">Risqué</span></td>
+              <td class="result-won">✓ Gagné</td>
+            </tr>
+            <tr data-sport="foot" data-result="lost">
+              <td>26/04/2026</td>
+              <td><span class="sport-pill pill-foot">⚽ Football</span></td>
+              <td>Chelsea — Arsenal</td>
+              <td>Match nul</td>
+              <td>3.50</td>
+              <td><span class="badge badge-risky" style="font-size:.7rem;">Risqué</span></td>
+              <td class="result-lost">✗ Perdu</td>
+            </tr>
+            <tr data-sport="tenn" data-result="won">
+              <td>25/04/2026</td>
+              <td><span class="sport-pill pill-tenn">🎾 Tennis</span></td>
+              <td>Alcaraz — Medvedev</td>
+              <td>Alcaraz Victoire</td>
+              <td>1.70</td>
+              <td><span class="badge badge-safe" style="font-size:.7rem;">Safe</span></td>
+              <td class="result-won">✓ Gagné</td>
+            </tr>
+            <tr data-sport="boxe" data-result="won">
+              <td>24/04/2026</td>
+              <td><span class="sport-pill pill-boxe">🥊 Boxe/MMA</span></td>
+              <td>UFC 310 — Main Event</td>
+              <td>Victoire par KO</td>
+              <td>2.80</td>
+              <td><span class="badge badge-jackpot" style="font-size:.7rem;">Jackpot</span></td>
+              <td class="result-won">✓ Gagné</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination">
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">…</button>
+        <button class="page-btn">34</button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo-box"><img src="logo.svg" alt="SPARTIATE"></div>
+        <p>Des pronostics fiables, des analyses expertes et une communauté de gagnants.</p>
+      </div>
+
+      <div class="footer-col">
+        <h5>Navigation</h5>
+        <a href="index.html">Accueil</a>
+        <a href="historique.html">Historique</a>
+        <a href="affiliation.html">Affiliation</a>
+        <a href="login.html">Mon Compte</a>
+      </div>
+
+      <div class="footer-col">
+        <h5>Légal</h5>
+        <a href="mentions-legales.html">Mentions légales</a>
+        <a href="cgu.html">CGU</a>
+        <a href="confidentialite.html">Confidentialité</a>
+        <a href="jeu-responsable.html">Jeu responsable</a>
+      </div>
+
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <a href="https://www.instagram.com/spartiates_pronos/" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:.4rem;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>@spartiates_pronos</a>
+        <a href="mailto:support@spartiate-prono.fr">support@spartiate-prono.fr</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 SPARTIATE — Tous droits réservés. Les paris sportifs comportent des risques. Jouez de façon responsable.</p>
+      <div class="footer-legal">
+        <a href="cgu.html">CGU</a>
+        <a href="confidentialite.html">Confidentialité</a>
+        <a href="confidentialite.html">Cookies</a>
+      </div>
+    </div>
+  
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supa.js"></script>
+  <script>
+    const SPORT_MAP = {
+      Football:   { key:'foot', pill:'pill-foot', icon:'⚽' },
+      Basketball: { key:'bask', pill:'pill-bask', icon:'🏀' },
+      Tennis:     { key:'tenn', pill:'pill-tenn', icon:'🎾' },
+      Rugby:      { key:'rugy', pill:'pill-rugy', icon:'🏉' },
+      Hockey:     { key:'hock', pill:'pill-hock', icon:'🏒' },
+      'Boxe/MMA': { key:'boxe', pill:'pill-boxe', icon:'🥊' },
+    };
+
+    const CAT_MAP = {
+      Safe:    '<span class="badge badge-safe"    style="font-size:.7rem;">Safe</span>',
+      Risqué:  '<span class="badge badge-risky"   style="font-size:.7rem;">Risqué</span>',
+      Jackpot: '<span class="badge badge-jackpot" style="font-size:.7rem;">Jackpot</span>',
+    };
+
+    let allRows = [];
+    let currentSport  = 'tous';
+    let currentResult = 'tous';
+
+    async function loadHistorique() {
+      const tbody = document.getElementById('histo-body');
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:2rem; color:var(--text-muted);">Chargement…</td></tr>';
+
+      const { data, error } = await supa
+        .from('historique')
+        .select('*')
+        .order('date_match', { ascending: false });
+
+      if (error) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:2rem; color:var(--red);">Erreur de chargement.</td></tr>';
+        return;
+      }
+
+      allRows = data;
+      updateKPIs(data);
+      renderRows(data);
+    }
+
+    function updateKPIs(data) {
+      const total   = data.length;
+      const gagnes  = data.filter(r => r.resultat === 'gagné').length;
+      const perdus  = data.filter(r => r.resultat === 'perdu').length;
+      const taux    = total ? Math.round(gagnes / total * 100) : 0;
+      const unites  = data.reduce((s, r) => s + (parseFloat(r.gain_unites) || 0), 0);
+      const cotes   = data.filter(r => r.cote).map(r => parseFloat(r.cote));
+      const coteMoy = cotes.length ? (cotes.reduce((a,b)=>a+b,0)/cotes.length).toFixed(2) : '—';
+
+      document.querySelector('.kpi-band').innerHTML = `
+        <div class="kpi"><div class="kpi-val">${total}</div><div class="kpi-label">Pronos publiés</div></div>
+        <div class="kpi"><div class="kpi-val green">${gagnes}</div><div class="kpi-label">Gagnants</div></div>
+        <div class="kpi"><div class="kpi-val red">${perdus}</div><div class="kpi-label">Perdants</div></div>
+        <div class="kpi"><div class="kpi-val">${taux}%</div><div class="kpi-label">Taux de réussite</div></div>
+        <div class="kpi"><div class="kpi-val" style="color:var(--gold);">${unites>=0?'+':''}${unites.toFixed(1)}u</div><div class="kpi-label">Unités gagnées</div></div>
+        <div class="kpi"><div class="kpi-val">${coteMoy}</div><div class="kpi-label">Cote moyenne</div></div>
+      `;
+    }
+
+    function renderRows(data) {
+      const tbody = document.getElementById('histo-body');
+      if (!data.length) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:2rem; color:var(--text-muted);">Aucun résultat.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = data.map(r => {
+        const s   = SPORT_MAP[r.sport] || { key:'foot', pill:'pill-foot', icon:'🏅' };
+        const res = r.resultat === 'gagné'
+          ? '<td class="result-won">✓ Gagné</td>'
+          : '<td class="result-lost">✗ Perdu</td>';
+        const d = new Date(r.date_match);
+        const dateStr = d.toLocaleDateString('fr-FR');
+        return `<tr data-sport="${s.key}" data-result="${r.resultat==='gagné'?'won':'lost'}">
+          <td>${dateStr}</td>
+          <td><span class="sport-pill ${s.pill}">${s.icon} ${esc(r.sport)}</span></td>
+          <td>${esc(r.match)}</td>
+          <td>${esc(r.prono)}</td>
+          <td>${r.cote ?? '—'}</td>
+          <td>${CAT_MAP[r.categorie] ?? r.categorie}</td>
+          ${res}
+        </tr>`;
+      }).join('');
+    }
+
+    function filterSport(sport, btn) {
+      currentSport = sport;
+      document.querySelectorAll('.filters .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyFilters();
+    }
+
+    function filterResult(result, btn) {
+      currentResult = result;
+      btn.closest('div').querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyFilters();
+    }
+
+    function applyFilters() {
+      let filtered = allRows;
+      if (currentSport !== 'tous') {
+        filtered = filtered.filter(r => (SPORT_MAP[r.sport]||{}).key === currentSport);
+      }
+      if (currentResult === 'won')  filtered = filtered.filter(r => r.resultat === 'gagné');
+      if (currentResult === 'lost') filtered = filtered.filter(r => r.resultat === 'perdu');
+      renderRows(filtered);
+    }
+
+    let sortDir = {};
+    function sortTable(col) {
+      const tbody = document.getElementById('histo-body');
+      const rows  = Array.from(tbody.querySelectorAll('tr'));
+      const dir   = (sortDir[col] = !sortDir[col]);
+      rows.sort((a, b) => {
+        const va = a.cells[col]?.textContent.trim() || '';
+        const vb = b.cells[col]?.textContent.trim() || '';
+        const na = parseFloat(va.replace(/[^\d.]/g,''));
+        const nb = parseFloat(vb.replace(/[^\d.]/g,''));
+        if (!isNaN(na) && !isNaN(nb)) return dir ? na - nb : nb - na;
+        return dir ? va.localeCompare(vb,'fr') : vb.localeCompare(va,'fr');
+      });
+      rows.forEach(r => tbody.appendChild(r));
+    }
+
+    loadHistorique();
+  </script>
+
+</body>
+</html>

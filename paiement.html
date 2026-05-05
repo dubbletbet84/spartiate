@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paiement — SPARTIATE</title>
+  <meta name="description" content="Choisissez votre abonnement SPARTIATE et accédez à nos pronostics sportifs premium. Paiement sécurisé par Stripe.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="canonical" href="https://www.spartiate-prono.fr/paiement.html">
+  <meta name="theme-color" content="#CC1414">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Stripe.js -->
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    .pay-body { background: var(--section-alt); min-height: calc(100vh - 90px - 140px); padding: 60px 0 80px; }
+
+    .pay-grid {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      align-items: start;
+    }
+
+    /* ── PLANS ── */
+    .plan-select { display: flex; flex-direction: column; gap: 1rem; }
+
+    .plan-option {
+      background: var(--white);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 1.4rem 1.6rem;
+      cursor: pointer;
+      transition: border-color .2s, box-shadow .2s, background .2s;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      position: relative;
+    }
+    .plan-option:hover { border-color: var(--blue-btn); box-shadow: 0 4px 16px rgba(26,47,196,.1); }
+    .plan-option.selected { border-color: var(--red); background: #FEF2F2; box-shadow: 0 4px 20px rgba(204,20,20,.12); }
+
+    .plan-radio {
+      width: 22px; height: 22px; min-width: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color .2s;
+    }
+    .plan-option.selected .plan-radio { border-color: var(--red); }
+    .plan-radio-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--red); opacity: 0; transition: opacity .2s;
+    }
+    .plan-option.selected .plan-radio-dot { opacity: 1; }
+
+    .plan-info { flex: 1; }
+    .plan-info .plan-label {
+      font-size: .72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: .2rem;
+    }
+    .plan-info .plan-title { font-size: 1rem; font-weight: 800; color: var(--text); margin-bottom: .25rem; }
+    .plan-info .plan-features-mini {
+      font-size: .8rem; color: var(--text-muted); line-height: 1.5;
+    }
+
+    .plan-price-tag { text-align: right; flex-shrink: 0; }
+    .plan-price-tag .price { font-size: 1.6rem; font-weight: 900; color: var(--text); line-height: 1; }
+    .plan-price-tag .period { font-size: .75rem; color: var(--text-muted); }
+    .plan-price-tag .badge-pop {
+      display: inline-block; background: var(--red); color: #fff;
+      font-size: .65rem; font-weight: 700; padding: .15rem .5rem;
+      border-radius: 10px; margin-top: .3rem; text-transform: uppercase; letter-spacing: .5px;
+    }
+
+    .plan-badge-trial {
+      position: absolute; top: -10px; right: 14px;
+      background: var(--green); color: #fff;
+      font-size: .65rem; font-weight: 700; padding: .18rem .7rem;
+      border-radius: 10px; text-transform: uppercase; letter-spacing: .5px;
+    }
+
+    /* ── CHECKOUT BOX ── */
+    .checkout-box {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,.08);
+      position: sticky;
+      top: 110px;
+    }
+
+    .checkout-box h3 { font-size: 1.1rem; font-weight: 800; color: var(--text); margin-bottom: 1.4rem; }
+
+    .summary-line {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: .6rem 0; font-size: .88rem; color: var(--text);
+      border-bottom: 1px solid #F1F5F9;
+    }
+    .summary-line:last-of-type { border-bottom: none; }
+    .summary-line .label { color: var(--text-muted); }
+    .summary-line.total { font-size: 1rem; font-weight: 800; padding-top: .9rem; border-top: 2px solid var(--border); border-bottom: none; margin-top: .4rem; }
+    .summary-line.total .label { color: var(--text); }
+
+    .btn-pay {
+      display: block; width: 100%; padding: 1rem;
+      background: var(--red); color: #fff;
+      border: none; border-radius: 8px;
+      font-family: inherit; font-size: 1rem; font-weight: 800;
+      cursor: pointer; margin-top: 1.4rem;
+      transition: background .18s, transform .12s, box-shadow .18s;
+      text-align: center; text-decoration: none;
+    }
+    .btn-pay:hover { background: var(--red-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(204,20,20,.3); }
+    .btn-pay:disabled { background: #CBD5E1; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .secure-badges {
+      display: flex; align-items: center; justify-content: center;
+      gap: 1rem; margin-top: 1.2rem; flex-wrap: wrap;
+    }
+    .secure-badge {
+      display: flex; align-items: center; gap: .35rem;
+      font-size: .72rem; color: var(--text-muted); font-weight: 600;
+    }
+    .secure-badge svg { color: var(--green); }
+
+    .stripe-mention {
+      text-align: center; margin-top: 1rem;
+      font-size: .72rem; color: var(--text-muted);
+      display: flex; align-items: center; justify-content: center; gap: .35rem;
+    }
+
+    .pay-title { max-width: 1000px; margin: 0 auto 2rem; padding: 0 2rem; }
+    .pay-title h1 { font-size: 1.8rem; font-weight: 900; color: var(--blue-title); margin-bottom: .3rem; }
+    .pay-title p  { font-size: .9rem; color: var(--text-muted); }
+
+    .faq-pay { max-width: 1000px; margin: 3rem auto 0; padding: 0 2rem; }
+    .faq-pay h3 { font-size: 1rem; font-weight: 800; color: var(--text); margin-bottom: 1rem; }
+    .faq-pay-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); }
+    .faq-pay-item { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem; box-shadow: 0 1px 4px rgba(0,0,0,.04); }
+    .faq-pay-item h4 { font-size: .86rem; font-weight: 700; color: var(--text); margin-bottom: .4rem; }
+    .faq-pay-item p  { font-size: .82rem; color: var(--text-muted); line-height: 1.6; }
+
+    @media (max-width: 768px) {
+      .pay-grid { grid-template-columns: 1fr; }
+      .checkout-box { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-box"><img src="logo.svg" alt="SPARTIATE — Pronostics Sportifs Premium"></div>
+      </a>
+      <nav class="nav">
+        <a href="historique.html"  class="nav-btn">Historique</a>
+        <a href="affiliation.html" class="nav-btn">Affiliation</a>
+      </nav>
+      <div class="search-wrap">
+        <input type="text" placeholder="Rechercher un sport, un prono…">
+        <span class="search-icon">🔍</span>
+      </div>
+      <a href="login.html" class="btn-connect">Se Connecter</a>
+    </div>
+  </header>
+
+  <!-- ── BODY ── -->
+  <main class="pay-body">
+
+    <div class="pay-title">
+      <h1>Choisissez votre abonnement</h1>
+      <p>Sans engagement · Résiliation en un clic · Paiement 100% sécurisé par Stripe</p>
+    </div>
+
+    <div class="pay-grid">
+
+      <!-- ── SÉLECTION DU PLAN ── -->
+      <div class="plan-select" id="plan-select">
+
+        <!-- ESSAI -->
+        <div class="plan-option" onclick="selectPlan(this, 'essai')">
+          <span class="plan-badge-trial">🎯 Sans engagement</span>
+          <div class="plan-radio"><div class="plan-radio-dot"></div></div>
+          <div class="plan-info">
+            <div class="plan-label">Essai — 7 jours</div>
+            <div class="plan-title">Spartiate Starter</div>
+            <div class="plan-features-mini">Accès complet 7 jours · Paiement unique · Sans renouvellement automatique</div>
+          </div>
+          <div class="plan-price-tag">
+            <div class="price">4,99€</div>
+            <div class="period">unique</div>
+          </div>
+        </div>
+
+        <!-- VIP -->
+        <div class="plan-option" onclick="selectPlan(this, 'vip')">
+          <div class="plan-radio"><div class="plan-radio-dot"></div></div>
+          <div class="plan-info">
+            <div class="plan-label">Abonnement mensuel</div>
+            <div class="plan-title">Spartiate VIP</div>
+            <div class="plan-features-mini">2 pronos/jour · Football, Basketball & Tennis · Analyses détaillées</div>
+          </div>
+          <div class="plan-price-tag">
+            <div class="price">14,99€</div>
+            <div class="period">/mois</div>
+          </div>
+        </div>
+
+        <!-- PRO -->
+        <div class="plan-option selected" onclick="selectPlan(this, 'pro')">
+          <div class="plan-radio"><div class="plan-radio-dot"></div></div>
+          <div class="plan-info">
+            <div class="plan-label">Abonnement mensuel</div>
+            <div class="plan-title">Spartiate Pro</div>
+            <div class="plan-features-mini">3 pronos/jour · Tous les sports · Analyses complètes · Historique</div>
+          </div>
+          <div class="plan-price-tag">
+            <div class="price">24,99€</div>
+            <div class="period">/mois</div>
+            <div class="badge-pop">⭐ Populaire</div>
+          </div>
+        </div>
+
+        <!-- ÉLITE -->
+        <div class="plan-option" onclick="selectPlan(this, 'elite')">
+          <div class="plan-radio"><div class="plan-radio-dot"></div></div>
+          <div class="plan-info">
+            <div class="plan-label">Abonnement mensuel</div>
+            <div class="plan-title">Spartiate Gestion</div>
+            <div class="plan-features-mini">Pronos illimités · Mise conseillée par pari · Jackpot · Support 24/7</div>
+          </div>
+          <div class="plan-price-tag">
+            <div class="price">44,99€</div>
+            <div class="period">/mois</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── RÉCAPITULATIF & BOUTON PAYER ── -->
+      <div class="checkout-box">
+        <h3>Récapitulatif</h3>
+
+        <div class="summary-line">
+          <span class="label">Plan sélectionné</span>
+          <span id="sum-plan" style="font-weight:700;">Pro</span>
+        </div>
+        <div class="summary-line">
+          <span class="label">Durée</span>
+          <span id="sum-duree">Mensuel</span>
+        </div>
+        <div class="summary-line">
+          <span class="label">Renouvellement</span>
+          <span id="sum-renew">Automatique</span>
+        </div>
+        <div class="summary-line total">
+          <span class="label">Total</span>
+          <span id="sum-total">24,99 €</span>
+        </div>
+
+        <a id="btn-pay" href="LIEN_STRIPE_PRO" target="_blank" class="btn-pay">
+          🔒 Payer maintenant
+        </a>
+
+        <div class="secure-badges">
+          <div class="secure-badge">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Paiement sécurisé
+          </div>
+          <div class="secure-badge">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            SSL chiffré
+          </div>
+          <div class="secure-badge">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Sans engagement
+          </div>
+        </div>
+
+        <div class="stripe-mention">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Paiement traité par <strong style="margin-left:.25rem;">Stripe</strong> — données bancaires jamais stockées
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── FAQ PAIEMENT ── -->
+    <div class="faq-pay">
+      <h3>Questions fréquentes sur le paiement</h3>
+      <div class="faq-pay-grid">
+        <div class="faq-pay-item">
+          <h4>🔒 Mon paiement est-il sécurisé ?</h4>
+          <p>Oui. Tous les paiements sont traités par Stripe, leader mondial du paiement en ligne. Vos données bancaires ne transitent jamais par nos serveurs.</p>
+        </div>
+        <div class="faq-pay-item">
+          <h4>🔄 Comment résilier mon abonnement ?</h4>
+          <p>Depuis votre espace Mon Compte, rubrique "Abonnement", en un seul clic. Aucun délai de préavis, aucuns frais.</p>
+        </div>
+        <div class="faq-pay-item">
+          <h4>📅 Quand suis-je débité ?</h4>
+          <p>Le premier prélèvement a lieu immédiatement à la souscription, puis à la même date chaque mois. L'essai 7 jours est un paiement unique sans renouvellement.</p>
+        </div>
+        <div class="faq-pay-item">
+          <h4>🎫 Puis-je changer de plan ?</h4>
+          <p>Oui, vous pouvez upgrader ou downgrader votre abonnement à tout moment depuis votre espace personnel. Le changement prend effet au prochain cycle.</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo-box"><img src="logo.svg" alt="SPARTIATE"></div>
+        <p>Des pronostics fiables, des analyses expertes et une communauté de gagnants.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Navigation</h5>
+        <a href="index.html">Accueil</a>
+        <a href="historique.html">Historique</a>
+        <a href="affiliation.html">Affiliation</a>
+        <a href="login.html">Mon Compte</a>
+      </div>
+      <div class="footer-col">
+        <h5>Légal</h5>
+        <a href="mentions-legales.html">Mentions légales</a>
+        <a href="cgu.html">CGU</a>
+        <a href="confidentialite.html">Confidentialité</a>
+        <a href="jeu-responsable.html">Jeu responsable</a>
+      </div>
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <a href="https://www.instagram.com/spartiates_pronos/" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:.4rem;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>@spartiates_pronos</a>
+        <a href="mailto:support@spartiate-prono.fr">support@spartiate-prono.fr</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 SPARTIATE — Tous droits réservés. Les paris sportifs comportent des risques. Jouez de façon responsable.</p>
+      <div class="footer-legal">
+        <a href="cgu.html">CGU</a>
+        <a href="confidentialite.html">Confidentialité</a>
+        <a href="mentions-legales.html">Mentions légales</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── Initialisation Stripe (clé publique) ──
+    const stripe = Stripe('pk_live_51TJIVhIbnUAcda0eltbPHFrzK0oSGnqq0ZJzA4e0KQj0OwjWidKzphhc7pU1aHksWjkWgatKtaYNPckZnlzmssth002mmAme0p');
+
+    // ── Plans avec liens Stripe Payment Links (à remplacer par tes vrais liens) ──
+    const PLANS = {
+      essai:   { nom: "Spartiate Starter", prix: 4.99, duree: '7 jours (unique)',  renew: 'Aucun renouvellement', lien: 'https://buy.stripe.com/eVq00jdNpal40Jme9I9sk04' },
+      vip:     { nom: 'Spartiate VIP',    prix: 14.99, duree: 'Mensuel',           renew: 'Automatique',          lien: 'https://buy.stripe.com/7sYcN510D78S8bOghQ9sk02' },
+      pro:     { nom: 'Spartiate Pro',    prix: 24.99, duree: 'Mensuel',           renew: 'Automatique',          lien: 'https://buy.stripe.com/dRmbJ15gT9h063Gc1A9sk00' },
+      elite:   { nom: 'Spartiate Gestion', prix: 44.99, duree: 'Mensuel',          renew: 'Automatique',          lien: 'https://buy.stripe.com/00wcN56kXdxgajW9Ts9sk01' },
+    };
+
+    // Présélection via URL (?plan=pro)
+    const params  = new URLSearchParams(window.location.search);
+    const presel  = params.get('plan') || 'pro';
+
+    function selectPlan(el, planKey) {
+      const plan = PLANS[planKey];
+      if (!plan) return;
+
+      document.querySelectorAll('.plan-option').forEach(p => p.classList.remove('selected'));
+      el.classList.add('selected');
+
+      document.getElementById('sum-plan').textContent  = plan.nom;
+      document.getElementById('sum-duree').textContent = plan.duree;
+      document.getElementById('sum-renew').textContent = plan.renew;
+      document.getElementById('sum-total').textContent = plan.prix.toFixed(2).replace('.', ',') + ' €';
+
+      const btn = document.getElementById('btn-pay');
+      btn.href = plan.lien;
+      btn.classList.toggle('disabled-btn', plan.lien.startsWith('LIEN_'));
+    }
+
+    // Appliquer la présélection au chargement
+    document.addEventListener('DOMContentLoaded', () => {
+      const options = document.querySelectorAll('.plan-option');
+      const keys    = ['essai', 'vip', 'pro', 'elite'];
+      const idx     = keys.indexOf(presel);
+      if (idx !== -1) selectPlan(options[idx], presel);
+    });
+  </script>
+
+</body>
+</html>

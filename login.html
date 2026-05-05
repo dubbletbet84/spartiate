@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ── SEO ── -->
+  <title>Connexion — SPARTIATE | Accédez à vos Pronostics Sportifs</title>
+  <meta name="description" content="Connectez-vous à votre espace SPARTIATE pour accéder à vos pronostics sportifs premium. Pas encore membre ? Créez votre compte en 30 secondes.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="canonical" href="https://www.spartiate-prono.fr/login.html">
+  <meta name="theme-color" content="#CC1414">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Connexion — SPARTIATE",
+    "url": "https://www.spartiate-prono.fr/login.html",
+    "description": "Page de connexion et d'inscription à SPARTIATE, service de pronostics sportifs premium.",
+    "inLanguage": "fr-FR",
+    "isPartOf": { "@type": "WebSite", "url": "https://www.spartiate-prono.fr" },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.spartiate-prono.fr/" },
+        { "@type": "ListItem", "position": 2, "name": "Connexion", "item": "https://www.spartiate-prono.fr/login.html" }
+      ]
+    }
+  }
+  </script>
+
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supa.js"></script>
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-box"><img src="logo.svg" alt="SPARTIATE — Pronostics Sportifs Premium"></div>
+      </a>
+      <nav class="nav">
+        <a href="historique.html"  class="nav-btn">Historique</a>
+        <a href="affiliation.html" class="nav-btn">Affiliation</a>
+      </nav>
+      <div class="search-wrap">
+        <input type="text" placeholder="Rechercher un sport, un prono…">
+        <span class="search-icon">🔍</span>
+      </div>
+      <a href="login.html" class="btn-connect">Se Connecter</a>
+    </div>
+  </header>
+
+  <!-- ── LOGIN BODY ── -->
+  <main style="background: var(--section-alt);">
+    <div class="login-wrap">
+      <div class="login-box">
+
+        <h2>Bienvenue ⚔️</h2>
+        <p class="sub">Connectez-vous pour accéder à vos pronostics.</p>
+
+        <!-- Tabs -->
+        <div class="tabs">
+          <button class="tab-btn active" onclick="switchTab('login', this)">Connexion</button>
+          <button class="tab-btn"        onclick="switchTab('register', this)">Inscription</button>
+        </div>
+
+        <!-- ── LOGIN FORM ── -->
+        <form id="form-login" onsubmit="handleLogin(event)" novalidate>
+          <div class="form-group">
+            <label>Adresse e-mail</label>
+            <input type="email" placeholder="exemple@email.com" required>
+          </div>
+          <div class="form-group">
+            <label>Mot de passe</label>
+            <input type="password" placeholder="••••••••" required>
+          </div>
+          <div class="forgot">
+            <a href="#">Mot de passe oublié ?</a>
+          </div>
+          <button type="submit" class="btn-submit">Se connecter</button>
+          <div class="divider-or">ou</div>
+          <p style="text-align:center; font-size:.84rem; color:var(--text-muted);">
+            Pas encore membre ? <a href="#" onclick="switchTabByName('register')" style="color:var(--blue-title); font-weight:700; text-decoration:none;">Créer un compte</a>
+          </p>
+        </form>
+
+        <!-- ── REGISTER FORM ── -->
+        <form id="form-register" style="display:none;" onsubmit="handleRegister(event)">
+          <div class="form-group">
+            <label>Prénom</label>
+            <input type="text" placeholder="Jean" required>
+          </div>
+          <div class="form-group">
+            <label>Nom</label>
+            <input type="text" placeholder="Dupont" required>
+          </div>
+          <div class="form-group">
+            <label>Adresse e-mail</label>
+            <input type="email" placeholder="exemple@email.com" required>
+          </div>
+          <div class="form-group">
+            <label>Mot de passe</label>
+            <input type="password" placeholder="8 caractères minimum" required>
+          </div>
+          <div class="form-group">
+            <label>Confirmer le mot de passe</label>
+            <input type="password" placeholder="••••••••" required>
+          </div>
+          <!-- Vérification d'âge -->
+          <div style="background:#FEF2F2; border:1px solid #FECACA; border-radius:8px; padding:1rem 1.1rem; margin-bottom:1rem;">
+            <label style="display:flex; align-items:flex-start; gap:.75rem; cursor:pointer; user-select:none;">
+              <input type="checkbox" id="age-check" required
+                style="width:20px; height:20px; min-width:20px; accent-color:var(--red); margin-top:1px; cursor:pointer;">
+              <span style="font-size:.86rem; color:#7F1D1D; line-height:1.5;">
+                <strong>Je certifie avoir 18 ans ou plus.</strong><br>
+                <span style="font-size:.78rem; color:#991B1B;">Les paris sportifs sont interdits aux mineurs. En cochant cette case, je confirme être majeur(e).</span>
+              </span>
+            </label>
+          </div>
+
+          <!-- CGU + Confidentialité -->
+          <div style="margin-bottom:1rem;">
+            <label style="display:flex; align-items:flex-start; gap:.75rem; cursor:pointer; user-select:none;">
+              <input type="checkbox" id="cgu-check" required
+                style="width:18px; height:18px; min-width:18px; accent-color:var(--blue-btn); margin-top:2px; cursor:pointer;">
+              <span style="font-size:.82rem; color:var(--text-muted); line-height:1.5;">
+                J'accepte les <a href="cgu.html" style="color:var(--blue-title); font-weight:700;">CGU</a> et la <a href="confidentialite.html" style="color:var(--blue-title); font-weight:700;">politique de confidentialité</a> de SPARTIATE.
+              </span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn-submit">Créer mon compte</button>
+        </form>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo-box"><img src="logo.svg" alt="SPARTIATE"></div>
+        <p>Des pronostics fiables, des analyses expertes et une communauté de gagnants.</p>
+      </div>
+
+      <div class="footer-col">
+        <h5>Navigation</h5>
+        <a href="index.html">Accueil</a>
+        <a href="historique.html">Historique</a>
+        <a href="affiliation.html">Affiliation</a>
+        <a href="login.html">Mon Compte</a>
+      </div>
+
+      <div class="footer-col">
+        <h5>Légal</h5>
+        <a href="mentions-legales.html">Mentions légales</a>
+        <a href="cgu.html">CGU</a>
+        <a href="confidentialite.html">Confidentialité</a>
+        <a href="jeu-responsable.html">Jeu responsable</a>
+      </div>
+
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <a href="https://www.instagram.com/spartiates_pronos/" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:.4rem;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>@spartiates_pronos</a>
+        <a href="mailto:support@spartiate-prono.fr">support@spartiate-prono.fr</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 SPARTIATE — Tous droits réservés. Les paris sportifs comportent des risques. Jouez de façon responsable.</p>
+      <div class="footer-legal">
+        <a href="cgu.html">CGU</a>
+        <a href="confidentialite.html">Confidentialité</a>
+        <a href="confidentialite.html">Cookies</a>
+      </div>
+    </div>
+  
+  </footer>
+
+  <script>
+    function switchTab(name, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('form-login').style.display    = name === 'login'    ? 'block' : 'none';
+      document.getElementById('form-register').style.display = name === 'register' ? 'block' : 'none';
+    }
+
+    function switchTabByName(name) {
+      const btns = document.querySelectorAll('.tab-btn');
+      const idx  = name === 'register' ? 1 : 0;
+      switchTab(name, btns[idx]);
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const emailInput = document.querySelector('#form-login input[type="email"]');
+      const email = emailInput.value.trim();
+      const pwd   = document.querySelector('#form-login input[type="password"]').value;
+      const btn   = document.querySelector('#form-login .btn-submit');
+      btn.disabled = true; btn.textContent = 'Connexion…';
+
+      // Accès admin via Supabase Auth
+      if (email === 'sodim84') {
+        const { data, error } = await supa.auth.signInWithPassword({
+          email: 'admin@spartiate-prono.fr',
+          password: pwd,
+        });
+        btn.disabled = false; btn.textContent = 'Se connecter';
+        if (!error && data.session) {
+          window.location.href = 'admin.html';
+          return;
+        }
+        emailInput.setCustomValidity('Identifiant ou mot de passe incorrect.');
+        emailInput.reportValidity();
+        return;
+      }
+
+      btn.disabled = false; btn.textContent = 'Se connecter';
+
+      // Validation email pour les utilisateurs normaux
+      if (!email.includes('@')) {
+        emailInput.setCustomValidity('Veuillez entrer une adresse e-mail valide.');
+        emailInput.reportValidity();
+        return;
+      }
+      emailInput.setCustomValidity('');
+      window.location.href = 'dashboard.html';
+    }
+
+    function handleRegister(e) {
+      e.preventDefault();
+      window.location.href = 'paiement.html';
+    }
+  </script>
+
+</body>
+</html>

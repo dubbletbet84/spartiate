@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — SPARTIATE</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supa.js"></script>
+  <style>
+    body { background: #0F172A; min-height: 100vh; }
+
+    /* ── LOGIN ── */
+    .admin-login {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh;
+    }
+    .admin-login-box {
+      background: #1E293B; border: 1px solid #334155; border-radius: 16px;
+      padding: 2.5rem 2rem; width: 100%; max-width: 380px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+    }
+    .admin-login-box h2 { color: #fff; font-size: 1.4rem; font-weight: 800; margin-bottom: .4rem; }
+    .admin-login-box p  { color: #94A3B8; font-size: .85rem; margin-bottom: 1.8rem; }
+
+    /* ── DASHBOARD ── */
+    .admin-wrap { display: none; max-width: 1200px; margin: 0 auto; padding: 2rem; }
+    .admin-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 2rem; padding-bottom: 1.2rem;
+      border-bottom: 1px solid #334155;
+    }
+    .admin-header h1 { color: #fff; font-size: 1.5rem; font-weight: 900; }
+    .admin-header span { color: #94A3B8; font-size: .85rem; }
+
+    .admin-grid { display: grid; grid-template-columns: 400px 1fr; gap: 2rem; align-items: start; }
+
+    /* ── FORM ── */
+    .admin-card {
+      background: #1E293B; border: 1px solid #334155; border-radius: 14px; padding: 1.8rem;
+    }
+    .admin-card h3 { color: #fff; font-size: 1rem; font-weight: 700; margin-bottom: 1.4rem; }
+
+    .form-row { margin-bottom: 1rem; }
+    .form-row label { display: block; font-size: .78rem; font-weight: 600; color: #94A3B8;
+      text-transform: uppercase; letter-spacing: .5px; margin-bottom: .4rem; }
+    .form-row input, .form-row select, .form-row textarea {
+      width: 100%; padding: .65rem .9rem; background: #0F172A; border: 1px solid #334155;
+      border-radius: 8px; color: #fff; font-family: inherit; font-size: .9rem;
+      transition: border-color .18s;
+    }
+    .form-row input:focus, .form-row select:focus, .form-row textarea:focus {
+      outline: none; border-color: var(--red);
+    }
+    .form-row textarea { resize: vertical; min-height: 80px; }
+    .form-row select option { background: #1E293B; }
+
+    .btn-admin {
+      width: 100%; padding: .85rem; background: var(--red); color: #fff;
+      border: none; border-radius: 8px; font-family: inherit; font-size: .95rem;
+      font-weight: 700; cursor: pointer; margin-top: .5rem;
+      transition: background .18s;
+    }
+    .btn-admin:hover { background: var(--red-dark); }
+
+    .toast {
+      position: fixed; bottom: 2rem; right: 2rem; padding: .9rem 1.4rem;
+      border-radius: 10px; font-size: .88rem; font-weight: 600;
+      color: #fff; z-index: 9999; opacity: 0; pointer-events: none;
+      transition: opacity .3s;
+    }
+    .toast.show { opacity: 1; }
+    .toast.success { background: #16A34A; }
+    .toast.error   { background: var(--red); }
+
+    /* ── TABLE ── */
+    .admin-table-wrap { overflow-x: auto; }
+    .admin-table { width: 100%; border-collapse: collapse; }
+    .admin-table thead th {
+      background: #0F172A; padding: .75rem 1rem; text-align: left;
+      font-size: .72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .5px; color: #64748B; border-bottom: 1px solid #334155;
+      white-space: nowrap;
+    }
+    .admin-table tbody td {
+      padding: .75rem 1rem; font-size: .84rem; color: #CBD5E1;
+      border-bottom: 1px solid #1E293B; vertical-align: middle;
+    }
+    .admin-table tbody tr:hover td { background: #1E293B; }
+
+    .status-select {
+      background: #0F172A; border: 1px solid #334155; border-radius: 6px;
+      color: #fff; font-size: .78rem; padding: .3rem .5rem; cursor: pointer;
+      font-family: inherit;
+    }
+    .status-en_attente { border-color: #F59E0B; color: #F59E0B; }
+    .status-validé     { border-color: #16A34A; color: #16A34A; }
+    .status-refusé     { border-color: #CC1414; color: #CC1414; }
+
+    .btn-del {
+      background: none; border: 1px solid #334155; border-radius: 6px;
+      color: #EF4444; font-size: .78rem; padding: .3rem .6rem; cursor: pointer;
+      font-family: inherit; transition: all .18s;
+    }
+    .btn-del:hover { background: #EF4444; color: #fff; border-color: #EF4444; }
+
+    .badge-admin {
+      display: inline-block; padding: .18rem .6rem; border-radius: 8px;
+      font-size: .7rem; font-weight: 700;
+    }
+    .ba-safe    { background: #DCFCE7; color: #15803D; }
+    .ba-risque  { background: #FEF9C3; color: #92400E; }
+    .ba-jackpot { background: #F3E8FF; color: #7E22CE; }
+
+    @media (max-width: 900px) {
+      .admin-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── LOGIN ── -->
+  <div class="admin-login" id="login-screen">
+    <div class="admin-login-box">
+      <h2>⚔️ Admin SPARTIATE</h2>
+      <p>Accès réservé à l'administrateur.</p>
+      <div class="form-row">
+        <label>Identifiant</label>
+        <input type="text" id="admin-user" placeholder="Identifiant"
+          onkeydown="if(event.key==='Enter') checkPassword()">
+      </div>
+      <div class="form-row">
+        <label>Mot de passe</label>
+        <input type="password" id="admin-pwd" placeholder="••••••••"
+          onkeydown="if(event.key==='Enter') checkPassword()">
+      </div>
+      <button class="btn-admin" onclick="checkPassword()">Entrer</button>
+      <p id="pwd-error" style="color:#EF4444; font-size:.82rem; margin-top:.8rem; display:none;">
+        Identifiant ou mot de passe incorrect.
+      </p>
+    </div>
+  </div>
+
+  <!-- ── ADMIN PANEL ── -->
+  <div class="admin-wrap" id="admin-panel">
+
+    <div class="admin-header">
+      <div>
+        <h1>⚔️ Admin SPARTIATE</h1>
+        <span>Gestion des pronostics</span>
+      </div>
+      <button onclick="logout()" style="background:none;border:1px solid #334155;color:#94A3B8;padding:.5rem 1rem;border-radius:8px;cursor:pointer;font-family:inherit;font-size:.84rem;">
+        Déconnexion
+      </button>
+    </div>
+
+    <div class="admin-grid">
+
+      <!-- ── FORMULAIRE AJOUT ── -->
+      <div class="admin-card">
+        <h3>➕ Ajouter un pronostic</h3>
+        <form id="prono-form" onsubmit="addProno(event)">
+          <div class="form-row">
+            <label>Date du match</label>
+            <input type="date" id="f-date" required>
+          </div>
+          <div class="form-row">
+            <label>Sport</label>
+            <select id="f-sport" required>
+              <option value="">— Choisir —</option>
+              <option>Football</option>
+              <option>Basketball</option>
+              <option>Tennis</option>
+              <option>Rugby</option>
+              <option>Hockey</option>
+              <option>Boxe/MMA</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>Match (ex: PSG vs Lyon)</label>
+            <input type="text" id="f-match" placeholder="Équipe A vs Équipe B" required>
+          </div>
+          <div class="form-row">
+            <label>Pronostic</label>
+            <input type="text" id="f-prono" placeholder="Ex: PSG gagne" required>
+          </div>
+          <div class="form-row">
+            <label>Cote</label>
+            <input type="number" id="f-cote" step="0.01" min="1" placeholder="1.85">
+          </div>
+          <div class="form-row">
+            <label>Mise conseillée</label>
+            <input type="text" id="f-mise" placeholder="Ex: 2u, 50€, 3% de la bankroll…">
+          </div>
+          <div class="form-row">
+            <label>Catégorie</label>
+            <select id="f-categorie">
+              <option value="Safe">Safe</option>
+              <option value="Risqué">Risqué</option>
+              <option value="Jackpot">Jackpot</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>Abonnement requis</label>
+            <select id="f-abo">
+              <option value="spartiate_starter">Spartiate Starter</option>
+              <option value="spartiate_vip">Spartiate VIP</option>
+              <option value="spartiate_pro" selected>Spartiate Pro</option>
+              <option value="spartiate_gestion">Spartiate Gestion</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>Notes / Analyse (optionnel)</label>
+            <textarea id="f-notes" placeholder="Contexte, statistiques, raisonnement…"></textarea>
+          </div>
+          <button type="submit" class="btn-admin">Publier le pronostic</button>
+        </form>
+      </div>
+
+      <!-- ── TABLE DES PRONOS ── -->
+      <div class="admin-card">
+        <h3>📋 Pronostics (<span id="prono-count">0</span>)</h3>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Match</th>
+                <th>Prono</th>
+                <th>Cote</th>
+                <th>Cat.</th>
+                <th>Statut</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="admin-tbody">
+              <tr><td colspan="7" style="text-align:center;padding:2rem;color:#64748B;">Chargement…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ── Auth Supabase réelle (plus de mot de passe en clair) ──
+    async function checkPassword() {
+      const user = document.getElementById('admin-user').value.trim();
+      const pwd  = document.getElementById('admin-pwd').value;
+      const btn  = document.querySelector('.btn-admin');
+      btn.disabled = true; btn.textContent = 'Connexion…';
+
+      // L'identifiant sodim84 est mappé à l'email admin Supabase
+      const email = user === 'sodim84' ? 'admin@spartiate-prono.fr' : user;
+      const { data, error } = await supa.auth.signInWithPassword({ email, password: pwd });
+
+      btn.disabled = false; btn.textContent = 'Entrer';
+      if (error || !data.session) {
+        document.getElementById('pwd-error').style.display = 'block';
+        return;
+      }
+      showPanel();
+    }
+
+    async function logout() {
+      await supa.auth.signOut();
+      location.reload();
+    }
+
+    function showPanel() {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('admin-panel').style.display  = 'block';
+      document.getElementById('f-date').value = new Date().toISOString().slice(0, 10);
+      loadPronos();
+    }
+
+    // ── Toast ──
+    function showToast(msg, type = 'success') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = `toast ${type} show`;
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    // ── Charger pronos ──
+    async function loadPronos() {
+      const { data, error } = await supa
+        .from('pronos').select('*').order('date_match', { ascending: false });
+
+      const tbody = document.getElementById('admin-tbody');
+      if (error) {
+        tbody.innerHTML = `<tr><td colspan="7" style="color:#EF4444;padding:1rem;">Erreur : ${esc(error.message)}</td></tr>`;
+        return;
+      }
+
+      document.getElementById('prono-count').textContent = data.length;
+      const catClass = { Safe:'ba-safe', Risqué:'ba-risque', Jackpot:'ba-jackpot' };
+
+      tbody.innerHTML = data.map(p => `
+        <tr id="row-${p.id}">
+          <td style="white-space:nowrap;">${new Date(p.date_match).toLocaleDateString('fr-FR')}</td>
+          <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${esc(p.match)}">${esc(p.match)}</td>
+          <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${esc(p.prono)}">${esc(p.prono)}</td>
+          <td>${esc(String(p.cote ?? '—'))}</td>
+          <td><span class="badge-admin ${catClass[p.categorie] || ''}">${esc(p.categorie)}</span></td>
+          <td>
+            <select class="status-select status-${esc(p.statut)}" onchange="updateStatut(${p.id}, this)">
+              <option value="en_attente" ${p.statut === 'en_attente' ? 'selected' : ''}>⏳ En attente</option>
+              <option value="validé"     ${p.statut === 'validé'     ? 'selected' : ''}>✅ Validé</option>
+              <option value="refusé"     ${p.statut === 'refusé'     ? 'selected' : ''}>❌ Refusé</option>
+            </select>
+          </td>
+          <td><button class="btn-del" onclick="deleteProno(${p.id})">Suppr.</button></td>
+        </tr>
+      `).join('');
+    }
+
+    // ── Ajouter prono ──
+    async function addProno(e) {
+      e.preventDefault();
+      const btn = e.submitter;
+      btn.disabled = true; btn.textContent = 'Publication…';
+
+      const payload = {
+        date_match:        document.getElementById('f-date').value,
+        sport:             document.getElementById('f-sport').value,
+        match:             document.getElementById('f-match').value.trim(),
+        prono:             document.getElementById('f-prono').value.trim(),
+        cote:              parseFloat(document.getElementById('f-cote').value) || null,
+        mise:              document.getElementById('f-mise').value.trim() || null,
+        categorie:         document.getElementById('f-categorie').value,
+        abonnement_requis: document.getElementById('f-abo').value,
+        notes:             document.getElementById('f-notes').value.trim() || null,
+        statut:            'en_attente',
+      };
+
+      const { error } = await supa.from('pronos').insert([payload]);
+      btn.disabled = false; btn.textContent = 'Publier le pronostic';
+      if (error) { showToast('Erreur : ' + error.message, 'error'); return; }
+      showToast('✅ Pronostic publié !');
+      document.getElementById('prono-form').reset();
+      document.getElementById('f-date').value = new Date().toISOString().slice(0, 10);
+      loadPronos();
+    }
+
+    // ── Mettre à jour le statut ──
+    async function updateStatut(id, sel) {
+      const newStatut = sel.value;
+      sel.className = `status-select status-${newStatut}`;
+      const { error } = await supa.from('pronos').update({ statut: newStatut }).eq('id', id);
+      if (error) { showToast('Erreur mise à jour', 'error'); return; }
+
+      // Archivage automatique dans historique
+      if (newStatut === 'validé' || newStatut === 'refusé') {
+        const { data } = await supa.from('pronos').select('*').eq('id', id).single();
+        if (data) {
+          const resultat = newStatut === 'validé' ? 'gagné' : 'perdu';
+          const miseVal  = parseFloat(data.mise) || 2;
+          const gain     = newStatut === 'validé'
+            ? parseFloat(((parseFloat(data.cote) - 1) * miseVal).toFixed(2))
+            : -miseVal;
+          await supa.from('historique').insert([{
+            prono_id: data.id, date_match: data.date_match, sport: data.sport,
+            match: data.match, prono: data.prono, cote: data.cote, mise: data.mise,
+            resultat, gain_unites: gain, categorie: data.categorie,
+          }]);
+        }
+      }
+      showToast('Statut mis à jour ✓');
+    }
+
+    // ── Supprimer ──
+    async function deleteProno(id) {
+      if (!confirm('Supprimer ce pronostic ?')) return;
+      const { error } = await supa.from('pronos').delete().eq('id', id);
+      if (error) { showToast('Erreur suppression', 'error'); return; }
+      document.getElementById(`row-${id}`)?.remove();
+      showToast('Pronostic supprimé.');
+      const count = document.getElementById('prono-count');
+      count.textContent = parseInt(count.textContent) - 1;
+    }
+
+    // ── Vérification session au chargement ──
+    supa.auth.getSession().then(({ data: { session } }) => {
+      if (session) showPanel();
+    });
+  </script>
+
+</body>
+</html>

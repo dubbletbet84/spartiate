@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ── SEO ── -->
+  <title>Mon Dashboard — SPARTIATE | Mes Pronostics du Jour</title>
+  <meta name="description" content="Accédez à vos pronostics sportifs du jour, analyses détaillées et historique de performances sur votre espace membre SPARTIATE.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="canonical" href="https://www.spartiate-prono.fr/dashboard.html">
+  <meta name="theme-color" content="#CC1414">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supa.js"></script>
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-box"><img src="logo.svg" alt="SPARTIATE — Pronostics Sportifs Premium"></div>
+      </a>
+      <nav class="nav">
+        <a href="historique.html"  class="nav-btn">Historique</a>
+        <a href="affiliation.html" class="nav-btn">Affiliation</a>
+      </nav>
+      <div class="search-wrap">
+        <input type="text" placeholder="Rechercher un sport, un prono…">
+        <span class="search-icon">🔍</span>
+      </div>
+      <div class="header-actions">
+        <a href="login.html" class="btn-account">👤 Mon Compte</a>
+        <a href="index.html" class="btn-logout">Déconnexion</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── WELCOME BAND ── -->
+  <div style="background: #EFF6FF; border-bottom: 1px solid #BFDBFE; padding: 1rem 2rem;">
+    <div style="max-width:1180px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:.5rem;">
+      <div>
+        <p style="font-weight:700; color:var(--blue-title); font-size:1rem;">Bonjour, Jamil 👋</p>
+        <p style="font-size:.82rem; color:var(--text-muted);">Abonnement <strong style="color:var(--text);">Pro</strong> · Actif jusqu'au 4 juin 2026</p>
+      </div>
+      <div style="display:flex; gap:2rem; flex-wrap:wrap;">
+        <div style="text-align:center;">
+          <p style="font-size:1.4rem; font-weight:900; color:var(--blue-title);">12</p>
+          <p style="font-size:.72rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:.5px;">Pronos ce mois</p>
+        </div>
+        <div style="text-align:center;">
+          <p style="font-size:1.4rem; font-weight:900; color:var(--green);">9</p>
+          <p style="font-size:.72rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:.5px;">Gagnants</p>
+        </div>
+        <div style="text-align:center;">
+          <p style="font-size:1.4rem; font-weight:900; color:var(--red);">3</p>
+          <p style="font-size:.72rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:.5px;">Perdants</p>
+        </div>
+        <div style="text-align:center;">
+          <p style="font-size:1.4rem; font-weight:900; color:var(--text);">75%</p>
+          <p style="font-size:.72rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:.5px;">Réussite</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 1 : PRONO DU JOUR ── -->
+  <section id="pronos" class="dash-section">
+    <div class="container">
+      <h2 class="section-title">Prono du Jour</h2>
+      <div class="divider"></div>
+      <p class="section-subtitle">
+        Dimanche 4 mai 2026 · 3 pronostics disponibles avec votre abonnement Pro.
+      </p>
+
+      <div class="prono-grid" id="prono-grid">
+        <p style="color:var(--text-muted); padding:1rem;">Chargement des pronos…</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 2 : ANALYSE ── -->
+  <section id="analyse" class="dash-section dash-section-alt">
+    <div class="container">
+      <h2 class="section-title">Analyse</h2>
+      <div class="divider"></div>
+      <p class="section-subtitle">Décryptage complet du match phare de la journée : PSG — OM.</p>
+
+      <div class="analyse-block">
+        <h4>📋 Contexte du Match</h4>
+        <p>
+          Le Classique opposant le Paris Saint-Germain à l'Olympique de Marseille se joue dans un contexte de fin de saison tendu.
+          Le PSG, déjà sacré champion, aborde ce match sans pression mais avec l'objectif de conserver son invincibilité à domicile.
+          L'OM, de son côté, lutte pour une qualification en Coupe d'Europe et se présentera avec toutes ses forces vives.
+        </p>
+      </div>
+
+      <div class="analyse-block">
+        <h4>📊 Statistiques Comparatives</h4>
+        <table class="stats-table">
+          <thead>
+            <tr>
+              <th>Critère</th>
+              <th>PSG</th>
+              <th>OM</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Buts marqués (domicile/extérieur)</td><td>2.8 / match</td><td>1.6 / match</td></tr>
+            <tr><td>Buts encaissés</td><td>0.7 / match</td><td>1.3 / match</td></tr>
+            <tr><td>Possession moyenne</td><td>61%</td><td>48%</td></tr>
+            <tr><td>Tirs cadrés / match</td><td>7.2</td><td>4.8</td></tr>
+            <tr><td>Forme récente (5 derniers)</td><td>V V V N V</td><td>N D V V D</td></tr>
+            <tr><td>Confrontations directes (5 dernières)</td><td>3 victoires</td><td>1 victoire</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="analyse-block">
+        <h4>🔍 Notre Raisonnement</h4>
+        <p>
+          La supériorité du PSG à domicile est statistiquement écrasante cette saison. L'OM présente des lacunes défensives
+          marquées lors de ses déplacements contre le Top 3, encaissant en moyenne 2.1 buts par match. La forme du duo
+          offensif parisien et la motivation de finir en beauté devant leur public nous confortent dans ce pronostic.
+          Le marché « Plus de 2,5 buts » est appuyé par les 7 dernières rencontres entre ces deux équipes (6 fois Over 2,5).
+          <strong style="color:var(--blue-title);">Recommandation : Mise 3/5.</strong>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 3 : ÉTAT DU PRONO ── -->
+  <section id="statuts" class="dash-section">
+    <div class="container">
+      <h2 class="section-title">État du Prono</h2>
+      <div class="divider"></div>
+      <p class="section-subtitle">
+        Chaque pronostic est classé selon notre niveau de confiance pour vous aider à calibrer votre mise.
+      </p>
+
+      <div class="status-grid">
+
+        <div class="status-card">
+          <span class="badge badge-safe">✅ Safe</span>
+          <h4>Pronostic Sûr</h4>
+          <p>
+            Niveau de confiance élevé (≥ 80%). Les indicateurs statistiques, la forme des équipes et le contexte
+            s'alignent fortement en faveur de ce résultat. Mise recommandée : 4 à 5 unités.
+          </p>
+        </div>
+
+        <div class="status-card">
+          <span class="badge badge-risky">⚠️ Risqué</span>
+          <h4>Pronostic Risqué</h4>
+          <p>
+            Niveau de confiance modéré (55–79%). Le pronostic est fondé mais des incertitudes subsistent
+            (blessures, météo, forme inconstante). Mise recommandée : 1 à 2 unités.
+          </p>
+        </div>
+
+        <div class="status-card">
+          <span class="badge badge-jackpot">💎 Jackpot</span>
+          <h4>Pronostic Jackpot</h4>
+          <p>
+            Cote élevée avec une analyse solide. Moins fréquent, mais potentiellement très rentable.
+            Réservé aux parieurs expérimentés. Mise recommandée : 1 unité maximum.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Historique rapide -->
+      <div style="margin-top:3rem;">
+        <h3 style="font-size:1.1rem; font-weight:700; color:var(--blue-title); margin-bottom:1.2rem;">📅 Historique récent</h3>
+        <div class="analyse-block" style="padding:0; overflow:hidden;">
+          <table class="stats-table" style="margin:0;">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Match</th>
+                <th>Pronostic</th>
+                <th>Cote</th>
+                <th>Statut</th>
+                <th>Résultat</th>
+              </tr>
+            </thead>
+            <tbody id="dash-histo-body">
+              <tr><td colspan="6" style="text-align:center;padding:1rem;color:var(--text-muted);">Chargement…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo-box"><img src="logo.svg" alt="SPARTIATE"></div>
+        <p>Des pronostics fiables, des analyses expertes et une communauté de gagnants.</p>
+      </div>
+
+      <div class="footer-col">
+        <h5>Navigation</h5>
+        <a href="index.html">Accueil</a>
+        <a href="historique.html">Historique</a>
+        <a href="affiliation.html">Affiliation</a>
+        <a href="login.html">Mon Compte</a>
+      </div>
+
+      <div class="footer-col">
+        <h5>Légal</h5>
+        <a href="mentions-legales.html">Mentions légales</a>
+        <a href="cgu.html">CGU</a>
+        <a href="confidentialite.html">Confidentialité</a>
+        <a href="jeu-responsable.html">Jeu responsable</a>
+      </div>
+
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <a href="https://www.instagram.com/spartiates_pronos/" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:.4rem;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>@spartiates_pronos</a>
+        <a href="mailto:support@spartiate-prono.fr">support@spartiate-prono.fr</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 SPARTIATE — Tous droits réservés. Les paris sportifs comportent des risques. Jouez de façon responsable.</p>
+      <div class="footer-legal">
+        <a href="cgu.html">CGU</a>
+        <a href="confidentialite.html">Confidentialité</a>
+        <a href="confidentialite.html">Cookies</a>
+      </div>
+    </div>
+  
+  </footer>
+
+  <script>
+
+    // ── Pronos du jour ──
+    async function loadPronos() {
+      const today = new Date().toISOString().slice(0,10);
+      const { data, error } = await supa
+        .from('pronos')
+        .select('*')
+        .eq('date_match', today)
+        .order('created_at', { ascending: true });
+
+      const grid = document.getElementById('prono-grid');
+      if (error || !data?.length) {
+        grid.innerHTML = '<p style="color:var(--text-muted);padding:1rem;">Aucun pronostic pour aujourd\'hui.</p>';
+        return;
+      }
+
+      grid.innerHTML = data.map(p => {
+        const equipes = p.match.split(/\s+[-—vs]+\s+/i);
+        const eq1 = equipes[0] || p.match;
+        const eq2 = equipes[1] || '';
+        const icon = SPORT_ICON[p.sport] || '🏅';
+        return `
+        <div class="prono-card">
+          <div class="prono-header">
+            <span class="prono-competition">${icon} ${p.sport}</span>
+            <span class="prono-time" style="font-size:.78rem;color:var(--text-muted);">${p.mise ? 'Mise : '+p.mise : ''}</span>
+          </div>
+          <div class="prono-body">
+            <div class="prono-match">
+              <div class="team"><div class="team-name">${eq1}</div></div>
+              <div class="vs">VS</div>
+              <div class="team"><div class="team-name">${eq2}</div></div>
+            </div>
+            <div class="prono-pick">
+              <div>
+                <div class="pick-label">Notre pronostic</div>
+                <div class="pick-value">${esc(p.prono)}</div>
+              </div>
+              <div class="pick-cote">Cote : ${esc(String(p.cote ?? '—'))}</div>
+            </div>
+            <div style="margin-top:.9rem;">${CAT_BADGE[p.categorie] ?? ''}</div>
+            ${p.notes ? `<p style="font-size:.82rem;color:var(--text-muted);margin-top:.7rem;line-height:1.6;">${esc(p.notes)}</p>` : ''}
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    // ── Historique récent ──
+    async function loadHistorique() {
+      const { data, error } = await supa
+        .from('historique')
+        .select('*')
+        .order('date_match', { ascending: false })
+        .limit(5);
+
+      const tbody = document.getElementById('dash-histo-body');
+      if (error || !data?.length) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:1rem;color:var(--text-muted);">Aucun historique disponible.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = data.map(r => {
+        const icon = SPORT_ICON[r.sport] || '🏅';
+        const res  = r.resultat === 'gagné'
+          ? `<td style="color:var(--green);font-weight:700;">✓ Gagné</td>`
+          : `<td style="color:var(--red);font-weight:700;">✗ Perdu</td>`;
+        return `<tr>
+          <td>${new Date(r.date_match).toLocaleDateString('fr-FR')}</td>
+          <td>${icon} ${esc(r.match)}</td>
+          <td>${esc(r.prono)}</td>
+          <td>${r.cote ?? '—'}</td>
+          <td>${CAT_BADGE_SM[r.categorie] ?? r.categorie}</td>
+          ${res}
+        </tr>`;
+      }).join('');
+    }
+
+    loadPronos();
+    loadHistorique();
+  </script>
+</body>
+</html>

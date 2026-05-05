@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jeu Responsable — SPARTIATE</title>
+  <meta name="description" content="SPARTIATE s'engage pour un jeu responsable. Informations, conseils et ressources pour jouer en toute sécurité.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://www.spartiate-prono.fr/jeu-responsable.html">
+  <meta name="theme-color" content="#CC1414">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .legal-body { background: var(--section-alt); padding: 60px 0 80px; }
+    .legal-box {
+      background: var(--white); border: 1px solid var(--border); border-radius: 14px;
+      padding: 3rem 3.5rem; max-width: 860px; margin: 0 auto;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    }
+    .legal-box h1 { font-size: 2rem; font-weight: 900; color: var(--blue-title); margin-bottom: .5rem; }
+    .legal-box .update { font-size: .8rem; color: var(--text-muted); margin-bottom: 2rem; display: block; }
+    .legal-box h2 { font-size: 1.1rem; font-weight: 700; color: var(--text); margin: 2rem 0 .6rem; padding-bottom: .4rem; border-bottom: 2px solid var(--red); display: inline-block; }
+    .legal-box p  { font-size: .9rem; color: var(--text); line-height: 1.8; margin-bottom: .9rem; }
+    .legal-box ul { font-size: .9rem; color: var(--text); line-height: 1.8; margin: 0 0 .9rem 1.5rem; }
+    .legal-box li { margin-bottom: .3rem; }
+    .legal-box a  { color: var(--blue-title); }
+    .legal-nav {
+      background: var(--white); border: 1px solid var(--border); border-radius: 10px;
+      padding: 1.2rem 1.5rem; max-width: 860px; margin: 0 auto 2rem;
+      display: flex; gap: .7rem; flex-wrap: wrap; align-items: center;
+    }
+    .legal-nav span { font-size: .75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; }
+    .legal-nav a {
+      font-size: .82rem; font-weight: 600; color: var(--text-muted);
+      text-decoration: none; padding: .3rem .8rem; border-radius: 5px;
+      border: 1px solid var(--border); transition: all .18s;
+    }
+    .legal-nav a:hover, .legal-nav a.active { background: var(--blue-btn); color: #fff; border-color: var(--blue-btn); }
+
+    .alert-box {
+      background: #FEF2F2; border: 1px solid #FECACA; border-radius: 10px;
+      padding: 1.3rem 1.6rem; margin-bottom: 2rem;
+      display: flex; align-items: flex-start; gap: 1rem;
+    }
+    .alert-box .alert-icon { font-size: 1.6rem; flex-shrink: 0; }
+    .alert-box p { margin: 0; font-size: .9rem; color: #991B1B; line-height: 1.65; }
+    .alert-box strong { color: #7F1D1D; }
+
+    .hotline-card {
+      background: linear-gradient(135deg, #0D1B3E, #1E3A8A);
+      border-radius: 12px; padding: 2rem; margin: 2rem 0; color: white; text-align: center;
+    }
+    .hotline-card h3 { font-size: 1.2rem; font-weight: 900; margin-bottom: .4rem; }
+    .hotline-card .number { font-size: 2.5rem; font-weight: 900; color: #93C5FD; letter-spacing: 2px; margin: .5rem 0; }
+    .hotline-card p { font-size: .85rem; color: rgba(255,255,255,.7); margin: 0; }
+
+    .quiz-card {
+      background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 10px;
+      padding: 1.5rem; margin: 1.5rem 0;
+    }
+    .quiz-card h4 { font-size: .95rem; font-weight: 700; color: #92400E; margin-bottom: 1rem; }
+    .quiz-item { font-size: .87rem; color: #78350F; margin-bottom: .6rem; display: flex; align-items: flex-start; gap: .5rem; }
+    .quiz-item::before { content: "□"; font-size: 1rem; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-box"><img src="logo.svg" alt="SPARTIATE — Pronostics Sportifs Premium"></div>
+      </a>
+      <nav class="nav">
+        <a href="historique.html"  class="nav-btn">Historique</a>
+        <a href="affiliation.html" class="nav-btn">Affiliation</a>
+      </nav>
+      <div class="search-wrap">
+        <input type="text" placeholder="Rechercher un sport, un prono…">
+        <span class="search-icon">🔍</span>
+      </div>
+      <a href="login.html" class="btn-connect">Se Connecter</a>
+    </div>
+  </header>
+
+  <main class="legal-body">
+    <div class="container">
+
+      <div class="legal-nav">
+        <span>Pages légales :</span>
+        <a href="mentions-legales.html">Mentions légales</a>
+        <a href="cgu.html">CGU</a>
+        <a href="confidentialite.html">Confidentialité</a>
+        <a href="jeu-responsable.html" class="active">Jeu responsable</a>
+      </div>
+
+      <div class="legal-box">
+        <h1>Jeu Responsable</h1>
+        <span class="update">Dernière mise à jour : 4 mai 2026</span>
+
+        <div class="alert-box">
+          <div class="alert-icon">⚠️</div>
+          <p><strong>Avertissement important :</strong> Les paris sportifs comportent des risques de pertes financières. Les pronostics SPARTIATE sont fournis à titre informatif uniquement. Ne pariez jamais plus que ce que vous pouvez vous permettre de perdre. Le jeu est interdit aux mineurs de moins de 18 ans.</p>
+        </div>
+
+        <h2>Notre engagement</h2>
+        <p>Chez SPARTIATE, nous considérons que la sécurité et le bien-être de nos utilisateurs passent avant tout. Notre service est conçu pour être un outil d'analyse sportive divertissant, et non une incitation à des comportements de jeu excessifs ou problématiques.</p>
+        <p>Nous rappelons systématiquement que les paris sportifs doivent rester un loisir et jamais une source de revenus principale ou une solution à des difficultés financières.</p>
+
+        <h2>Les règles d'or du pari responsable</h2>
+        <ul>
+          <li>Ne pariez que l'argent que vous pouvez vous permettre de perdre.</li>
+          <li>Fixez-vous un budget quotidien, hebdomadaire et mensuel et respectez-le.</li>
+          <li>Ne cherchez jamais à récupérer vos pertes en augmentant vos mises.</li>
+          <li>Ne pariez pas sous l'influence de l'alcool ou d'émotions fortes.</li>
+          <li>Considérez le pari comme un divertissement, pas comme un investissement.</li>
+          <li>Faites des pauses régulières et ne pariez pas tous les jours.</li>
+          <li>Ne pariez jamais de l'argent destiné à vos besoins essentiels (loyer, nourriture, factures).</li>
+        </ul>
+
+        <h2>Signes d'une dépendance au jeu</h2>
+        <p>Consultez-vous si vous reconnaissez plusieurs de ces comportements :</p>
+
+        <div class="quiz-card">
+          <h4>🔍 Auto-évaluation — Cochez les cases qui vous correspondent :</h4>
+          <div class="quiz-item">Je pense constamment aux paris, même quand je fais autre chose.</div>
+          <div class="quiz-item">J'ai besoin de miser de plus en plus pour ressentir le même plaisir.</div>
+          <div class="quiz-item">J'ai déjà emprunté de l'argent pour parier ou rembourser des dettes de jeu.</div>
+          <div class="quiz-item">Je cache mes activités de jeu à mes proches.</div>
+          <div class="quiz-item">Je continue à parier même quand je n'en ai pas les moyens.</div>
+          <div class="quiz-item">Je ressens de l'irritation ou de l'anxiété quand je ne peux pas parier.</div>
+          <div class="quiz-item">J'ai manqué des obligations professionnelles ou familiales à cause des paris.</div>
+        </div>
+        <p>Si vous avez coché 3 cases ou plus, nous vous encourageons vivement à contacter une aide professionnelle.</p>
+
+        <h2>Obtenir de l'aide</h2>
+
+        <div class="hotline-card">
+          <h3>📞 Joueurs Info Service</h3>
+          <div class="number">09 74 75 13 13</div>
+          <p>Anonyme, gratuit, disponible 7j/7 de 8h à 2h.<br>Écoute, information et orientation vers des professionnels.</p>
+        </div>
+
+        <p>D'autres ressources sont disponibles :</p>
+        <ul>
+          <li><strong>SOS Joueurs :</strong> <a href="https://www.sosjoueurs.org" target="_blank" rel="noopener">sosjoueurs.org</a> — Accompagnement des joueurs problématiques et de leurs proches.</li>
+          <li><strong>Addictions France :</strong> <a href="https://www.addictions-france.org" target="_blank" rel="noopener">addictions-france.org</a></li>
+          <li><strong>ANJ (Autorité Nationale des Jeux) :</strong> <a href="https://www.anj.fr" target="_blank" rel="noopener">anj.fr</a> — Outils d'auto-exclusion auprès des opérateurs agréés.</li>
+        </ul>
+
+        <h2>Protection des mineurs</h2>
+        <p>Les paris sportifs sont strictement interdits aux personnes de moins de 18 ans. SPARTIATE met en place des mesures de vérification de l'âge lors de l'inscription. Si vous êtes parent, nous vous recommandons d'utiliser des logiciels de contrôle parental pour restreindre l'accès à ce type de contenu.</p>
+
+        <h2>Auto-exclusion</h2>
+        <p>Si vous souhaitez vous exclure temporairement ou définitivement de notre service, contactez-nous à <a href="mailto:support@spartiate-prono.fr">support@spartiate-prono.fr</a>. Nous traiterons votre demande dans les 24 heures.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo-box"><img src="logo.svg" alt="SPARTIATE"></div>
+        <p>Des pronostics fiables, des analyses expertes et une communauté de gagnants.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Navigation</h5>
+        <a href="index.html">Accueil</a>
+        <a href="historique.html">Historique</a>
+        <a href="affiliation.html">Affiliation</a>
+        <a href="login.html">Mon Compte</a>
+      </div>
+      <div class="footer-col">
+        <h5>Légal</h5>
+        <a href="mentions-legales.html">Mentions légales</a>
+        <a href="cgu.html">CGU</a>
+        <a href="confidentialite.html">Confidentialité</a>
+        <a href="jeu-responsable.html">Jeu responsable</a>
+      </div>
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <a href="https://www.instagram.com/spartiates_pronos/" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:.4rem;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>@spartiates_pronos</a>
+        <a href="mailto:support@spartiate-prono.fr">support@spartiate-prono.fr</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 SPARTIATE — Tous droits réservés. Les paris sportifs comportent des risques. Jouez de façon responsable.</p>
+      <div class="footer-legal">
+        <a href="cgu.html">CGU</a>
+        <a href="confidentialite.html">Confidentialité</a>
+        <a href="mentions-legales.html">Mentions légales</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

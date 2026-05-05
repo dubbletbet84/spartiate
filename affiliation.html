@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Programme d'Affiliation — SPARTIATE</title>
+  <meta name="description" content="Rejoignez le programme d'affiliation SPARTIATE et gagnez des commissions en recommandant nos abonnements de pronostics sportifs. Jusqu'à 30% de commission.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://www.spartiate-prono.fr/affiliation.html">
+  <meta name="theme-color" content="#CC1414">
+  <meta property="og:title"       content="Programme Affiliation — SPARTIATE">
+  <meta property="og:description" content="Gagnez jusqu'à 30% de commission en recommandant SPARTIATE. Programme d'affiliation simple et transparent.">
+  <meta property="og:type"        content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Programme d'Affiliation — SPARTIATE",
+    "url": "https://www.spartiate-prono.fr/affiliation.html",
+    "description": "Programme d'affiliation SPARTIATE — gagnez des commissions en recommandant nos abonnements sportifs.",
+    "inLanguage": "fr-FR",
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil",      "item": "https://www.spartiate-prono.fr/" },
+        { "@type": "ListItem", "position": 2, "name": "Affiliation",  "item": "https://www.spartiate-prono.fr/affiliation.html" }
+      ]
+    }
+  }
+  </script>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .steps-grid {
+      display: grid;
+      gap: 1.4rem;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      counter-reset: steps;
+    }
+    .step-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem 1.6rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,.05);
+      position: relative;
+      counter-increment: steps;
+    }
+    .step-card::before {
+      content: counter(steps);
+      position: absolute;
+      top: -14px;
+      left: 1.6rem;
+      background: var(--red);
+      color: #fff;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .82rem;
+      font-weight: 900;
+    }
+    .step-card h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin: .5rem 0 .5rem; }
+    .step-card p  { font-size: .86rem; color: var(--text-muted); line-height: 1.65; }
+
+    .commission-grid {
+      display: grid;
+      gap: 1.3rem;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+    .commission-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,.05);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .commission-card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(0,0,0,.1); }
+    .commission-card.featured { border: 2px solid var(--red); }
+    .commission-pct {
+      font-size: 3.2rem;
+      font-weight: 900;
+      color: var(--blue-title);
+      line-height: 1;
+    }
+    .commission-pct span { font-size: 1.5rem; }
+    .commission-card h4 { font-size: .9rem; font-weight: 700; color: var(--text); margin: .6rem 0 .4rem; }
+    .commission-card p  { font-size: .82rem; color: var(--text-muted); line-height: 1.55; }
+    .commission-tag {
+      display: inline-block;
+      background: #FEF2F2;
+      color: var(--red);
+      font-size: .72rem;
+      font-weight: 700;
+      padding: .22rem .7rem;
+      border-radius: 12px;
+      margin-top: .8rem;
+    }
+
+    .faq-list { display: flex; flex-direction: column; gap: .8rem; }
+    .faq-item {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,.04);
+    }
+    .faq-q {
+      padding: 1.1rem 1.4rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+    .faq-q:hover { background: #FAFBFF; }
+    .faq-q .arrow { color: var(--text-muted); font-size: 1rem; transition: transform .2s; }
+    .faq-q.open .arrow { transform: rotate(180deg); }
+    .faq-a {
+      display: none;
+      padding: 0 1.4rem 1.1rem;
+      font-size: .87rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      border-top: 1px solid var(--border);
+    }
+    .faq-a.open { display: block; }
+
+    .aff-form-box {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      max-width: 560px;
+      margin: 0 auto;
+      box-shadow: 0 4px 20px rgba(0,0,0,.07);
+    }
+    .aff-form-box h3 { font-size: 1.4rem; font-weight: 900; color: var(--blue-title); margin-bottom: .35rem; }
+    .aff-form-box .sub { font-size: .88rem; color: var(--text-muted); margin-bottom: 1.6rem; }
+
+    .testimonial-grid {
+      display: grid;
+      gap: 1.3rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+    .testimonial {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.8rem;
+      box-shadow: 0 1px 6px rgba(0,0,0,.05);
+    }
+    .testimonial .stars { color: var(--gold); font-size: 1rem; margin-bottom: .8rem; }
+    .testimonial p { font-size: .88rem; color: var(--text); line-height: 1.65; margin-bottom: 1rem; font-style: italic; }
+    .testimonial .author { font-size: .8rem; font-weight: 700; color: var(--text-muted); }
+    .testimonial .earned { font-size: .8rem; color: var(--green); font-weight: 700; }
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-box"><img src="logo.svg" alt="SPARTIATE — Pronostics Sportifs Premium"></div>
+      </a>
+      <nav class="nav">
+        <a href="historique.html"  class="nav-btn">Historique</a>
+        <a href="affiliation.html" class="nav-btn active">Affiliation</a>
+      </nav>
+      <div class="search-wrap">
+        <input type="text" placeholder="Rechercher un sport, un prono…">
+        <span class="search-icon">🔍</span>
+      </div>
+      <a href="login.html" class="btn-connect">Se Connecter</a>
+    </div>
+  </header>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="hero-inner">
+      <span class="hero-tag">💸 Programme d'affiliation</span>
+      <h1>Gagnez de l'argent en <em>recommandant</em> SPARTIATE</h1>
+      <p>Partagez votre lien unique, recrutez des abonnés et percevez des commissions récurrentes chaque mois. Simple, transparent, rentable.</p>
+      <div class="hero-cta">
+        <a href="#rejoindre" class="btn-primary">Devenir affilié</a>
+        <a href="#commissions" class="btn-outline-w">Voir les commissions</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item"><strong>30%</strong><span>Commission max</span></div>
+        <div class="stat-item"><strong>+120</strong><span>Affiliés actifs</span></div>
+        <div class="stat-item"><strong>J+15</strong><span>Paiement mensuel</span></div>
+        <div class="stat-item"><strong>∞</strong><span>Sans plafond</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── COMMENT ÇA MARCHE ── -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Comment ça marche ?</h2>
+      <div class="divider"></div>
+      <p class="section-subtitle">Quatre étapes simples pour commencer à gagner des commissions dès aujourd'hui.</p>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <h3>Créez votre compte</h3>
+          <p>Inscrivez-vous gratuitement et accédez à votre espace affilié en quelques minutes.</p>
+        </div>
+        <div class="step-card">
+          <h3>Obtenez votre lien</h3>
+          <p>Récupérez votre lien d'affiliation unique depuis votre tableau de bord personnel.</p>
+        </div>
+        <div class="step-card">
+          <h3>Partagez partout</h3>
+          <p>Partagez votre lien sur vos réseaux sociaux, blog, chaîne YouTube ou groupe WhatsApp.</p>
+        </div>
+        <div class="step-card">
+          <h3>Encaissez vos gains</h3>
+          <p>Percevez vos commissions le 15 de chaque mois par virement bancaire ou PayPal.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── COMMISSIONS ── -->
+  <section id="commissions" class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Grille des Commissions</h2>
+      <div class="divider"></div>
+      <p class="section-subtitle">Plus vous recrutez, plus votre taux augmente. Les commissions sont récurrentes tant que l'abonné reste actif.</p>
+
+      <div class="commission-grid">
+        <div class="commission-card">
+          <div class="commission-pct"><span>+</span>15<span>%</span></div>
+          <h4>Ambassadeur</h4>
+          <p>Dès votre 1er filleul. Commissions récurrentes sur tous les abonnements Starter, Pro et Élite.</p>
+          <span class="commission-tag">0 — 9 filleuls actifs</span>
+        </div>
+        <div class="commission-card featured">
+          <div class="commission-pct" style="color:var(--red);"><span>+</span>22<span>%</span></div>
+          <h4>Expert</h4>
+          <p>À partir de 10 filleuls actifs. Bonus trimestriel de 50€ si objectif maintenu 3 mois.</p>
+          <span class="commission-tag">10 — 29 filleuls actifs</span>
+        </div>
+        <div class="commission-card">
+          <div class="commission-pct" style="color:var(--gold);"><span>+</span>30<span>%</span></div>
+          <h4>Élite</h4>
+          <p>Le taux maximum. Gestionnaire dédié, bonus mensuels et accès aux ressources marketing exclusives.</p>
+          <span class="commission-tag">30+ filleuls actifs</span>
+        </div>
+      </div>
+
+      <!-- Exemple de calcul -->
+      <div style="background:var(--white); border:1px solid var(--border); border-radius:12px; padding:2rem; margin-top:2rem; box-shadow:0 1px 6px rgba(0,0,0,.05);">
+        <h4 style="font-size:1rem; font-weight:700; color:var(--blue-title); margin-bottom:1rem;">💡 Exemple de revenus mensuels</h4>
+        <div style="display:grid; gap:1rem; grid-template-columns:repeat(auto-fit, minmax(200px,1fr));">
+          <div style="background:#F8FAFC; border-radius:8px; padding:1rem; text-align:center;">
+            <p style="font-size:.78rem; color:var(--text-muted); margin-bottom:.4rem;">5 filleuls abonnement Pro</p>
+            <p style="font-size:1.5rem; font-weight:900; color:var(--green);">+18,74€/mois</p>
+            <p style="font-size:.72rem; color:var(--text-muted);">15% × 24,99€ × 5</p>
+          </div>
+          <div style="background:#F8FAFC; border-radius:8px; padding:1rem; text-align:center;">
+            <p style="font-size:.78rem; color:var(--text-muted); margin-bottom:.4rem;">15 filleuls abonnement Pro</p>
+            <p style="font-size:1.5rem; font-weight:900; color:var(--green);">+82,47€/mois</p>
+            <p style="font-size:.72rem; color:var(--text-muted);">22% × 24,99€ × 15</p>
+          </div>
+          <div style="background:#FEF2F2; border-radius:8px; padding:1rem; text-align:center;">
+            <p style="font-size:.78rem; color:var(--text-muted); margin-bottom:.4rem;">30 filleuls abonnement Élite</p>
+            <p style="font-size:1.5rem; font-weight:900; color:var(--red);">+449,82€/mois</p>
+            <p style="font-size:.72rem; color:var(--text-muted);">30% × 49,99€ × 30</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TÉMOIGNAGES ── -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Ce que disent nos affiliés</h2>
+      <div class="divider"></div>
+
+      <div class="testimonial-grid">
+        <div class="testimonial">
+          <div class="stars">★★★★★</div>
+          <p>"J'ai partagé le lien sur ma chaîne YouTube sportive et en 3 mois j'avais déjà 18 filleuls actifs. Les paiements arrivent toujours à temps."</p>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span class="author">— Karim T., YouTubeur sport</span>
+            <span class="earned">+€247/mois</span>
+          </div>
+        </div>
+        <div class="testimonial">
+          <div class="stars">★★★★★</div>
+          <p>"Le programme est ultra-simple. Mon blog foot m'a permis d'atteindre le palier Élite en 4 mois. Le support est réactif et professionnel."</p>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span class="author">— Sarah M., Blogueuse</span>
+            <span class="earned">+€391/mois</span>
+          </div>
+        </div>
+        <div class="testimonial">
+          <div class="stars">★★★★☆</div>
+          <p>"Je partage le lien dans mon groupe Telegram de fans de NBA. Les conversions sont bonnes car le service est vraiment qualitatif."</p>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span class="author">— Antoine B., Admin Telegram</span>
+            <span class="earned">+€132/mois</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FAQ ── -->
+  <section class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Questions Fréquentes</h2>
+      <div class="divider"></div>
+      <div class="faq-list" style="max-width:760px;">
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">L'affiliation est-elle gratuite ? <span class="arrow">▼</span></div>
+          <div class="faq-a">Oui, rejoindre le programme d'affiliation SPARTIATE est totalement gratuit. Pas de frais cachés, pas d'abonnement requis pour être affilié.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">Comment sont suivis mes filleuls ? <span class="arrow">▼</span></div>
+          <div class="faq-a">Chaque affilié reçoit un lien unique avec un cookie de tracking valable 30 jours. Tout abonnement souscrit via votre lien dans ce délai vous est attribué.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">Quand et comment suis-je payé ? <span class="arrow">▼</span></div>
+          <div class="faq-a">Les commissions sont versées le 15 de chaque mois pour le mois précédent, par virement bancaire SEPA ou PayPal, dès 20€ de gains cumulés.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">Les commissions sont-elles récurrentes ? <span class="arrow">▼</span></div>
+          <div class="faq-a">Oui. Tant que votre filleul maintient son abonnement actif, vous percevez la commission chaque mois sur son renouvellement.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">Y a-t-il des ressources marketing disponibles ? <span class="arrow">▼</span></div>
+          <div class="faq-a">Oui, nous mettons à disposition des bannières, visuels pour réseaux sociaux, textes optimisés et guides pratiques dans l'espace affilié. Les affiliés Élite bénéficient de ressources exclusives et d'un gestionnaire dédié.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FORMULAIRE D'INSCRIPTION ── -->
+  <section id="rejoindre" class="section">
+    <div class="container">
+      <h2 class="section-title" style="text-align:center;">Rejoindre le Programme</h2>
+      <div class="divider" style="margin:0.7rem auto 2rem;"></div>
+      <div class="aff-form-box">
+        <h3>Créez votre compte affilié</h3>
+        <p class="sub">Gratuit, sans engagement. Commencez à gagner dès votre premier filleul.</p>
+        <form onsubmit="handleAffiliation(event)">
+          <div class="form-group">
+            <label>Prénom & Nom</label>
+            <input type="text" placeholder="Jean Dupont" required>
+          </div>
+          <div class="form-group">
+            <label>Adresse e-mail</label>
+            <input type="email" placeholder="jean@exemple.fr" required>
+          </div>
+          <div class="form-group">
+            <label>Comment comptez-vous promouvoir SPARTIATE ?</label>
+            <input type="text" placeholder="Blog, YouTube, Réseaux sociaux, Telegram…" required>
+          </div>
+          <div class="form-group">
+            <label>Mot de passe</label>
+            <input type="password" placeholder="8 caractères minimum" required>
+          </div>
+          <button type="submit" class="btn-submit">Rejoindre le programme →</button>
+          <p style="text-align:center; font-size:.78rem; color:var(--text-muted); margin-top:.9rem;">
+            En vous inscrivant, vous acceptez nos <a href="#" style="color:var(--blue-title);">conditions d'affiliation</a>.
+          </p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo-box"><img src="logo.svg" alt="SPARTIATE"></div>
+        <p>Des pronostics fiables, des analyses expertes et une communauté de gagnants.</p>
+      </div>
+
+      <div class="footer-col">
+        <h5>Navigation</h5>
+        <a href="index.html">Accueil</a>
+        <a href="historique.html">Historique</a>
+        <a href="affiliation.html">Affiliation</a>
+        <a href="login.html">Mon Compte</a>
+      </div>
+
+      <div class="footer-col">
+        <h5>Légal</h5>
+        <a href="mentions-legales.html">Mentions légales</a>
+        <a href="cgu.html">CGU</a>
+        <a href="confidentialite.html">Confidentialité</a>
+        <a href="jeu-responsable.html">Jeu responsable</a>
+      </div>
+
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <a href="https://www.instagram.com/spartiates_pronos/" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:.4rem;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>@spartiates_pronos</a>
+        <a href="mailto:support@spartiate-prono.fr">support@spartiate-prono.fr</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 SPARTIATE — Tous droits réservés. Les paris sportifs comportent des risques. Jouez de façon responsable.</p>
+      <div class="footer-legal">
+        <a href="cgu.html">CGU</a>
+        <a href="confidentialite.html">Confidentialité</a>
+        <a href="confidentialite.html">Cookies</a>
+      </div>
+    </div>
+  
+  </footer>
+
+  <script>
+    function toggleFaq(el) {
+      el.classList.toggle('open');
+      el.nextElementSibling.classList.toggle('open');
+    }
+    function handleAffiliation(e) {
+      e.preventDefault();
+      alert('Votre demande a été enregistrée ! Vous recevrez un e-mail de confirmation sous 24h.');
+    }
+  </script>
+
+</body>
+</html>
