@@ -203,12 +203,29 @@
           </div>
           <div class="form-row">
             <label>Abonnement requis</label>
-            <select id="f-abo">
-              <option value="spartiate_starter">Spartiate Starter</option>
-              <option value="spartiate_vip">Spartiate VIP</option>
-              <option value="spartiate_pro" selected>Spartiate Pro</option>
-              <option value="spartiate_gestion">Spartiate Gestion</option>
-            </select>
+            <div style="display:flex; flex-direction:column; gap:.6rem; padding:.7rem .9rem; background:#0F172A; border:1px solid #334155; border-radius:8px;">
+              <label style="display:flex; align-items:center; gap:.6rem; color:#CBD5E1; font-size:.88rem; cursor:pointer;">
+                <input type="checkbox" class="f-abo" value="spartiate_starter"
+                  style="width:16px;height:16px;accent-color:var(--red);cursor:pointer;">
+                Spartiate Starter
+              </label>
+              <label style="display:flex; align-items:center; gap:.6rem; color:#CBD5E1; font-size:.88rem; cursor:pointer;">
+                <input type="checkbox" class="f-abo" value="spartiate_vip"
+                  style="width:16px;height:16px;accent-color:var(--red);cursor:pointer;">
+                Spartiate VIP
+              </label>
+              <label style="display:flex; align-items:center; gap:.6rem; color:#CBD5E1; font-size:.88rem; cursor:pointer;">
+                <input type="checkbox" class="f-abo" value="spartiate_pro" checked
+                  style="width:16px;height:16px;accent-color:var(--red);cursor:pointer;">
+                Spartiate Pro
+              </label>
+              <label style="display:flex; align-items:center; gap:.6rem; color:#CBD5E1; font-size:.88rem; cursor:pointer;">
+                <input type="checkbox" class="f-abo" value="spartiate_gestion"
+                  style="width:16px;height:16px;accent-color:var(--red);cursor:pointer;">
+                Spartiate Gestion
+              </label>
+            </div>
+            <p style="font-size:.72rem; color:#64748B; margin-top:.3rem;">Le prono sera visible par les abonnements cochés.</p>
           </div>
           <div class="form-row">
             <label>Notes / Analyse (optionnel)</label>
@@ -334,7 +351,7 @@
         cote:              parseFloat(document.getElementById('f-cote').value) || null,
         mise:              document.getElementById('f-mise').value.trim() || null,
         categorie:         document.getElementById('f-categorie').value,
-        abonnement_requis: document.getElementById('f-abo').value,
+        abonnement_requis: [...document.querySelectorAll('.f-abo:checked')].map(c => c.value).join(',') || 'spartiate_starter',
         notes:             document.getElementById('f-notes').value.trim() || null,
         statut:            'en_attente',
       };
