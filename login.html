@@ -200,31 +200,18 @@
       switchTab(name, btns[idx]);
     }
 
-    async function handleLogin(e) {
+    function handleLogin(e) {
       e.preventDefault();
       const emailInput = document.querySelector('#form-login input[type="email"]');
       const email = emailInput.value.trim();
       const pwd   = document.querySelector('#form-login input[type="password"]').value;
-      const btn   = document.querySelector('#form-login .btn-submit');
-      btn.disabled = true; btn.textContent = 'Connexion…';
 
-      // Accès admin via Supabase Auth
-      if (email === 'sodim84') {
-        const { data, error } = await supa.auth.signInWithPassword({
-          email: 'admin@spartiate-prono.fr',
-          password: pwd,
-        });
-        btn.disabled = false; btn.textContent = 'Se connecter';
-        if (!error && data.session) {
-          window.location.href = 'admin.html';
-          return;
-        }
-        emailInput.setCustomValidity('Identifiant ou mot de passe incorrect.');
-        emailInput.reportValidity();
+      // Accès admin direct
+      if (email === 'sodim84' && pwd === 'thube.spart84') {
+        sessionStorage.setItem('admin_ok', '1');
+        window.location.href = 'admin.html';
         return;
       }
-
-      btn.disabled = false; btn.textContent = 'Se connecter';
 
       // Validation email pour les utilisateurs normaux
       if (!email.includes('@')) {
