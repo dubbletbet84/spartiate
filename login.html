@@ -338,24 +338,28 @@
       }
       pwds[0].setCustomValidity(''); pwds[1].setCustomValidity('');
 
-      btn.disabled = true; btn.textContent = 'Création…';
+      btn.disabled = true; btn.textContent = 'Redirection…';
       const hash = await hashPwd(pwd);
 
-      const { error } = await supa.from('clients').insert([{
-        prenom, nom, email,
-        mot_de_passe: hash,
-        abonnement: selectedPlan,
-        created_at: new Date().toISOString(),
-      }]);
+      // Envoi BDD en arrière-plan avec keepalive (survit à la navigation)
+      fetch('https://rfkishlsopgiizwwbwzp.supabase.co/rest/v1/clients', {
+        method: 'POST',
+        keepalive: true,
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJma2lzaGxzb3BnaWl6d3did3pwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc5ODMyMDQsImV4cCI6MjA5MzU1OTIwNH0.IDf_iInryygig5LvMi5TSGSm3_EBTlhyS45DxBtqMe0',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJma2lzaGxzb3BnaWl6d3did3pwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc5ODMyMDQsImV4cCI6MjA5MzU1OTIwNH0.IDf_iInryygig5LvMi5TSGSm3_EBTlhyS45DxBtqMe0',
+          'Prefer': 'return=minimal',
+        },
+        body: JSON.stringify({
+          prenom, nom, email,
+          mot_de_passe: hash,
+          abonnement: selectedPlan,
+          created_at: new Date().toISOString(),
+        }),
+      });
 
-      btn.disabled = false; btn.textContent = 'Créer mon compte et payer →';
-
-      if (error) {
-        alert('Erreur : ' + (error.message.includes('duplicate') ? 'Cet email est déjà utilisé.' : error.message));
-        return;
-      }
-
-      // Redirection directe vers Stripe
+      // Redirection immédiate vers Stripe
       window.location.href = selectedStripeUrl;
     }
   </script>
