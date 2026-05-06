@@ -259,6 +259,59 @@
       </div>
 
     </div>
+
+    <!-- ── ANALYSE DU JOUR ── -->
+    <div class="admin-card" style="margin-top:2rem;">
+      <h3>📝 Analyse du Jour</h3>
+      <form id="analyse-form" onsubmit="saveAnalyse(event)">
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem;">
+          <div class="form-row" style="margin:0;">
+            <label>Titre du match</label>
+            <input type="text" id="a-match" placeholder="PSG — OM">
+          </div>
+          <div class="form-row" style="margin:0;">
+            <label>Équipe 1</label>
+            <input type="text" id="a-eq1" placeholder="PSG">
+          </div>
+          <div class="form-row" style="margin:0;">
+            <label>Équipe 2</label>
+            <input type="text" id="a-eq2" placeholder="OM">
+          </div>
+        </div>
+        <div class="form-row" style="margin-top:1rem;">
+          <label>Contexte du match</label>
+          <textarea id="a-contexte" rows="3" placeholder="Décrivez le contexte du match…"></textarea>
+        </div>
+
+        <!-- Stats dynamiques -->
+        <div class="form-row">
+          <label>Statistiques comparatives</label>
+          <table style="width:100%; border-collapse:collapse; margin-bottom:.5rem;">
+            <thead>
+              <tr>
+                <th style="text-align:left; font-size:.72rem; color:#64748B; padding:.4rem .5rem; width:40%;">Critère</th>
+                <th style="text-align:left; font-size:.72rem; color:#64748B; padding:.4rem .5rem;" id="a-th-eq1">Équipe 1</th>
+                <th style="text-align:left; font-size:.72rem; color:#64748B; padding:.4rem .5rem;" id="a-th-eq2">Équipe 2</th>
+                <th style="width:32px;"></th>
+              </tr>
+            </thead>
+            <tbody id="stats-rows"></tbody>
+          </table>
+          <button type="button" onclick="addStatRow()" style="background:none; border:1px dashed #334155; color:#94A3B8; padding:.4rem .9rem; border-radius:6px; cursor:pointer; font-size:.82rem; font-family:inherit;">+ Ajouter une ligne</button>
+        </div>
+
+        <div class="form-row">
+          <label>Raisonnement</label>
+          <textarea id="a-raisonnement" rows="3" placeholder="Notre analyse et raisonnement…"></textarea>
+        </div>
+        <div class="form-row">
+          <label>Recommandation</label>
+          <input type="text" id="a-recommandation" placeholder="Ex: Mise 3/5">
+        </div>
+        <button type="submit" class="btn-admin" style="margin-top:.5rem;">💾 Publier l'analyse</button>
+      </form>
+    </div>
+
   </div>
 
   <!-- Toast -->
@@ -289,6 +342,7 @@
       document.getElementById('admin-panel').style.display  = 'block';
       document.getElementById('f-date').value = new Date().toISOString().slice(0, 10);
       loadPronos();
+      loadAnalyse();
     }
 
     if (sessionStorage.getItem('admin_ok') === '1') showPanel();
@@ -384,6 +438,62 @@
         }
       }
       showToast('Statut mis à jour ✓');
+    }
+
+    // ── Analyse ──
+    function addStatRow(critere='', val1='', val2='') {
+      const tbody = document.getElementById('stats-rows');
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="padding:.3rem .2rem;"><input type="text" placeholder="Critère" value="${esc(critere)}" style="width:100%;padding:.4rem .6rem;background:#0F172A;border:1px solid #334155;border-radius:6px;color:#fff;font-family:inherit;font-size:.82rem;"></td>
+        <td style="padding:.3rem .2rem;"><input type="text" placeholder="Valeur" value="${esc(val1)}" style="width:100%;padding:.4rem .6rem;background:#0F172A;border:1px solid #334155;border-radius:6px;color:#fff;font-family:inherit;font-size:.82rem;"></td>
+        <td style="padding:.3rem .2rem;"><input type="text" placeholder="Valeur" value="${esc(val2)}" style="width:100%;padding:.4rem .6rem;background:#0F172A;border:1px solid #334155;border-radius:6px;color:#fff;font-family:inherit;font-size:.82rem;"></td>
+        <td style="padding:.3rem .2rem;"><button type="button" onclick="this.closest('tr').remove()" style="background:none;border:none;color:#EF4444;cursor:pointer;font-size:1rem;padding:.2rem;">✕</button></td>`;
+      tbody.appendChild(tr);
+    }
+
+    function getStats() {
+      return [...document.querySelectorAll('#stats-rows tr')].map(tr => {
+        const [c, v1, v2] = tr.querySelectorAll('input');
+        return { critere: c.value.trim(), val1: v1.value.trim(), val2: v2.value.trim() };
+      }).filter(r => r.critere);
+    }
+
+    async function loadAnalyse() {
+      const { data } = await supa.from('analyse').select('*').eq('id', 1).single();
+      if (!data) return;
+      document.getElementById('a-match').value         = data.match_titre || '';
+      document.getElementById('a-eq1').value           = data.equipe1     || '';
+      document.getElementById('a-eq2').value           = data.equipe2     || '';
+      document.getElementById('a-contexte').value      = data.contexte    || '';
+      document.getElementById('a-raisonnement').value  = data.raisonnement|| '';
+      document.getElementById('a-recommandation').value= data.recommandation||'';
+      document.getElementById('stats-rows').innerHTML  = '';
+      (data.stats || []).forEach(r => addStatRow(r.critere, r.val1, r.val2));
+    }
+
+    async function saveAnalyse(e) {
+      e.preventDefault();
+      const btn = e.submitter;
+      btn.disabled = true; btn.textContent = 'Enregistrement…';
+      const eq1 = document.getElementById('a-eq1').value.trim();
+      const eq2 = document.getElementById('a-eq2').value.trim();
+      if (document.getElementById('a-th-eq1')) document.getElementById('a-th-eq1').textContent = eq1 || 'Équipe 1';
+      if (document.getElementById('a-th-eq2')) document.getElementById('a-th-eq2').textContent = eq2 || 'Équipe 2';
+      const payload = {
+        match_titre:    document.getElementById('a-match').value.trim(),
+        equipe1:        eq1,
+        equipe2:        eq2,
+        contexte:       document.getElementById('a-contexte').value.trim(),
+        stats:          getStats(),
+        raisonnement:   document.getElementById('a-raisonnement').value.trim(),
+        recommandation: document.getElementById('a-recommandation').value.trim(),
+        updated_at:     new Date().toISOString(),
+      };
+      const { error } = await supa.from('analyse').upsert([{ id: 1, ...payload }]);
+      btn.disabled = false; btn.textContent = '💾 Publier l\'analyse';
+      if (error) { showToast('Erreur : ' + error.message, 'error'); return; }
+      showToast('✅ Analyse publiée !');
     }
 
     // ── Supprimer ──

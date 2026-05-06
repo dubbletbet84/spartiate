@@ -87,48 +87,8 @@
     <div class="container">
       <h2 class="section-title">Analyse</h2>
       <div class="divider"></div>
-      <p class="section-subtitle">Décryptage complet du match phare de la journée : PSG — OM.</p>
-
-      <div class="analyse-block">
-        <h4>📋 Contexte du Match</h4>
-        <p>
-          Le Classique opposant le Paris Saint-Germain à l'Olympique de Marseille se joue dans un contexte de fin de saison tendu.
-          Le PSG, déjà sacré champion, aborde ce match sans pression mais avec l'objectif de conserver son invincibilité à domicile.
-          L'OM, de son côté, lutte pour une qualification en Coupe d'Europe et se présentera avec toutes ses forces vives.
-        </p>
-      </div>
-
-      <div class="analyse-block">
-        <h4>📊 Statistiques Comparatives</h4>
-        <table class="stats-table">
-          <thead>
-            <tr>
-              <th>Critère</th>
-              <th>PSG</th>
-              <th>OM</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>Buts marqués (domicile/extérieur)</td><td>2.8 / match</td><td>1.6 / match</td></tr>
-            <tr><td>Buts encaissés</td><td>0.7 / match</td><td>1.3 / match</td></tr>
-            <tr><td>Possession moyenne</td><td>61%</td><td>48%</td></tr>
-            <tr><td>Tirs cadrés / match</td><td>7.2</td><td>4.8</td></tr>
-            <tr><td>Forme récente (5 derniers)</td><td>V V V N V</td><td>N D V V D</td></tr>
-            <tr><td>Confrontations directes (5 dernières)</td><td>3 victoires</td><td>1 victoire</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="analyse-block">
-        <h4>🔍 Notre Raisonnement</h4>
-        <p>
-          La supériorité du PSG à domicile est statistiquement écrasante cette saison. L'OM présente des lacunes défensives
-          marquées lors de ses déplacements contre le Top 3, encaissant en moyenne 2.1 buts par match. La forme du duo
-          offensif parisien et la motivation de finir en beauté devant leur public nous confortent dans ce pronostic.
-          Le marché « Plus de 2,5 buts » est appuyé par les 7 dernières rencontres entre ces deux équipes (6 fois Over 2,5).
-          <strong style="color:var(--blue-title);">Recommandation : Mise 3/5.</strong>
-        </p>
-      </div>
+      <p class="section-subtitle" id="analyse-subtitle">Chargement de l'analyse…</p>
+      <div id="analyse-content"></div>
     </div>
   </section>
 
@@ -386,7 +346,40 @@
     const dateEl = document.getElementById('dash-date-subtitle');
     if (dateEl) dateEl.textContent = dateStr.charAt(0).toUpperCase() + dateStr.slice(1) + ' · Pronostics de votre abonnement ' + (aboLabels[userAbonnement] || userAbonnement) + '.';
 
+    // ── Analyse du jour ──
+    async function loadAnalyse() {
+      const subtitle = document.getElementById('analyse-subtitle');
+      const content  = document.getElementById('analyse-content');
+      const { data, error } = await supa.from('analyse').select('*').eq('id', 1).single();
+      if (error || !data || !data.match_titre) {
+        subtitle.textContent = 'Aucune analyse publiée pour le moment.';
+        content.innerHTML = '';
+        return;
+      }
+      subtitle.textContent = 'Décryptage complet du match phare : ' + data.match_titre + '.';
+      const statsRows = (data.stats || []).map(r =>
+        `<tr><td>${esc(r.critere)}</td><td>${esc(r.val1)}</td><td>${esc(r.val2)}</td></tr>`
+      ).join('');
+      content.innerHTML = `
+        ${data.contexte ? `<div class="analyse-block"><h4>📋 Contexte du Match</h4><p>${esc(data.contexte)}</p></div>` : ''}
+        ${statsRows ? `
+        <div class="analyse-block">
+          <h4>📊 Statistiques Comparatives</h4>
+          <table class="stats-table">
+            <thead><tr><th>Critère</th><th>${esc(data.equipe1||'Équipe 1')}</th><th>${esc(data.equipe2||'Équipe 2')}</th></tr></thead>
+            <tbody>${statsRows}</tbody>
+          </table>
+        </div>` : ''}
+        ${data.raisonnement ? `
+        <div class="analyse-block">
+          <h4>🔍 Notre Raisonnement</h4>
+          <p>${esc(data.raisonnement)}${data.recommandation ? ` <strong style="color:var(--blue-title);">Recommandation : ${esc(data.recommandation)}.</strong>` : ''}</p>
+        </div>` : ''}
+      `;
+    }
+
     loadPronos();
+    loadAnalyse();
     loadHistorique();
   </script>
 </body>
