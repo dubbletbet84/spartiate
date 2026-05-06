@@ -186,6 +186,8 @@
   
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supa.js"></script>
   <script>
     function switchTab(name, btn) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -223,8 +225,26 @@
       window.location.href = 'dashboard.html';
     }
 
-    function handleRegister(e) {
+    async function handleRegister(e) {
       e.preventDefault();
+      const inputs  = document.querySelectorAll('#form-register input[type="text"], #form-register input[type="email"]');
+      const prenom  = inputs[0].value.trim();
+      const nom     = inputs[1].value.trim();
+      const email   = inputs[2].value.trim();
+      const btn     = document.querySelector('#form-register .btn-submit');
+      btn.disabled  = true; btn.textContent = 'Création…';
+
+      const { error } = await supa.from('clients').insert([{
+        prenom, nom, email,
+        abonnement: 'aucun',
+        created_at: new Date().toISOString(),
+      }]);
+
+      btn.disabled = false; btn.textContent = 'Créer mon compte';
+
+      if (error) {
+        console.error('Erreur inscription:', error.message);
+      }
       window.location.href = 'paiement.html';
     }
   </script>
