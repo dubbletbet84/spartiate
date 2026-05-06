@@ -74,9 +74,7 @@
     <div class="container">
       <h2 class="section-title">Prono du Jour</h2>
       <div class="divider"></div>
-      <p class="section-subtitle">
-        Dimanche 4 mai 2026 · 3 pronostics disponibles avec votre abonnement Pro.
-      </p>
+      <p class="section-subtitle" id="dash-date-subtitle"></p>
 
       <div class="prono-grid" id="prono-grid">
         <p style="color:var(--text-muted); padding:1rem;">Chargement des pronos…</p>
@@ -381,6 +379,12 @@
         </tr>`;
       }).join('');
     }
+
+    // Date du jour dynamique
+    const today = new Date();
+    const dateStr = today.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+    const dateEl = document.getElementById('dash-date-subtitle');
+    if (dateEl) dateEl.textContent = dateStr.charAt(0).toUpperCase() + dateStr.slice(1) + ' · Pronostics de votre abonnement ' + (aboLabels[userAbonnement] || userAbonnement) + '.';
 
     loadPronos();
     loadHistorique();
