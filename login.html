@@ -271,6 +271,7 @@
       sessionStorage.setItem('user_email',      data.email);
       sessionStorage.setItem('user_prenom',     data.prenom || '');
       sessionStorage.setItem('user_abonnement', data.abonnement || 'aucun');
+
       window.location.href = 'dashboard.html';
     }
 
@@ -301,7 +302,6 @@
       const { error } = await supa.from('clients').insert([{
         prenom, nom, email,
         mot_de_passe: hash,
-        abonnement: 'aucun',
         created_at: new Date().toISOString(),
       }]);
 
