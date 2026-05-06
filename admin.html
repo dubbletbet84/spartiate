@@ -460,7 +460,7 @@
     }
 
     async function loadAnalyse() {
-      const { data } = await supa.from('analyse').select('*').eq('id', 1).single();
+      const { data } = await supa.from('analyse_jour').select('*').eq('id', 1).single();
       if (!data) return;
       document.getElementById('a-match').value         = data.match_titre || '';
       document.getElementById('a-eq1').value           = data.equipe1     || '';
@@ -490,7 +490,7 @@
         recommandation: document.getElementById('a-recommandation').value.trim(),
         updated_at:     new Date().toISOString(),
       };
-      const { error } = await supa.from('analyse').upsert([{ id: 1, ...payload }]);
+      const { error } = await supa.from('analyse_jour').upsert([{ id: 1, ...payload }]);
       btn.disabled = false; btn.textContent = '💾 Publier l\'analyse';
       if (error) { showToast('Erreur : ' + error.message, 'error'); return; }
       showToast('✅ Analyse publiée !');
