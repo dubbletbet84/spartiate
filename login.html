@@ -79,7 +79,10 @@
           </div>
           <div class="form-group">
             <label>Mot de passe</label>
-            <input type="password" placeholder="••••••••" required>
+            <div style="position:relative;">
+              <input type="password" id="login-pwd" placeholder="••••••••" required style="width:100%; padding-right:2.8rem;">
+              <button type="button" onclick="togglePwd('login-pwd', this)" style="position:absolute; right:.75rem; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:var(--text-muted); font-size:1.1rem; padding:0; line-height:1;">👁</button>
+            </div>
           </div>
           <div class="forgot">
             <a href="#">Mot de passe oublié ?</a>
@@ -107,11 +110,17 @@
           </div>
           <div class="form-group">
             <label>Mot de passe</label>
-            <input type="password" placeholder="8 caractères minimum" required>
+            <div style="position:relative;">
+              <input type="password" id="reg-pwd" placeholder="8 caractères minimum" required style="width:100%; padding-right:2.8rem;">
+              <button type="button" onclick="togglePwd('reg-pwd', this)" style="position:absolute; right:.75rem; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:var(--text-muted); font-size:1.1rem; padding:0; line-height:1;">👁</button>
+            </div>
           </div>
           <div class="form-group">
             <label>Confirmer le mot de passe</label>
-            <input type="password" placeholder="••••••••" required>
+            <div style="position:relative;">
+              <input type="password" id="reg-pwd2" placeholder="••••••••" required style="width:100%; padding-right:2.8rem;">
+              <button type="button" onclick="togglePwd('reg-pwd2', this)" style="position:absolute; right:.75rem; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:var(--text-muted); font-size:1.1rem; padding:0; line-height:1;">👁</button>
+            </div>
           </div>
           <!-- Vérification d'âge -->
           <div style="background:#FEF2F2; border:1px solid #FECACA; border-radius:8px; padding:1rem 1.1rem; margin-bottom:1rem;">
@@ -189,6 +198,17 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supa.js"></script>
   <script>
+    function togglePwd(inputId, btn) {
+      const input = document.getElementById(inputId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = '🙈';
+      } else {
+        input.type = 'password';
+        btn.textContent = '👁';
+      }
+    }
+
     function switchTab(name, btn) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
@@ -212,7 +232,8 @@
       e.preventDefault();
       const emailInput = document.querySelector('#form-login input[type="text"]');
       const email = emailInput.value.trim();
-      const pwd   = document.querySelector('#form-login input[type="password"]').value;
+      const pwdInput = document.getElementById('login-pwd');
+      const pwd   = pwdInput ? pwdInput.value : document.querySelector('#form-login input[type="password"]').value;
       const btn   = document.querySelector('#form-login .btn-submit');
 
       // Accès admin direct
@@ -259,9 +280,9 @@
       const prenom  = inputs[0].value.trim();
       const nom     = inputs[1].value.trim();
       const email   = inputs[2].value.trim();
-      const pwds    = document.querySelectorAll('#form-register input[type="password"]');
-      const pwd     = pwds[0].value;
-      const pwd2    = pwds[1].value;
+      const pwd     = document.getElementById('reg-pwd').value;
+      const pwd2    = document.getElementById('reg-pwd2').value;
+      const pwds    = [document.getElementById('reg-pwd'), document.getElementById('reg-pwd2')];
       const btn     = document.querySelector('#form-register .btn-submit');
 
       if (pwd.length < 8) {
