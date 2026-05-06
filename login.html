@@ -353,6 +353,11 @@
         return;
       }
 
+      // Stocker la session maintenant → pas besoin de se reconnecter après Stripe
+      sessionStorage.setItem('user_email',      email);
+      sessionStorage.setItem('user_prenom',     prenom);
+      sessionStorage.setItem('user_abonnement', selectedPlan);
+
       // Compte créé → redirection Stripe
       btn.textContent = 'Redirection vers le paiement…';
       window.location.href = selectedStripeUrl;
