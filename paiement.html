@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <!-- Stripe.js -->
   <script src="https://js.stripe.com/v3/"></script>
   <style>
@@ -357,6 +358,12 @@
   </footer>
 
   <script>
+    // ── Supabase ──
+    const _supa = supabase.createClient(
+      'https://rfkishlsopgiizwwbwzp.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJma2lzaGxzb3BnaWl6d3did3pwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc5ODMyMDQsImV4cCI6MjA5MzU1OTIwNH0.IDf_iInryygig5LvMi5TSGSm3_EBTlhyS45DxBtqMe0'
+    );
+
     // ── Initialisation Stripe (clé publique) ──
     const stripe = Stripe('pk_live_51TJIVhIbnUAcda0eltbPHFrzK0oSGnqq0ZJzA4e0KQj0OwjWidKzphhc7pU1aHksWjkWgatKtaYNPckZnlzmssth002mmAme0p');
 
@@ -387,7 +394,27 @@
       const btn = document.getElementById('btn-pay');
       btn.href = plan.lien;
       btn.classList.toggle('disabled-btn', plan.lien.startsWith('LIEN_'));
+      btn.dataset.planKey = planKey;
     }
+
+    // ── Mise à jour abonnement au clic sur Payer ──
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('btn-pay').addEventListener('click', async function() {
+        const email = sessionStorage.getItem('client_email');
+        const planKey = this.dataset.planKey || presel;
+        const aboMap = {
+          essai: 'spartiate_starter',
+          vip:   'spartiate_vip',
+          pro:   'spartiate_pro',
+          elite: 'spartiate_gestion',
+        };
+        if (email && aboMap[planKey]) {
+          await _supa.from('clients')
+            .update({ abonnement: aboMap[planKey] })
+            .eq('email', email);
+        }
+      });
+    });
 
     // Appliquer la présélection au chargement
     document.addEventListener('DOMContentLoaded', () => {

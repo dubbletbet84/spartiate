@@ -245,6 +245,8 @@
       if (error) {
         console.error('Erreur inscription:', error.message);
       }
+      // Sauvegarder l'email pour mettre à jour l'abonnement sur paiement.html
+      sessionStorage.setItem('client_email', email);
       window.location.href = 'paiement.html';
     }
   </script>
