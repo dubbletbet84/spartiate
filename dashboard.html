@@ -45,8 +45,8 @@
   <div style="background: #EFF6FF; border-bottom: 1px solid #BFDBFE; padding: 1rem 2rem;">
     <div style="max-width:1180px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:.5rem;">
       <div>
-        <p style="font-weight:700; color:var(--blue-title); font-size:1rem;">Bonjour, Jamil 👋</p>
-        <p style="font-size:.82rem; color:var(--text-muted);">Abonnement <strong style="color:var(--text);">Pro</strong> · Actif jusqu'au 4 juin 2026</p>
+        <p id="welcome-prenom" style="font-weight:700; color:var(--blue-title); font-size:1rem;">Bonjour 👋</p>
+        <p style="font-size:.82rem; color:var(--text-muted);">Abonnement <strong id="welcome-abo" style="color:var(--text);">—</strong></p>
       </div>
       <div style="display:flex; gap:2rem; flex-wrap:wrap;">
         <div style="text-align:center;">
@@ -249,9 +249,24 @@
     const userPrenom     = sessionStorage.getItem('user_prenom');
     const userAbonnement = sessionStorage.getItem('user_abonnement') || 'aucun';
 
-    if (!userEmail) {
-      window.location.href = 'login.html';
-    }
+    if (!userEmail) { window.location.href = 'login.html'; }
+
+    // ── Helpers ──
+    const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+    const SPORT_ICON = {
+      Football:'⚽', Basketball:'🏀', Tennis:'🎾', Rugby:'🏉',
+      Baseball:'⚾', Hockey:'🏒', Volleyball:'🏐', MMA:'🥊',
+      Boxe:'🥊', Cyclisme:'🚴', Formule1:'🏎️', Golf:'⛳',
+      Handball:'🤾', Natation:'🏊', Athlétisme:'🏃',
+    };
+
+    const CAT_BADGE = {
+      Safe:    '<span class="badge badge-safe">✅ Safe</span>',
+      Risqué:  '<span class="badge badge-risky">⚠️ Risqué</span>',
+      Jackpot: '<span class="badge badge-jackpot">💎 Jackpot</span>',
+    };
+    const CAT_BADGE_SM = CAT_BADGE;
 
     // ── Afficher infos utilisateur ──
     const aboLabels = {
@@ -261,9 +276,27 @@
       spartiate_gestion: 'Gestion',
       aucun:             'Aucun abonnement',
     };
+
+    // Bandeau prénom
     if (userPrenom) {
-      document.querySelector('.header .btn-account') && (document.querySelector('.header .btn-account').textContent = '👤 ' + userPrenom);
+      const el = document.getElementById('welcome-prenom');
+      if (el) el.textContent = 'Bonjour, ' + userPrenom + ' 👋';
     }
+    // Bandeau abonnement
+    const elAbo = document.getElementById('welcome-abo');
+    if (elAbo) elAbo.textContent = aboLabels[userAbonnement] || userAbonnement;
+
+    // Bouton header
+    const btnAccount = document.querySelector('.header .btn-account');
+    if (btnAccount && userPrenom) btnAccount.textContent = '👤 ' + userPrenom;
+
+    // Déconnexion
+    const btnLogout = document.querySelector('.btn-logout');
+    if (btnLogout) btnLogout.addEventListener('click', e => {
+      e.preventDefault();
+      sessionStorage.clear();
+      window.location.href = 'index.html';
+    });
 
     // ── Pronos du jour filtrés par abonnement ──
     async function loadPronos() {
