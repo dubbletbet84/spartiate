@@ -244,20 +244,53 @@
 
   <script>
 
-    // ── Pronos du jour ──
+    // ── Vérification connexion ──
+    const userEmail      = sessionStorage.getItem('user_email');
+    const userPrenom     = sessionStorage.getItem('user_prenom');
+    const userAbonnement = sessionStorage.getItem('user_abonnement') || 'aucun';
+
+    if (!userEmail) {
+      window.location.href = 'login.html';
+    }
+
+    // ── Afficher infos utilisateur ──
+    const aboLabels = {
+      spartiate_starter: 'Starter',
+      spartiate_vip:     'VIP',
+      spartiate_pro:     'Pro',
+      spartiate_gestion: 'Gestion',
+      aucun:             'Aucun abonnement',
+    };
+    if (userPrenom) {
+      document.querySelector('.header .btn-account') && (document.querySelector('.header .btn-account').textContent = '👤 ' + userPrenom);
+    }
+
+    // ── Pronos du jour filtrés par abonnement ──
     async function loadPronos() {
       const today = new Date().toISOString().slice(0,10);
       const grid  = document.getElementById('prono-grid');
-      const { data, error } = await supa.from('pronos').select('*').eq('date_match', today);
+      const { data, error } = await supa.from('pronos').select('*').eq('date_match', today).eq('statut', 'en_attente');
       if (error) {
         grid.innerHTML = '<p style="color:var(--red);padding:1rem;">Erreur de chargement.</p>';
         return;
       }
-      if (!data.length) {
-        grid.innerHTML = '<p style="color:var(--text-muted);padding:1rem;">Aucun pronostic pour aujourd\'hui.</p>';
+
+      // Filtrer par abonnement
+      const visibles = (data || []).filter(p => {
+        if (!p.abonnement_requis) return true;
+        return p.abonnement_requis.split(',').includes(userAbonnement);
+      });
+
+      if (!visibles.length) {
+        grid.innerHTML = `<p style="color:var(--text-muted);padding:1rem;">
+          ${userAbonnement === 'aucun'
+            ? 'Vous n\'avez pas d\'abonnement actif. <a href="paiement.html" style="color:var(--red);font-weight:700;">S\'abonner →</a>'
+            : 'Aucun pronostic pour aujourd\'hui.'}
+        </p>`;
         return;
       }
-      grid.innerHTML = data.map(p => {
+
+      grid.innerHTML = visibles.map(p => {
         const equipes = p.match.split(/\s+[-—vs]+\s+/i);
         const eq1 = equipes[0] || p.match;
         const eq2 = equipes[1] || '';

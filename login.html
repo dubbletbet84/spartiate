@@ -202,11 +202,18 @@
       switchTab(name, btns[idx]);
     }
 
-    function handleLogin(e) {
+    // ── Hash SHA-256 du mot de passe ──
+    async function hashPwd(pwd) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pwd));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+
+    async function handleLogin(e) {
       e.preventDefault();
       const emailInput = document.querySelector('#form-login input[type="text"]');
       const email = emailInput.value.trim();
       const pwd   = document.querySelector('#form-login input[type="password"]').value;
+      const btn   = document.querySelector('#form-login .btn-submit');
 
       // Accès admin direct
       if (email === 'sodim84' && pwd === 'thube.spart84') {
@@ -215,13 +222,34 @@
         return;
       }
 
-      // Validation email pour les utilisateurs normaux
       if (!email.includes('@')) {
         emailInput.setCustomValidity('Veuillez entrer une adresse e-mail valide.');
         emailInput.reportValidity();
         return;
       }
       emailInput.setCustomValidity('');
+
+      btn.disabled = true; btn.textContent = 'Connexion…';
+      const hash = await hashPwd(pwd);
+
+      const { data, error } = await supa
+        .from('clients')
+        .select('*')
+        .eq('email', email)
+        .eq('mot_de_passe', hash)
+        .single();
+
+      btn.disabled = false; btn.textContent = 'Se connecter';
+
+      if (error || !data) {
+        emailInput.setCustomValidity('Email ou mot de passe incorrect.');
+        emailInput.reportValidity();
+        return;
+      }
+
+      sessionStorage.setItem('user_email',      data.email);
+      sessionStorage.setItem('user_prenom',     data.prenom || '');
+      sessionStorage.setItem('user_abonnement', data.abonnement || 'aucun');
       window.location.href = 'dashboard.html';
     }
 
@@ -231,11 +259,27 @@
       const prenom  = inputs[0].value.trim();
       const nom     = inputs[1].value.trim();
       const email   = inputs[2].value.trim();
+      const pwds    = document.querySelectorAll('#form-register input[type="password"]');
+      const pwd     = pwds[0].value;
+      const pwd2    = pwds[1].value;
       const btn     = document.querySelector('#form-register .btn-submit');
-      btn.disabled  = true; btn.textContent = 'Création…';
+
+      if (pwd.length < 8) {
+        pwds[0].setCustomValidity('Minimum 8 caractères.');
+        pwds[0].reportValidity(); return;
+      }
+      if (pwd !== pwd2) {
+        pwds[1].setCustomValidity('Les mots de passe ne correspondent pas.');
+        pwds[1].reportValidity(); return;
+      }
+      pwds[0].setCustomValidity(''); pwds[1].setCustomValidity('');
+
+      btn.disabled = true; btn.textContent = 'Création…';
+      const hash = await hashPwd(pwd);
 
       const { error } = await supa.from('clients').insert([{
         prenom, nom, email,
+        mot_de_passe: hash,
         abonnement: 'aucun',
         created_at: new Date().toISOString(),
       }]);
@@ -243,9 +287,10 @@
       btn.disabled = false; btn.textContent = 'Créer mon compte';
 
       if (error) {
-        console.error('Erreur inscription:', error.message);
+        alert('Erreur : ' + (error.message.includes('duplicate') ? 'Cet email est déjà utilisé.' : error.message));
+        return;
       }
-      // Sauvegarder l'email pour mettre à jour l'abonnement sur paiement.html
+
       sessionStorage.setItem('client_email', email);
       window.location.href = 'paiement.html';
     }
