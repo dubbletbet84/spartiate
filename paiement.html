@@ -373,6 +373,13 @@
     const params  = new URLSearchParams(window.location.search);
     const presel  = params.get('plan') || 'pro';
 
+    const aboMap = {
+      essai: 'spartiate_starter',
+      vip:   'spartiate_vip',
+      pro:   'spartiate_pro',
+      elite: 'spartiate_gestion',
+    };
+
     function selectPlan(el, planKey) {
       const plan = PLANS[planKey];
       if (!plan) return;
@@ -387,37 +394,15 @@
 
       const btn = document.getElementById('btn-pay');
       btn.href = plan.lien;
-      btn.classList.toggle('disabled-btn', plan.lien.startsWith('LIEN_'));
       btn.dataset.planKey = planKey;
+
+      // Mise à jour BDD dès la sélection du plan (arrière-plan, zéro délai au clic)
+      const email = sessionStorage.getItem('client_email') || sessionStorage.getItem('user_email');
+      if (email && aboMap[planKey]) {
+        supa.from('clients').update({ abonnement: aboMap[planKey] }).eq('email', email);
+      }
     }
 
-    // ── Mise à jour abonnement au clic sur Payer ──
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('btn-pay').addEventListener('click', async function(e) {
-        e.preventDefault(); // bloquer la navigation immédiate
-
-        const email   = sessionStorage.getItem('client_email') || sessionStorage.getItem('user_email');
-        const planKey = this.dataset.planKey || presel;
-        const stripeUrl = PLANS[planKey]?.lien;
-
-        const aboMap = {
-          essai: 'spartiate_starter',
-          vip:   'spartiate_vip',
-          pro:   'spartiate_pro',
-          elite: 'spartiate_gestion',
-        };
-
-        // Mise à jour BDD en arrière-plan (sans bloquer)
-        if (email && aboMap[planKey]) {
-          supa.from('clients')
-            .update({ abonnement: aboMap[planKey] })
-            .eq('email', email);
-        }
-
-        // Redirection immédiate vers Stripe
-        window.location.href = stripeUrl;
-      });
-    });
 
     // Appliquer la présélection au chargement
     document.addEventListener('DOMContentLoaded', () => {
