@@ -407,17 +407,14 @@
           elite: 'spartiate_gestion',
         };
 
-        const btn = document.getElementById('btn-pay');
-        btn.textContent = '⏳ Enregistrement…';
-        btn.style.pointerEvents = 'none';
-
+        // Mise à jour BDD en arrière-plan (sans bloquer)
         if (email && aboMap[planKey]) {
-          await supa.from('clients')
+          supa.from('clients')
             .update({ abonnement: aboMap[planKey] })
             .eq('email', email);
         }
 
-        // Rediriger vers Stripe après la mise à jour
+        // Redirection immédiate vers Stripe
         window.location.href = stripeUrl;
       });
     });
