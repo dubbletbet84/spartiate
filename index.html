@@ -227,7 +227,7 @@
         <a href="#decouvrir" class="btn-outline-w">En savoir plus</a>
       </div>
       <div class="hero-stats">
-        <div class="stat-item"><strong>76,4%</strong><span>Taux de réussite</span></div>
+        <div class="stat-item"><strong id="idx-taux">—</strong><span>Taux de réussite</span></div>
         <div class="stat-item"><strong>3 100+</strong><span>Abonnés actifs</span></div>
         <div class="stat-item"><strong>5 ans</strong><span>D'expérience</span></div>
         <div class="stat-item"><strong>6</strong><span>Sports couverts</span></div>
@@ -475,6 +475,17 @@
     }
 
     loadHomeHistorique();
+
+    // ── Stats dynamiques depuis historique ──
+    (async () => {
+      const { data } = await supa.from('historique').select('resultat');
+      if (!data || !data.length) return;
+      const total  = data.length;
+      const gagnes = data.filter(r => r.resultat === 'gagné').length;
+      const taux   = Math.round(gagnes / total * 100);
+      const el = document.getElementById('idx-taux');
+      if (el) el.textContent = taux + '%';
+    })();
   </script>
 </body>
 </html>
