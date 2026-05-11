@@ -1,19 +1,12 @@
 User-agent: *
 Allow: /
-Allow: /index.html
-Allow: /styles.css
-Allow: /logo.png
-Allow: /og-image.jpg
 
 # Pages privées — ne pas indexer
 Disallow: /dashboard.html
 Disallow: /login.html
-
-# Ressources inutiles pour les crawlers
-Disallow: /*.json$
+Disallow: /admin.html
+Disallow: /paiement.html
+Disallow: /js/
 
 # Sitemap
 Sitemap: https://www.spartiate-prono.fr/sitemap.xml
-
-# Délai de crawl conseillé
-Crawl-delay: 10
