@@ -327,8 +327,8 @@
       tbody.innerHTML = data.map(r => {
         const icon = SPORT_ICON[r.sport] || '🏅';
         const res  = r.resultat === 'gagné'
-          ? `<td style="color:var(--green);font-weight:700;">✓ Gagné</td>`
-          : `<td style="color:var(--red);font-weight:700;">✗ Perdu</td>`;
+          ? `<td><span class="badge badge-won">✓ Gagné</span></td>`
+          : `<td><span class="badge badge-lost">✗ Perdu</span></td>`;
         return `<tr>
           <td>${new Date(r.date_match).toLocaleDateString('fr-FR')}</td>
           <td>${icon} ${esc(r.match)}</td>

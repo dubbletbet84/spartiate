@@ -349,8 +349,8 @@
       tbody.innerHTML = data.map(r => {
         const s   = SPORT_MAP[r.sport] || { key:'foot', pill:'pill-foot', icon:'🏅' };
         const res = r.resultat === 'gagné'
-          ? '<td class="result-won">✓ Gagné</td>'
-          : '<td class="result-lost">✗ Perdu</td>';
+          ? '<td><span class="badge badge-won">✓ Gagné</span></td>'
+          : '<td><span class="badge badge-lost">✗ Perdu</span></td>';
         const d = new Date(r.date_match);
         const dateStr = d.toLocaleDateString('fr-FR');
         return `<tr data-sport="${s.key}" data-result="${r.resultat==='gagné'?'won':'lost'}">

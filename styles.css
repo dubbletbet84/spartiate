@@ -585,6 +585,8 @@ nav.nav {
 .badge-safe   { background: #DCFCE7; border: 1px solid #86EFAC; color: var(--green); }
 .badge-risky  { background: #FFF7ED; border: 1px solid #FED7AA; color: var(--orange); }
 .badge-jackpot{ background: #FFFBEB; border: 1px solid #FDE68A; color: var(--gold); }
+.badge-won    { background: #DCFCE7; border: 1px solid #86EFAC; color: var(--green); }
+.badge-lost   { background: #FEE2E2; border: 1px solid #FCA5A5; color: var(--red); }
 
 /* Analyse */
 .analyse-block {
