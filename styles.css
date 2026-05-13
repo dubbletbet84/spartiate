@@ -39,6 +39,41 @@ body {
   box-shadow: 0 4px 20px rgba(0,0,0,.25);
 }
 
+/* ── TICKER ── */
+.ticker-wrap {
+  background: #0F172A;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: .45rem 0;
+  border-bottom: 1px solid #1E293B;
+}
+.ticker-track {
+  display: inline-block;
+  animation: ticker 22s linear infinite;
+}
+.ticker-track:hover { animation-play-state: paused; }
+.ticker-item {
+  display: inline-block;
+  padding: 0 3rem;
+  font-size: .82rem;
+  font-weight: 700;
+  color: #F8FAFC;
+  letter-spacing: .3px;
+}
+.ticker-item span {
+  background: var(--red);
+  color: #fff;
+  padding: .15rem .55rem;
+  border-radius: 6px;
+  margin-left: .4rem;
+  font-size: .78rem;
+  letter-spacing: .5px;
+}
+@keyframes ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 .header-inner {
   width: 100%;
   display: flex;
