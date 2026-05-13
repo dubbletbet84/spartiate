@@ -688,22 +688,115 @@ nav.nav {
 .footer-legal a:hover { color: #fff; }
 
 /* ─── RESPONSIVE ──────────────────────────────────────── */
+/* ══════════════════════════════════════════
+   RESPONSIVE — TABLETTE (≤ 900px)
+══════════════════════════════════════════ */
 @media (max-width: 900px) {
-  .footer-inner { grid-template-columns: 1fr 1fr; }
+  .footer-inner { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .pricing-grid { grid-template-columns: 1fr 1fr !important; }
+  .admin-grid   { grid-template-columns: 1fr; }
 }
+
+/* ══════════════════════════════════════════
+   RESPONSIVE — MOBILE (≤ 768px)
+══════════════════════════════════════════ */
 @media (max-width: 768px) {
-  .header { padding: 0 1rem; height: 74px; }
-  .logo-box { width: auto; height: 74px; font-size: .66rem; }
-  .logo-box img { height: 74px; }
-  nav.nav { gap: .45rem; margin-left: .6rem; }
-  .nav-btn { padding: .42rem .7rem; font-size: .76rem; }
-  .search-wrap input { width: 150px; }
-  .search-wrap input:focus { width: 180px; }
-  .hero h1 { font-size: 2rem; }
-  .pricing-card.featured { transform: none; }
-}
-@media (max-width: 540px) {
-  nav.nav { display: none; }
+  /* Header */
+  .header { padding: 0 1rem; height: 64px; }
+  .logo-box { height: 64px; }
+  .logo-box img { height: 60px; }
+  .header-inner { gap: .6rem; }
+  nav.nav { gap: .35rem; margin-left: .3rem; }
+  .nav-btn { padding: .38rem .6rem; font-size: .73rem; }
   .search-wrap { display: none; }
-  .footer-inner { grid-template-columns: 1fr; }
+  .btn-connect { padding: .45rem .9rem; font-size: .8rem; }
+  .header-actions { gap: .5rem; }
+  .btn-account { display: none; }
+  .btn-logout { padding: .4rem .8rem; font-size: .78rem; }
+
+  /* Ticker */
+  .ticker-item { font-size: .75rem; padding: 0 1.5rem; }
+
+  /* Hero */
+  .hero { padding: 50px 0 40px; }
+  .hero-inner { padding: 0 1.2rem; }
+  .hero h1 { font-size: 1.9rem; line-height: 1.2; }
+  .hero p  { font-size: .92rem; }
+  .hero-cta { flex-direction: column; gap: .7rem; }
+  .hero-cta .btn-primary,
+  .hero-cta .btn-outline-w { width: 100%; text-align: center; }
+  .hero-stats { gap: 1rem; }
+  .stat-item strong { font-size: 1.5rem; }
+
+  /* Sections */
+  .section { padding: 50px 0; }
+  .container { padding: 0 1.2rem; }
+  .section-title { font-size: 1.6rem; }
+
+  /* Cards grille */
+  .cards-grid  { grid-template-columns: 1fr; }
+  .sports-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Pricing */
+  .pricing-grid { grid-template-columns: 1fr !important; gap: 1rem; }
+  .pricing-card.featured { transform: none; }
+  .pricing-card { padding: 1.5rem; }
+
+  /* Login */
+  .login-wrap { padding: 1.5rem 1rem; }
+  .login-box  { padding: 1.8rem 1.2rem; }
+
+  /* Dashboard welcome band */
+  .dash-welcome { flex-direction: column; gap: 1rem; }
+
+  /* Prono grid */
+  .prono-grid { grid-template-columns: 1fr; }
+  .prono-card { padding: 1.2rem; }
+
+  /* Status grid */
+  .status-grid { grid-template-columns: 1fr; }
+
+  /* Tables : scroll horizontal */
+  .stats-table,
+  .histo-table,
+  .admin-table { font-size: .78rem; }
+  .admin-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* Footer */
+  .footer { padding: 2.5rem 1.2rem 1.5rem; }
+  .footer-inner { grid-template-columns: 1fr; gap: 1.5rem; }
+  .footer-brand { margin-bottom: .5rem; }
+  .footer-bottom { flex-direction: column; gap: .5rem; text-align: center; font-size: .72rem; }
+
+  /* Pay page */
+  .pay-grid { grid-template-columns: 1fr; }
+  .checkout-box { position: static; }
+}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE — PETIT MOBILE (≤ 480px)
+══════════════════════════════════════════ */
+@media (max-width: 480px) {
+  nav.nav { display: none; }
+
+  .hero h1 { font-size: 1.6rem; }
+  .hero-stats { grid-template-columns: repeat(2, 1fr); display: grid; }
+
+  .section-title { font-size: 1.4rem; }
+
+  /* Abonnements dans l'inscription */
+  #form-register label[onclick] { flex-wrap: wrap; }
+
+  /* Dashboard bandeau */
+  .dash-section { padding: 2rem 0; }
+
+  /* KPI bande historique */
+  .kpi-band { grid-template-columns: repeat(2, 1fr); gap: .8rem; }
+  .kpi .kpi-val { font-size: 1.6rem; }
+
+  /* Ticker plus compact */
+  .ticker-item { font-size: .7rem; padding: 0 1rem; }
+
+  /* Boutons */
+  .btn-submit { font-size: .92rem; padding: .85rem; }
 }
