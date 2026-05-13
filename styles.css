@@ -46,10 +46,12 @@ body {
   white-space: nowrap;
   padding: .45rem 0;
   border-bottom: 1px solid #1E293B;
+  width: 100%;
 }
 .ticker-track {
-  display: inline-block;
-  animation: ticker 22s linear infinite;
+  display: inline-flex;
+  animation: ticker 20s linear infinite;
+  will-change: transform;
 }
 .ticker-track:hover { animation-play-state: paused; }
 .ticker-item {
@@ -59,6 +61,7 @@ body {
   font-weight: 700;
   color: #F8FAFC;
   letter-spacing: .3px;
+  flex-shrink: 0;
 }
 .ticker-item span {
   background: var(--red);
