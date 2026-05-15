@@ -234,41 +234,45 @@
         const stripePaid  = sessionStorage.getItem('stripe_paid') === '1';
         const pendingPlan = sessionStorage.getItem('pending_plan') || 'spartiate_pro';
 
+        let paiementOk = false;
+
         if (stripePaid) {
+          // Vient de payer → activer via RPC
           const { error: updateErr } = await supa.rpc('activer_paiement', {
             user_email: userEmail,
             user_plan: pendingPlan
           });
-
           if (!updateErr) {
             sessionStorage.removeItem('stripe_paid');
             sessionStorage.removeItem('pending_plan');
             sessionStorage.setItem('paiement_ok', '1');
             sessionStorage.setItem('user_abonnement', pendingPlan);
-            document.body.style.visibility = 'visible';
-            return;
+            userAbonnement = pendingPlan;
+            paiementOk = true;
           }
         }
 
-        // Vérifier le statut en DB
-        const { data, error } = await supa
-          .from('clients')
-          .select('paiement, abonnement')
-          .eq('email', userEmail)
-          .single();
+        if (!paiementOk) {
+          // Vérifier le statut en DB
+          const { data, error } = await supa
+            .from('clients')
+            .select('paiement, abonnement')
+            .eq('email', userEmail)
+            .single();
 
-        if (error || !data) { sessionStorage.clear(); window.location.href = 'login.html'; return; }
+          if (error || !data) { sessionStorage.clear(); window.location.href = 'login.html'; return; }
 
-        if (!data.paiement) {
-          document.body.style.visibility = 'visible';
-          document.body.innerHTML = LOCK_HTML;
-          return;
+          if (!data.paiement) {
+            document.body.style.visibility = 'visible';
+            document.body.innerHTML = LOCK_HTML;
+            return;
+          }
+
+          sessionStorage.setItem('paiement_ok', '1');
+          userAbonnement = data.abonnement || 'aucun';
+          sessionStorage.setItem('user_abonnement', userAbonnement);
         }
 
-        // ✅ Paiement OK → cache + affichage
-        sessionStorage.setItem('paiement_ok', '1');
-        userAbonnement = data.abonnement || 'aucun';
-        sessionStorage.setItem('user_abonnement', userAbonnement);
         document.body.style.visibility = 'visible';
       })();
     }
