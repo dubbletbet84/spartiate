@@ -1,13 +1,20 @@
 const express = require('express');
-const stripe  = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const { createClient } = require('@supabase/supabase-js');
-const path = require('path');
+const path    = require('path');
 
-const app  = express();
-const supa = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY
-);
+// Stripe & Supabase initialisés uniquement si les variables sont présentes
+let stripe, supa;
+try {
+  stripe = require('stripe')(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder');
+  const { createClient } = require('@supabase/supabase-js');
+  supa = createClient(
+    process.env.SUPABASE_URL    || '',
+    process.env.SUPABASE_SERVICE_KEY || ''
+  );
+} catch(e) {
+  console.error('Init error:', e.message);
+}
+
+const app = express();
 
 // ── Webhook Stripe (raw body obligatoire pour la vérification de signature) ──
 app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
