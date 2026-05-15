@@ -88,7 +88,14 @@
       setTimeout(() => { window.location.href = 'dashboard.html'; }, 3000);
     }
 
-    activerAbonnement();
+    // Attendre que supa soit prêt avant d'exécuter
+    function waitForSupa(cb, tries = 0) {
+      if (typeof supa !== 'undefined') { cb(); }
+      else if (tries < 20) { setTimeout(() => waitForSupa(cb, tries + 1), 150); }
+      else { document.getElementById('box').innerHTML = '<p style="color:red;">Erreur : client Supabase non chargé.</p>'; }
+    }
+
+    waitForSupa(activerAbonnement);
   </script>
 </body>
 </html>
