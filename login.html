@@ -268,12 +268,6 @@
       switchTab(name, btns[idx]);
     }
 
-    // ── Hash SHA-256 du mot de passe ──
-    async function hashPwd(pwd) {
-      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pwd));
-      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-    }
-
     async function handleLogin(e) {
       e.preventDefault();
       const emailInput = document.querySelector('#form-login input[type="text"]');
@@ -297,13 +291,12 @@
       emailInput.setCustomValidity('');
 
       btn.disabled = true; btn.textContent = 'Connexion…';
-      const hash = await hashPwd(pwd);
 
       const { data, error } = await supa
         .from('clients')
         .select('*')
         .eq('email', email)
-        .eq('mot_de_passe', hash)
+        .eq('mot_de_passe', pwd)
         .single();
 
       btn.disabled = false; btn.textContent = 'Se connecter';
@@ -356,11 +349,10 @@
       pwds[0].setCustomValidity(''); pwds[1].setCustomValidity('');
 
       btn.disabled = true; btn.textContent = 'Création du compte…';
-      const hash = await hashPwd(pwd);
 
       const { error } = await supa.from('clients').insert([{
         prenom, nom, email,
-        mot_de_passe: hash,
+        mot_de_passe: pwd,
         abonnement: 'aucun',
         paiement: false,
         created_at: new Date().toISOString(),
