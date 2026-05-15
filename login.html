@@ -114,7 +114,7 @@
         </form>
 
         <!-- ── REGISTER FORM ── -->
-        <form id="form-register" style="display:none;" onsubmit="handleRegister(event)">
+        <form id="form-register" style="display:none;" onsubmit="handleRegister(event)" novalidate>
           <div class="form-group">
             <label>Prénom</label>
             <input type="text" id="reg-prenom" placeholder="Jean" required>
@@ -346,14 +346,13 @@
       const pwds    = [document.getElementById('reg-pwd'), document.getElementById('reg-pwd2')];
       const btn     = document.querySelector('#form-register .btn-submit');
 
-      if (pwd.length < 8) {
-        pwds[0].setCustomValidity('Minimum 8 caractères.');
-        pwds[0].reportValidity(); return;
-      }
-      if (pwd !== pwd2) {
-        pwds[1].setCustomValidity('Les mots de passe ne correspondent pas.');
-        pwds[1].reportValidity(); return;
-      }
+      if (!prenom) { alert('Veuillez entrer votre prénom.'); return; }
+      if (!nom)    { alert('Veuillez entrer votre nom.'); return; }
+      if (!email || !email.includes('@')) { alert('Veuillez entrer un email valide.'); return; }
+      if (pwd.length < 8) { alert('Le mot de passe doit faire au moins 8 caractères.'); return; }
+      if (pwd !== pwd2)   { alert('Les mots de passe ne correspondent pas.'); return; }
+      if (!document.getElementById('age-check').checked) { alert('Vous devez certifier avoir 18 ans ou plus.'); return; }
+      if (!document.getElementById('cgu-check').checked) { alert('Vous devez accepter les CGU.'); return; }
       pwds[0].setCustomValidity(''); pwds[1].setCustomValidity('');
 
       btn.disabled = true; btn.textContent = 'Création du compte…';
