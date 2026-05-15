@@ -370,9 +370,10 @@
       sessionStorage.setItem('user_abonnement', 'aucun');
       sessionStorage.setItem('pending_plan',    selectedPlan);
 
-      // Compte créé → redirection Stripe
+      // Compte créé → redirection Stripe avec référence email|plan
       btn.textContent = 'Redirection vers le paiement…';
-      window.location.href = selectedStripeUrl;
+      const stripeRef = encodeURIComponent(email + '|' + selectedPlan);
+      window.location.href = selectedStripeUrl + '?client_reference_id=' + stripeRef;
     }
   </script>
 
