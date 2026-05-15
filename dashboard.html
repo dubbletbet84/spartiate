@@ -209,46 +209,49 @@
 
     if (!userEmail) { window.location.href = 'login.html'; }
 
-    // ── Vérification paiement en DB (anti-bypass) ──
-    (async () => {
-      const { data, error } = await supa
-        .from('clients')
-        .select('paiement, abonnement')
-        .eq('email', userEmail)
-        .single();
+    const LOCK_HTML = `
+      <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#F4F6FB;">
+        <div style="background:#fff;border:1px solid #E2E8F0;border-radius:16px;padding:3rem 2.5rem;max-width:440px;width:90%;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.08);">
+          <div style="font-size:3rem;margin-bottom:1rem;">🔒</div>
+          <h2 style="font-size:1.4rem;font-weight:900;color:#1D4ED8;margin-bottom:.6rem;">Abonnement requis</h2>
+          <p style="color:#64748B;font-size:.9rem;line-height:1.6;margin-bottom:1.5rem;">
+            Votre paiement n'a pas encore été confirmé.<br>
+            Complétez votre abonnement pour accéder au dashboard.
+          </p>
+          <a href="login.html" style="background:#CC1414;color:#fff;padding:.75rem 2rem;border-radius:8px;font-weight:700;text-decoration:none;display:inline-block;">
+            Choisir un abonnement →
+          </a>
+        </div>
+      </div>`;
 
-      // Compte introuvable ou erreur → déconnexion
-      if (error || !data) {
-        sessionStorage.clear();
-        window.location.href = 'login.html';
-        return;
-      }
-
-      // Paiement non validé → écran de blocage
-      if (!data.paiement) {
-        document.body.style.visibility = 'visible';
-        document.body.innerHTML = `
-          <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#F4F6FB;">
-            <div style="background:#fff;border:1px solid #E2E8F0;border-radius:16px;padding:3rem 2.5rem;max-width:440px;width:90%;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.08);">
-              <div style="font-size:3rem;margin-bottom:1rem;">🔒</div>
-              <h2 style="font-size:1.4rem;font-weight:900;color:#1D4ED8;margin-bottom:.6rem;">Abonnement requis</h2>
-              <p style="color:#64748B;font-size:.9rem;line-height:1.6;margin-bottom:1.5rem;">
-                Votre paiement n'a pas encore été confirmé.<br>
-                Complétez votre abonnement pour accéder au dashboard.
-              </p>
-              <a href="login.html#register" style="background:#CC1414;color:#fff;padding:.75rem 2rem;border-radius:8px;font-weight:700;text-decoration:none;display:inline-block;">
-                Choisir un abonnement →
-              </a>
-            </div>
-          </div>`;
-        return;
-      }
-
-      // ✅ Paiement OK → afficher le dashboard
+    // ── Vérification paiement ──
+    // Si déjà vérifié dans cette session → affichage immédiat
+    if (sessionStorage.getItem('paiement_ok') === '1') {
       document.body.style.visibility = 'visible';
-      userAbonnement = data.abonnement || 'aucun';
-      sessionStorage.setItem('user_abonnement', userAbonnement);
-    })();
+    } else {
+      // Sinon → vérification en DB (première connexion)
+      (async () => {
+        const { data, error } = await supa
+          .from('clients')
+          .select('paiement, abonnement')
+          .eq('email', userEmail)
+          .single();
+
+        if (error || !data) { sessionStorage.clear(); window.location.href = 'login.html'; return; }
+
+        if (!data.paiement) {
+          document.body.style.visibility = 'visible';
+          document.body.innerHTML = LOCK_HTML;
+          return;
+        }
+
+        // ✅ Paiement OK → cache + affichage
+        sessionStorage.setItem('paiement_ok', '1');
+        userAbonnement = data.abonnement || 'aucun';
+        sessionStorage.setItem('user_abonnement', userAbonnement);
+        document.body.style.visibility = 'visible';
+      })();
+    }
 
     // ── Helpers ──
     const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
