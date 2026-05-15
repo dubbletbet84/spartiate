@@ -361,7 +361,8 @@
       const { error } = await supa.from('clients').insert([{
         prenom, nom, email,
         mot_de_passe: hash,
-        abonnement: selectedPlan,
+        abonnement: 'aucun',
+        paiement: false,
         created_at: new Date().toISOString(),
       }]);
 
@@ -371,10 +372,11 @@
         return;
       }
 
-      // Stocker la session maintenant → pas besoin de se reconnecter après Stripe
+      // Stocker la session + le plan choisi (sera confirmé après Stripe)
       sessionStorage.setItem('user_email',      email);
       sessionStorage.setItem('user_prenom',     prenom);
-      sessionStorage.setItem('user_abonnement', selectedPlan);
+      sessionStorage.setItem('user_abonnement', 'aucun');
+      sessionStorage.setItem('pending_plan',    selectedPlan);
 
       // Compte créé → redirection Stripe
       btn.textContent = 'Redirection vers le paiement…';
