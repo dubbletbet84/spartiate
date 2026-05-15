@@ -235,20 +235,19 @@
         const pendingPlan = sessionStorage.getItem('pending_plan') || 'spartiate_pro';
 
         if (stripePaid) {
-          const { error: updateErr } = await supa.from('clients')
-            .update({ paiement: true, abonnement: pendingPlan })
-            .eq('email', userEmail);
+          const { error: updateErr } = await supa.rpc('activer_paiement', {
+            user_email: userEmail,
+            user_plan: pendingPlan
+          });
 
-          // DEBUG — affiche le résultat de l'update
-          document.body.style.visibility = 'visible';
-          document.body.innerHTML = `<div style="padding:2rem;font-family:monospace;font-size:.85rem;background:#F8FAFC;">
-            <h3>🔍 DEBUG</h3>
-            <p><b>Email:</b> ${userEmail}</p>
-            <p><b>Plan:</b> ${pendingPlan}</p>
-            <p><b>stripe_paid:</b> ${sessionStorage.getItem('stripe_paid')}</p>
-            <p><b>Update error:</b> ${updateErr ? JSON.stringify(updateErr) : 'aucune'}</p>
-          </div>`;
-          return;
+          if (!updateErr) {
+            sessionStorage.removeItem('stripe_paid');
+            sessionStorage.removeItem('pending_plan');
+            sessionStorage.setItem('paiement_ok', '1');
+            sessionStorage.setItem('user_abonnement', pendingPlan);
+            document.body.style.visibility = 'visible';
+            return;
+          }
         }
 
         // Vérifier le statut en DB
