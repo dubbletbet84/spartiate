@@ -63,8 +63,9 @@
         box.innerHTML = `
           <div class="succes-icon">❌</div>
           <h1>Erreur d'activation</h1>
-          <p>Votre paiement a bien été reçu mais l'activation a échoué.<br>
-          Contactez-nous à <a href="mailto:support@spartiate-prono.fr">support@spartiate-prono.fr</a></p>`;
+          <p style="font-size:.8rem;color:#94A3B8;margin-top:.5rem;">Détail : ${error.message}</p>
+          <p style="font-size:.8rem;color:#94A3B8;">Email : ${email} | Plan : ${plan}</p>
+          <p>Contactez-nous à <a href="mailto:support@spartiate-prono.fr">support@spartiate-prono.fr</a></p>`;
         return;
       }
 
