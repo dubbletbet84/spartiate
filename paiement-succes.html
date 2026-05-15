@@ -42,68 +42,27 @@
       spartiate_gestion: 'Gestion',
     };
 
-    async function activerAbonnement() {
+    function activerAbonnement() {
       const email = sessionStorage.getItem('user_email');
       const plan  = sessionStorage.getItem('pending_plan');
-      const box   = document.getElementById('box');
 
-      // Si pas d'email en session → renvoyer vers login
-      if (!email) {
-        window.location.href = 'login.html';
-        return;
-      }
+      // Si pas d'email → login
+      if (!email) { window.location.href = 'login.html'; return; }
 
-      // Mettre à jour la DB via REST API directe
-      const SUPA_URL = 'https://rfkishlsopgiizwwbwzp.supabase.co';
-      const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJma2lzaGxzb3BnaWl6d3did3pwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc5ODMyMDQsImV4cCI6MjA5MzU1OTIwNH0.IDf_iInryygig5LvMi5TSGSm3_EBTlhyS45DxBtqMe0';
+      // Marquer que le paiement Stripe est confirmé
+      // L'activation DB se fera depuis le dashboard (contexte sûr)
+      sessionStorage.setItem('stripe_paid', '1');
 
-      let resp, errMsg;
-      try {
-        resp = await fetch(
-          `${SUPA_URL}/rest/v1/clients?email=eq.${encodeURIComponent(email)}`,
-          {
-            method: 'PATCH',
-            headers: {
-              'apikey': SUPA_KEY,
-              'Authorization': `Bearer ${SUPA_KEY}`,
-              'Content-Type': 'application/json',
-              'Prefer': 'return=minimal'
-            },
-            body: JSON.stringify({ paiement: true, abonnement: plan || 'spartiate_pro' })
-          }
-        );
-        if (!resp.ok) errMsg = `HTTP ${resp.status}`;
-      } catch (e) {
-        errMsg = e.message;
-      }
-
-      if (errMsg) {
-        box.innerHTML = `
-          <div class="succes-icon">❌</div>
-          <h1>Erreur d'activation</h1>
-          <p style="font-size:.8rem;color:#94A3B8;margin-top:.5rem;">Détail : ${errMsg}</p>
-          <p style="font-size:.8rem;color:#94A3B8;">Email : ${email} | Plan : ${plan}</p>
-          <p>Contactez-nous à <a href="mailto:support@spartiate-prono.fr">support@spartiate-prono.fr</a></p>`;
-        return;
-      }
-
-      // Mettre à jour la session
-      sessionStorage.setItem('user_abonnement', plan || 'spartiate_pro');
-      sessionStorage.removeItem('pending_plan');
-
+      // Redirection vers dashboard dans 2s
+      const box = document.getElementById('box');
       const label = PLAN_LABEL[plan] || 'Pro';
-
       box.innerHTML = `
         <div class="succes-icon">🎉</div>
         <h1>Bienvenue chez SPARTIATE !</h1>
-        <p>Votre abonnement <strong>${label}</strong> est maintenant actif.<br>
-        Accédez à vos pronostics dès maintenant.</p>
-        <a href="dashboard.html" class="btn-primary" style="text-decoration:none; padding:.75rem 2rem; border-radius:8px; background:var(--red); color:#fff; font-weight:700; font-size:1rem; display:inline-block; margin-top:1.8rem;">
-          Accéder au Dashboard →
-        </a>`;
+        <p>Votre abonnement <strong>${label}</strong> est en cours d'activation.<br>
+        Vous allez être redirigé automatiquement…</p>`;
 
-      // Redirection auto après 3s
-      setTimeout(() => { window.location.href = 'dashboard.html'; }, 3000);
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 2000);
     }
 
     // Attendre que supa soit prêt avant d'exécuter

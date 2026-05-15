@@ -225,12 +225,24 @@
       </div>`;
 
     // ── Vérification paiement ──
-    // Si déjà vérifié dans cette session → affichage immédiat
     if (sessionStorage.getItem('paiement_ok') === '1') {
+      // Déjà vérifié → affichage immédiat
       document.body.style.visibility = 'visible';
     } else {
-      // Sinon → vérification en DB (première connexion)
       (async () => {
+        // Si Stripe vient de rediriger → activer le compte en DB
+        const stripePaid  = sessionStorage.getItem('stripe_paid') === '1';
+        const pendingPlan = sessionStorage.getItem('pending_plan');
+
+        if (stripePaid && pendingPlan) {
+          await supa.from('clients')
+            .update({ paiement: true, abonnement: pendingPlan })
+            .eq('email', userEmail);
+          sessionStorage.removeItem('stripe_paid');
+          sessionStorage.removeItem('pending_plan');
+        }
+
+        // Vérifier le statut en DB
         const { data, error } = await supa
           .from('clients')
           .select('paiement, abonnement')
