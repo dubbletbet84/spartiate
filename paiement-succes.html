@@ -53,17 +53,35 @@
         return;
       }
 
-      // Mettre à jour la DB : paiement = true + bon abonnement
-      const { error } = await supa
-        .from('clients')
-        .update({ paiement: true, abonnement: plan || 'spartiate_pro' })
-        .eq('email', email);
+      // Mettre à jour la DB via REST API directe
+      const SUPA_URL = 'https://rfkishlsopgiizwwbwzp.supabase.co';
+      const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJma2lzaGxzb3BnaWl6d3did3pwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc5ODMyMDQsImV4cCI6MjA5MzU1OTIwNH0.IDf_iInryygig5LvMi5TSGSm3_EBTlhyS45DxBtqMe0';
 
-      if (error) {
+      let resp, errMsg;
+      try {
+        resp = await fetch(
+          `${SUPA_URL}/rest/v1/clients?email=eq.${encodeURIComponent(email)}`,
+          {
+            method: 'PATCH',
+            headers: {
+              'apikey': SUPA_KEY,
+              'Authorization': `Bearer ${SUPA_KEY}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({ paiement: true, abonnement: plan || 'spartiate_pro' })
+          }
+        );
+        if (!resp.ok) errMsg = `HTTP ${resp.status}`;
+      } catch (e) {
+        errMsg = e.message;
+      }
+
+      if (errMsg) {
         box.innerHTML = `
           <div class="succes-icon">❌</div>
           <h1>Erreur d'activation</h1>
-          <p style="font-size:.8rem;color:#94A3B8;margin-top:.5rem;">Détail : ${error.message}</p>
+          <p style="font-size:.8rem;color:#94A3B8;margin-top:.5rem;">Détail : ${errMsg}</p>
           <p style="font-size:.8rem;color:#94A3B8;">Email : ${email} | Plan : ${plan}</p>
           <p>Contactez-nous à <a href="mailto:support@spartiate-prono.fr">support@spartiate-prono.fr</a></p>`;
         return;
