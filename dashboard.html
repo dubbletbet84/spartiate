@@ -232,14 +232,20 @@
       (async () => {
         // Si Stripe vient de rediriger → activer le compte en DB
         const stripePaid  = sessionStorage.getItem('stripe_paid') === '1';
-        const pendingPlan = sessionStorage.getItem('pending_plan');
+        const pendingPlan = sessionStorage.getItem('pending_plan') || 'spartiate_pro';
 
-        if (stripePaid && pendingPlan) {
-          await supa.from('clients')
+        if (stripePaid) {
+          const { error: updateErr } = await supa.from('clients')
             .update({ paiement: true, abonnement: pendingPlan })
             .eq('email', userEmail);
-          sessionStorage.removeItem('stripe_paid');
-          sessionStorage.removeItem('pending_plan');
+          if (!updateErr) {
+            sessionStorage.removeItem('stripe_paid');
+            sessionStorage.removeItem('pending_plan');
+            sessionStorage.setItem('paiement_ok', '1');
+            sessionStorage.setItem('user_abonnement', pendingPlan);
+            document.body.style.visibility = 'visible';
+            return; // ✅ Activé → afficher dashboard directement
+          }
         }
 
         // Vérifier le statut en DB
