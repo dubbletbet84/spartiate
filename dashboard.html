@@ -18,7 +18,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supa.js"></script>
 </head>
-<body>
+<body style="visibility:hidden;">
 
   <!-- ── HEADER ── -->
   <header class="header">
@@ -207,7 +207,7 @@
     const userPrenom     = sessionStorage.getItem('user_prenom');
     let   userAbonnement = sessionStorage.getItem('user_abonnement') || 'aucun';
 
-    if (!userEmail) { window.location.href = 'login.html'; return; }
+    if (!userEmail) { window.location.href = 'login.html'; }
 
     // ── Vérification paiement en DB (anti-bypass) ──
     (async () => {
@@ -217,10 +217,16 @@
         .eq('email', userEmail)
         .single();
 
-      if (error || !data) { sessionStorage.clear(); window.location.href = 'login.html'; return; }
+      // Compte introuvable ou erreur → déconnexion
+      if (error || !data) {
+        sessionStorage.clear();
+        window.location.href = 'login.html';
+        return;
+      }
 
+      // Paiement non validé → écran de blocage
       if (!data.paiement) {
-        // Pas payé → page bloquée
+        document.body.style.visibility = 'visible';
         document.body.innerHTML = `
           <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#F4F6FB;">
             <div style="background:#fff;border:1px solid #E2E8F0;border-radius:16px;padding:3rem 2.5rem;max-width:440px;width:90%;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.08);">
@@ -230,15 +236,16 @@
                 Votre paiement n'a pas encore été confirmé.<br>
                 Complétez votre abonnement pour accéder au dashboard.
               </p>
-              <a href="login.html" style="background:#CC1414;color:#fff;padding:.75rem 2rem;border-radius:8px;font-weight:700;text-decoration:none;display:inline-block;">
-                S'abonner →
+              <a href="login.html#register" style="background:#CC1414;color:#fff;padding:.75rem 2rem;border-radius:8px;font-weight:700;text-decoration:none;display:inline-block;">
+                Choisir un abonnement →
               </a>
             </div>
           </div>`;
         return;
       }
 
-      // Paiement OK → sync abonnement depuis DB
+      // ✅ Paiement OK → afficher le dashboard
+      document.body.style.visibility = 'visible';
       userAbonnement = data.abonnement || 'aucun';
       sessionStorage.setItem('user_abonnement', userAbonnement);
     })();
