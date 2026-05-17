@@ -112,26 +112,8 @@
             "position": 1,
             "item": {
               "@type": "Product",
-              "name": "Abonnement Starter",
-              "description": "1 pronostic par jour. Football et Tennis. Idéal pour débuter.",
-              "brand": { "@id": "https://www.spartiate-prono.fr/#organization" },
-              "offers": {
-                "@type": "Offer",
-                "priceCurrency": "EUR",
-                "price": "9.99",
-                "priceSpecification": { "@type": "UnitPriceSpecification", "price": "9.99", "priceCurrency": "EUR", "unitText": "MONTH" },
-                "availability": "https://schema.org/InStock",
-                "url": "https://www.spartiate-prono.fr/login.html"
-              }
-            }
-          },
-          {
-            "@type": "ListItem",
-            "position": 2,
-            "item": {
-              "@type": "Product",
-              "name": "Abonnement Pro",
-              "description": "3 pronostics par jour. Tous les sports. Analyses complètes.",
+              "name": "Safe & Fun",
+              "description": "Accès aux pronos safe, picks fun publiés régulièrement, espace membre et récap hebdomadaire.",
               "brand": { "@id": "https://www.spartiate-prono.fr/#organization" },
               "offers": {
                 "@type": "Offer",
@@ -145,17 +127,35 @@
           },
           {
             "@type": "ListItem",
-            "position": 3,
+            "position": 2,
             "item": {
               "@type": "Product",
-              "name": "Abonnement Gestion",
-              "description": "Pronostics illimités. Tous les sports. Mise conseillée, analyses VIP et support 24/7.",
+              "name": "Groupe Gestion",
+              "description": "Conseils de mise, suivi bankroll, analyses détaillées par match et historique complet des pronos.",
               "brand": { "@id": "https://www.spartiate-prono.fr/#organization" },
               "offers": {
                 "@type": "Offer",
                 "priceCurrency": "EUR",
                 "price": "44.99",
                 "priceSpecification": { "@type": "UnitPriceSpecification", "price": "44.99", "priceCurrency": "EUR", "unitText": "MONTH" },
+                "availability": "https://schema.org/InStock",
+                "url": "https://www.spartiate-prono.fr/login.html"
+              }
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "item": {
+              "@type": "Product",
+              "name": "High Cotes",
+              "description": "Cotes minimum x5, 70% de réussite garanti, fiches pronos exclusives et accès prioritaire.",
+              "brand": { "@id": "https://www.spartiate-prono.fr/#organization" },
+              "offers": {
+                "@type": "Offer",
+                "priceCurrency": "EUR",
+                "price": "49.99",
+                "priceSpecification": { "@type": "UnitPriceSpecification", "price": "49.99", "priceCurrency": "EUR", "unitText": "MONTH" },
                 "availability": "https://schema.org/InStock",
                 "url": "https://www.spartiate-prono.fr/login.html"
               }
@@ -371,66 +371,52 @@
         Choisissez la formule adaptée à votre pratique. Sans engagement, résiliation en un clic.
       </p>
 
-      <div class="pricing-grid" style="grid-template-columns: repeat(4, 1fr);">
+      <div class="pricing-grid" style="grid-template-columns: repeat(3, 1fr);">
 
-        <!-- STARTER -->
+        <!-- SAFE & FUN -->
         <div class="pricing-card">
-          <p class="plan-name">Starter</p>
-          <div class="plan-price"><sup>€</sup>4<sub>.99 unique</sub></div>
-          <p class="plan-desc">Accès complet 7 jours, sans renouvellement automatique.</p>
+          <p class="plan-name">Safe &amp; Fun</p>
+          <div class="plan-price"><sup>€</sup>24<sub>.99 /mois</sub></div>
+          <p class="plan-desc">Les pronos safe publiés régulièrement avec un récap hebdo.</p>
           <ul class="plan-features">
-            <li><span class="check">✓</span> Football & Tennis</li>
-            <li><span class="check">✓</span> Statut du prono (Safe/Risqué)</li>
-            <li class="dimmed"><span class="cross">✗</span> Analyses détaillées</li>
-            <li class="dimmed"><span class="cross">✗</span> Pronos VIP</li>
-            <li class="dimmed"><span class="cross">✗</span> Support prioritaire</li>
-          </ul>
-          <a href="login.html" class="btn-plan btn-plan-outline">Commencer</a>
-        </div>
-
-        <!-- VIP -->
-        <div class="pricing-card">
-          <p class="plan-name">Spartiate VIP</p>
-          <div class="plan-price"><sup>€</sup>14<sub>.99 /mois</sub></div>
-          <p class="plan-desc">Analyses détaillées et pronos multi-sports chaque jour.</p>
-          <ul class="plan-features">
-            <li><span class="check">✓</span> Football, Basketball & Tennis</li>
-            <li><span class="check">✓</span> Analyses détaillées</li>
-            <li><span class="check">✓</span> Statut du prono détaillé</li>
-            <li class="dimmed"><span class="cross">✗</span> Pronos Jackpot</li>
-            <li class="dimmed"><span class="cross">✗</span> Support prioritaire</li>
+            <li><span class="check">✓</span> Accès aux pronos safe sur le site</li>
+            <li><span class="check">✓</span> Picks fun publiés régulièrement</li>
+            <li><span class="check">✓</span> Espace membre dédié</li>
+            <li><span class="check">✓</span> Récap hebdomadaire en ligne</li>
+            <li class="dimmed"><span class="cross">✗</span> Conseils de mise</li>
+            <li class="dimmed"><span class="cross">✗</span> Fiches pronos exclusives</li>
           </ul>
           <a href="login.html" class="btn-plan btn-plan-outline">S&apos;abonner</a>
         </div>
 
-        <!-- PRO (featured) -->
+        <!-- GROUPE GESTION (featured) -->
         <div class="pricing-card featured">
           <span class="badge-featured">⭐ Populaire</span>
-          <p class="plan-name">Spartiate Pro</p>
-          <div class="plan-price"><sup>€</sup>24<sub>.99 /mois</sub></div>
-          <p class="plan-desc">La formule plébiscitée par nos membres actifs.</p>
+          <p class="plan-name">Groupe Gestion</p>
+          <div class="plan-price"><sup>€</sup>44<sub>.99 /mois</sub></div>
+          <p class="plan-desc">La formule complète pour gérer sa bankroll et maximiser ses gains.</p>
           <ul class="plan-features">
-            <li><span class="check">✓</span> Tous les sports couverts</li>
-            <li><span class="check">✓</span> Analyses complètes</li>
-            <li><span class="check">✓</span> Pronos Jackpot inclus</li>
-            <li><span class="check">✓</span> Accès historique des pronos</li>
-            <li class="dimmed"><span class="cross">✗</span> Support prioritaire</li>
+            <li><span class="check">✓</span> Tout le plan Safe &amp; Fun</li>
+            <li><span class="check">✓</span> Conseils de mise affichés sur le site</li>
+            <li><span class="check">✓</span> Suivi bankroll intégré</li>
+            <li><span class="check">✓</span> Analyses détaillées par match</li>
+            <li><span class="check">✓</span> Historique des pronos complet</li>
+            <li class="dimmed"><span class="cross">✗</span> Fiches pronos exclusives</li>
           </ul>
           <a href="login.html" class="btn-plan btn-plan-red">S&apos;abonner maintenant</a>
         </div>
 
-        <!-- GESTION -->
+        <!-- HIGH COTES -->
         <div class="pricing-card">
-          <p class="plan-name">Spartiate Gestion</p>
-          <div class="plan-price"><sup>€</sup>44<sub>.99 /mois</sub></div>
-          <p class="plan-desc">Tous les pronos + la mise conseillée pour maximiser vos gains.</p>
+          <p class="plan-name">High Cotes</p>
+          <div class="plan-price"><sup>€</sup>49<sub>.99 /mois</sub></div>
+          <p class="plan-desc">Cotes élevées, taux de réussite garanti et fiches exclusives.</p>
           <ul class="plan-features">
-            <li><span class="check">✓</span> Pronos illimités tous sports</li>
-            <li><span class="check">✓</span> <strong>Mise conseillée par pari</strong></li>
-            <li><span class="check">✓</span> Jackpot & analyses avancées</li>
-            <li><span class="check">✓</span> Historique complet</li>
-            <li><span class="check">✓</span> Support prioritaire 24/7</li>
-            <li><span class="check">✓</span> Accès toutes fonctionnalités</li>
+            <li><span class="check">✓</span> Tout le plan Gestion</li>
+            <li><span class="check">✓</span> Cotes minimum x5 uniquement</li>
+            <li><span class="check">✓</span> 70% de réussite garanti</li>
+            <li><span class="check">✓</span> Fiches pronos exclusives sur le site</li>
+            <li><span class="check">✓</span> Accès prioritaire aux nouvelles sorties</li>
           </ul>
           <a href="login.html" class="btn-plan btn-plan-blue">S&apos;abonner</a>
         </div>
