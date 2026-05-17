@@ -145,25 +145,20 @@
           <div class="form-group">
             <label>Choisissez votre abonnement</label>
             <div style="display:flex; flex-direction:column; gap:.6rem; margin-top:.4rem;">
-              <label style="display:flex; align-items:center; gap:.75rem; cursor:pointer; background:var(--white); border:2px solid var(--border); border-radius:8px; padding:.75rem 1rem; transition:border-color .15s;" onclick="selectAbo(this,'spartiate_starter','https://buy.stripe.com/eVq00jdNpal40Jme9I9sk04')">
-                <input type="radio" name="plan" value="spartiate_starter" style="accent-color:var(--red); width:16px; height:16px;">
-                <span style="flex:1; font-size:.88rem;"><strong>Starter</strong> <span style="color:var(--text-muted); font-size:.8rem;">— 7 jours</span></span>
-                <span style="font-weight:800; color:var(--text);">4,99€</span>
-              </label>
-              <label style="display:flex; align-items:center; gap:.75rem; cursor:pointer; background:var(--white); border:2px solid var(--border); border-radius:8px; padding:.75rem 1rem; transition:border-color .15s;" onclick="selectAbo(this,'spartiate_vip','https://buy.stripe.com/7sYcN510D78S8bOghQ9sk02')">
-                <input type="radio" name="plan" value="spartiate_vip" style="accent-color:var(--red); width:16px; height:16px;">
-                <span style="flex:1; font-size:.88rem;"><strong>VIP</strong> <span style="color:var(--text-muted); font-size:.8rem;">— mensuel</span></span>
-                <span style="font-weight:800; color:var(--text);">14,99€/mois</span>
-              </label>
-              <label style="display:flex; align-items:center; gap:.75rem; cursor:pointer; background:#FEF2F2; border:2px solid var(--red); border-radius:8px; padding:.75rem 1rem; transition:border-color .15s;" onclick="selectAbo(this,'spartiate_pro','https://buy.stripe.com/dRmbJ15gT9h063Gc1A9sk00')">
-                <input type="radio" name="plan" value="spartiate_pro" checked style="accent-color:var(--red); width:16px; height:16px;">
-                <span style="flex:1; font-size:.88rem;"><strong>Pro</strong> <span style="color:var(--text-muted); font-size:.8rem;">— mensuel · ⭐ Populaire</span></span>
+              <label style="display:flex; align-items:center; gap:.75rem; cursor:pointer; background:var(--white); border:2px solid var(--border); border-radius:8px; padding:.75rem 1rem; transition:border-color .15s;" onclick="selectAbo(this,'safe_fun','https://buy.stripe.com/dRmbJ15gT9h063Gc1A9sk00')">
+                <input type="radio" name="plan" value="safe_fun" style="accent-color:var(--red); width:16px; height:16px;">
+                <span style="flex:1; font-size:.88rem;"><strong>Safe &amp; Fun</strong> <span style="color:var(--text-muted); font-size:.8rem;">— mensuel</span></span>
                 <span style="font-weight:800; color:var(--text);">24,99€/mois</span>
               </label>
-              <label style="display:flex; align-items:center; gap:.75rem; cursor:pointer; background:var(--white); border:2px solid var(--border); border-radius:8px; padding:.75rem 1rem; transition:border-color .15s;" onclick="selectAbo(this,'spartiate_gestion','https://buy.stripe.com/00wcN56kXdxgajW9Ts9sk01')">
-                <input type="radio" name="plan" value="spartiate_gestion" style="accent-color:var(--red); width:16px; height:16px;">
-                <span style="flex:1; font-size:.88rem;"><strong>Gestion</strong> <span style="color:var(--text-muted); font-size:.8rem;">— mensuel</span></span>
+              <label style="display:flex; align-items:center; gap:.75rem; cursor:pointer; background:#FEF2F2; border:2px solid var(--red); border-radius:8px; padding:.75rem 1rem; transition:border-color .15s;" onclick="selectAbo(this,'groupe_gestion','https://buy.stripe.com/00wcN56kXdxgajW9Ts9sk01')">
+                <input type="radio" name="plan" value="groupe_gestion" checked style="accent-color:var(--red); width:16px; height:16px;">
+                <span style="flex:1; font-size:.88rem;"><strong>Groupe Gestion</strong> <span style="color:var(--text-muted); font-size:.8rem;">— mensuel · ⭐ Populaire</span></span>
                 <span style="font-weight:800; color:var(--text);">44,99€/mois</span>
+              </label>
+              <label style="display:flex; align-items:center; gap:.75rem; cursor:pointer; background:var(--white); border:2px solid var(--border); border-radius:8px; padding:.75rem 1rem; transition:border-color .15s;" onclick="selectAbo(this,'high_cotes','STRIPE_LINK_HIGH_COTES')">
+                <input type="radio" name="plan" value="high_cotes" style="accent-color:var(--red); width:16px; height:16px;">
+                <span style="flex:1; font-size:.88rem;"><strong>High Cotes</strong> <span style="color:var(--text-muted); font-size:.8rem;">— mensuel</span></span>
+                <span style="font-weight:800; color:var(--text);">49,99€/mois</span>
               </label>
             </div>
           </div>
@@ -315,8 +310,8 @@
     }
 
     // Plan sélectionné
-    let selectedPlan = 'spartiate_pro';
-    let selectedStripeUrl = 'https://buy.stripe.com/dRmbJ15gT9h063Gc1A9sk00';
+    let selectedPlan = 'groupe_gestion';
+    let selectedStripeUrl = 'https://buy.stripe.com/00wcN56kXdxgajW9Ts9sk01';
 
     function selectAbo(label, plan, stripeUrl) {
       document.querySelectorAll('#form-register label[onclick]').forEach(l => {
