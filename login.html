@@ -150,7 +150,7 @@
                 <span style="flex:1; font-size:.88rem;"><strong>VIP</strong> <span style="color:var(--text-muted); font-size:.8rem;">— mensuel</span></span>
                 <span style="font-weight:800; color:var(--text);">24,99€/mois</span>
               </label>
-              <label style="display:flex; align-items:center; gap:.75rem; cursor:pointer; background:#FEF2F2; border:2px solid var(--red); border-radius:8px; padding:.75rem 1rem; transition:border-color .15s;" onclick="selectAbo(this,'groupe_gestion','https://buy.stripe.com/00wcN56kXdxgajW9Ts9sk01')">
+              <label style="display:flex; align-items:center; gap:.75rem; cursor:pointer; background:#FEF2F2; border:2px solid var(--red); border-radius:8px; padding:.75rem 1rem; transition:border-color .15s;" onclick="selectAbo(this,'groupe_gestion','https://buy.stripe.com/bJe9AT7p1fFo2Ru2r09sk08')">
                 <input type="radio" name="plan" value="groupe_gestion" checked style="accent-color:var(--red); width:16px; height:16px;">
                 <span style="flex:1; font-size:.88rem;"><strong>Groupe Gestion</strong> <span style="color:var(--text-muted); font-size:.8rem;">— mensuel · ⭐ Populaire</span></span>
                 <span style="font-weight:800; color:var(--text);">44,99€/mois</span>
@@ -316,7 +316,7 @@
 
     // Plan sélectionné
     let selectedPlan = 'groupe_gestion';
-    let selectedStripeUrl = 'https://buy.stripe.com/00wcN56kXdxgajW9Ts9sk01';
+    let selectedStripeUrl = 'https://buy.stripe.com/bJe9AT7p1fFo2Ru2r09sk08';
 
     function selectAbo(label, plan, stripeUrl) {
       document.querySelectorAll('#form-register label[onclick]').forEach(l => {
