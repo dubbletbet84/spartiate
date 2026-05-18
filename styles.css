@@ -362,7 +362,7 @@ nav.nav {
   display: grid;
   gap: 1.5rem;
   grid-template-columns: repeat(auto-fit, minmax(295px, 1fr));
-  align-items: start;
+  align-items: stretch;
 }
 
 .pricing-card {
@@ -373,6 +373,8 @@ nav.nav {
   position: relative;
   box-shadow: 0 2px 10px rgba(0,0,0,.06);
   transition: transform .2s, box-shadow .2s;
+  display: flex;
+  flex-direction: column;
 }
 .pricing-card:hover { transform: translateY(-5px); box-shadow: 0 14px 40px rgba(0,0,0,.12); }
 
@@ -404,13 +406,14 @@ nav.nav {
 .plan-price sub { font-size: .82rem; color: var(--text-muted); font-weight: 400; }
 .plan-desc { font-size: .84rem; color: var(--text-muted); margin: .7rem 0 1.6rem; line-height: 1.5; }
 
-.plan-features { list-style: none; margin-bottom: 1.8rem; display: flex; flex-direction: column; gap: .65rem; }
+.plan-features { list-style: none; margin-bottom: 1.8rem; display: flex; flex-direction: column; gap: .65rem; flex: 1; }
 .plan-features li { font-size: .86rem; display: flex; align-items: center; gap: .55rem; color: var(--text); }
 .plan-features li .check { color: var(--green); }
 .plan-features li .cross { color: #CBD5E1; }
 .plan-features li.dimmed { color: #94A3B8; }
 
 .btn-plan {
+  margin-top: auto;
   display: block;
   text-align: center;
   padding: .8rem;
