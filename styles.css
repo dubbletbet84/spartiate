@@ -251,7 +251,7 @@ nav.nav {
 .hero-inner { max-width: 1180px; margin: 0 auto; padding: 0 2rem; }
 .hero-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
 .hero-content { display: flex; flex-direction: column; }
-.hero-visual { display: flex; align-items: center; justify-content: center; }
+.hero-visual { display: flex; align-items: center; justify-content: center; margin-top: 3rem; }
 .hero-video-wrap { position: relative; width: 100%; border-radius: 14px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.5); aspect-ratio: 16/9; }
 .hero-video-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
