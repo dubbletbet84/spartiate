@@ -255,8 +255,10 @@
       </div>
       <div class="hero-visual">
         <div class="hero-video-wrap">
-          <iframe src="https://www.youtube.com/embed/QC0a4mL-ozU?autoplay=0&mute=0&controls=1&modestbranding=1&rel=0"
-            frameborder="0" allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>
+          <div class="yt-facade" id="yt-facade" onclick="loadYT()" style="cursor:pointer;">
+            <img src="https://i.ytimg.com/vi/QC0a4mL-ozU/maxresdefault.jpg" alt="Vidéo SPARTIATE" style="width:100%;height:100%;object-fit:cover;display:block;">
+            <div class="yt-play-btn">▶</div>
+          </div>
         </div>
       </div>
     </div>
@@ -530,6 +532,19 @@
       const el2 = document.getElementById('idx-taux2');
       if (el2) el2.textContent = taux + '%';
     })();
+  </script>
+  <script>
+    function loadYT() {
+      const facade = document.getElementById('yt-facade');
+      const wrap   = facade.parentNode;
+      const iframe = document.createElement('iframe');
+      iframe.src = 'https://www.youtube.com/embed/QC0a4mL-ozU?autoplay=1&controls=1&modestbranding=1&rel=0';
+      iframe.frameBorder = '0';
+      iframe.allow = 'autoplay; encrypted-media';
+      iframe.allowFullscreen = true;
+      iframe.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border:none;';
+      facade.replaceWith(iframe);
+    }
   </script>
 </body>
 </html>

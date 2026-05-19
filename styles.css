@@ -253,6 +253,9 @@ nav.nav {
 .hero-content { display: flex; flex-direction: column; }
 .hero-visual { display: flex; align-items: center; justify-content: center; margin-top: 3rem; }
 .hero-video-wrap { position: relative; width: 100%; border-radius: 14px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.5); aspect-ratio: 16/9; }
+.yt-facade { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.yt-facade:hover .yt-play-btn { transform: translate(-50%,-50%) scale(1.1); }
+.yt-play-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 64px; height: 64px; background: var(--red); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.4rem; transition: transform .2s; padding-left: 4px; box-shadow: 0 4px 20px rgba(0,0,0,.4); }
 .hero-video-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
 .hero-tag {
