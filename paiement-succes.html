@@ -44,15 +44,15 @@
     };
 
     function activerAbonnement() {
-      const email = sessionStorage.getItem('user_email');
-      const plan  = sessionStorage.getItem('pending_plan');
+      const email = localStorage.getItem('user_email');
+      const plan  = localStorage.getItem('pending_plan');
 
       // Si pas d'email → login
       if (!email) { window.location.href = 'login.html'; return; }
 
       // Marquer que le paiement Stripe est confirmé
       // L'activation DB se fera depuis le dashboard (contexte sûr)
-      sessionStorage.setItem('stripe_paid', '1');
+      localStorage.setItem('stripe_paid', '1');
 
       // Redirection vers dashboard dans 2s
       const box = document.getElementById('box');

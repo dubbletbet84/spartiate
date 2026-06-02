@@ -398,7 +398,7 @@
       btn.dataset.planKey = planKey;
 
       // Mise à jour BDD dès la sélection du plan (arrière-plan, zéro délai au clic)
-      const email = sessionStorage.getItem('client_email') || sessionStorage.getItem('user_email');
+      const email = localStorage.getItem('client_email') || localStorage.getItem('user_email');
       if (email && aboMap[planKey]) {
         supa.from('clients').update({ abonnement: aboMap[planKey] }).eq('email', email);
       }

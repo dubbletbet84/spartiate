@@ -254,9 +254,9 @@
   <script>
 
     // ── Vérification connexion ──
-    const userEmail      = sessionStorage.getItem('user_email');
-    const userPrenom     = sessionStorage.getItem('user_prenom');
-    let   userAbonnement = sessionStorage.getItem('user_abonnement') || 'aucun';
+    const userEmail      = localStorage.getItem('user_email');
+    const userPrenom     = localStorage.getItem('user_prenom');
+    let   userAbonnement = localStorage.getItem('user_abonnement') || 'aucun';
 
     if (!userEmail) { window.location.href = 'login.html'; }
 
@@ -276,14 +276,14 @@
       </div>`;
 
     // ── Vérification paiement ──
-    if (sessionStorage.getItem('paiement_ok') === '1') {
+    if (localStorage.getItem('paiement_ok') === '1') {
       // Déjà vérifié → affichage immédiat
       document.body.style.visibility = 'visible';
     } else {
       (async () => {
         // Si Stripe vient de rediriger → activer le compte en DB
-        const stripePaid  = sessionStorage.getItem('stripe_paid') === '1';
-        const pendingPlan = sessionStorage.getItem('pending_plan') || 'spartiate_pro';
+        const stripePaid  = localStorage.getItem('stripe_paid') === '1';
+        const pendingPlan = localStorage.getItem('pending_plan') || 'spartiate_pro';
 
         let paiementOk = false;
 
@@ -294,10 +294,10 @@
             user_plan: pendingPlan
           });
           if (!updateErr) {
-            sessionStorage.removeItem('stripe_paid');
-            sessionStorage.removeItem('pending_plan');
-            sessionStorage.setItem('paiement_ok', '1');
-            sessionStorage.setItem('user_abonnement', pendingPlan);
+            localStorage.removeItem('stripe_paid');
+            localStorage.removeItem('pending_plan');
+            localStorage.setItem('paiement_ok', '1');
+            localStorage.setItem('user_abonnement', pendingPlan);
             userAbonnement = pendingPlan;
             paiementOk = true;
           }
@@ -311,7 +311,7 @@
             .eq('email', userEmail)
             .single();
 
-          if (error || !data) { sessionStorage.clear(); window.location.href = 'login.html'; return; }
+          if (error || !data) { localStorage.clear(); window.location.href = 'login.html'; return; }
 
           if (!data.paiement) {
             document.body.style.visibility = 'visible';
@@ -319,9 +319,9 @@
             return;
           }
 
-          sessionStorage.setItem('paiement_ok', '1');
+          localStorage.setItem('paiement_ok', '1');
           userAbonnement = data.abonnement || 'aucun';
-          sessionStorage.setItem('user_abonnement', userAbonnement);
+          localStorage.setItem('user_abonnement', userAbonnement);
         }
 
         document.body.style.visibility = 'visible';
@@ -371,7 +371,7 @@
     const btnLogout = document.querySelector('.btn-logout');
     if (btnLogout) btnLogout.addEventListener('click', e => {
       e.preventDefault();
-      sessionStorage.clear();
+      localStorage.clear();
       window.location.href = 'index.html';
     });
 

@@ -307,9 +307,9 @@
         return;
       }
 
-      sessionStorage.setItem('user_email',      data.email);
-      sessionStorage.setItem('user_prenom',     data.prenom || '');
-      sessionStorage.setItem('user_abonnement', data.abonnement || 'aucun');
+      localStorage.setItem('user_email',      data.email);
+      localStorage.setItem('user_prenom',     data.prenom || '');
+      localStorage.setItem('user_abonnement', data.abonnement || 'aucun');
 
       window.location.href = 'dashboard.html';
     }
@@ -365,10 +365,10 @@
       }
 
       // Stocker la session + le plan choisi (sera confirmé après Stripe)
-      sessionStorage.setItem('user_email',      email);
-      sessionStorage.setItem('user_prenom',     prenom);
-      sessionStorage.setItem('user_abonnement', 'aucun');
-      sessionStorage.setItem('pending_plan',    selectedPlan);
+      localStorage.setItem('user_email',      email);
+      localStorage.setItem('user_prenom',     prenom);
+      localStorage.setItem('user_abonnement', 'aucun');
+      localStorage.setItem('pending_plan',    selectedPlan);
 
       // Compte créé → redirection Stripe avec référence email|plan
       btn.textContent = 'Redirection vers le paiement…';
