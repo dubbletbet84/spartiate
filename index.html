@@ -213,7 +213,7 @@
         <input type="text" placeholder="Rechercher un sport, un prono…">
         <span class="search-icon">🔍</span>
       </div>
-      <a href="login.html" class="btn-connect">Se Connecter</a>
+      <a href="login.html" class="btn-connect" id="header-auth-btn">Se Connecter</a>
     </div>
   </header>
   <!-- ── TICKER ── -->
@@ -533,6 +533,17 @@
       const el2 = document.getElementById('idx-taux2');
       if (el2) el2.textContent = taux + '%';
     })();
+  </script>
+  <script>
+    // Si connecté → remplace "Se Connecter" par "Mon Dashboard"
+    const authBtn = document.getElementById('header-auth-btn');
+    if (sessionStorage.getItem('user_email') && authBtn) {
+      const prenom = sessionStorage.getItem('user_prenom') || '';
+      authBtn.textContent = prenom ? '👤 ' + prenom : 'Mon Dashboard';
+      authBtn.href = 'dashboard.html';
+      authBtn.style.background = 'var(--green)';
+      authBtn.style.borderColor = 'var(--green)';
+    }
   </script>
   <script>
     function loadYT() {
