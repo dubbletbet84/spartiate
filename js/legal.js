@@ -5,11 +5,8 @@
   const page = window.location.pathname;
   if (!page.endsWith('index.html') && page !== '/' && page !== '') return;
   if (localStorage.getItem('age_verified')) return;
-  // Différer après le rendu pour ne pas bloquer le LCP
-  if (document.readyState !== 'complete') {
-    window.addEventListener('load', ageGate);
-    return;
-  }
+  // Différer de 500ms pour ne pas impacter le LCP
+  setTimeout(function() {
 
   const overlay = document.createElement('div');
   overlay.id = 'age-gate';
@@ -50,6 +47,7 @@
   document.getElementById('age-no').addEventListener('click', () => {
     window.location.href = 'https://www.google.fr';
   });
+  }, 500);
 })();
 
 // ── 2. BANNIÈRE COOKIES RGPD (CNIL) ──
