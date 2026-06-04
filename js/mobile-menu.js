@@ -28,7 +28,6 @@
     <div style="padding:1.2rem 1.5rem 1rem; border-bottom:1px solid rgba(255,255,255,.1); margin-bottom:.5rem;">
       <p style="color:#94A3B8; font-size:.72rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:.3rem;">Connecté en tant que</p>
       <p style="color:#fff; font-weight:800; font-size:1rem;">${prenom || email}</p>
-      ${abo && abo !== 'aucun' ? `<p style="color:var(--red); font-size:.78rem; font-weight:700; margin-top:.2rem;">Abonnement ${abo}</p>` : ''}
     </div>` : '';
 
   const authLinks = email ? `
