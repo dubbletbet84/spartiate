@@ -206,24 +206,24 @@
             <label>Abonnement requis</label>
             <div style="display:flex; flex-direction:column; gap:.6rem; padding:.7rem .9rem; background:#0F172A; border:1px solid #334155; border-radius:8px;">
               <label style="display:flex; align-items:center; gap:.6rem; color:#CBD5E1; font-size:.88rem; cursor:pointer;">
-                <input type="checkbox" class="f-abo" value="spartiate_starter"
+                <input type="checkbox" class="f-abo" value="safe_fun" checked
                   style="width:16px;height:16px;accent-color:var(--red);cursor:pointer;">
-                Spartiate Starter
+                VIP
               </label>
               <label style="display:flex; align-items:center; gap:.6rem; color:#CBD5E1; font-size:.88rem; cursor:pointer;">
-                <input type="checkbox" class="f-abo" value="spartiate_vip"
+                <input type="checkbox" class="f-abo" value="groupe_gestion" checked
                   style="width:16px;height:16px;accent-color:var(--red);cursor:pointer;">
-                Spartiate VIP
+                Groupe Gestion
               </label>
               <label style="display:flex; align-items:center; gap:.6rem; color:#CBD5E1; font-size:.88rem; cursor:pointer;">
-                <input type="checkbox" class="f-abo" value="spartiate_pro" checked
+                <input type="checkbox" class="f-abo" value="high_cotes" checked
                   style="width:16px;height:16px;accent-color:var(--red);cursor:pointer;">
-                Spartiate Pro
+                High Cotes
               </label>
               <label style="display:flex; align-items:center; gap:.6rem; color:#CBD5E1; font-size:.88rem; cursor:pointer;">
-                <input type="checkbox" class="f-abo" value="spartiate_gestion"
+                <input type="checkbox" class="f-abo" value="all_inclusive" checked
                   style="width:16px;height:16px;accent-color:var(--red);cursor:pointer;">
-                Spartiate Gestion
+                All Inclusive
               </label>
             </div>
             <p style="font-size:.72rem; color:#64748B; margin-top:.3rem;">Le prono sera visible par les abonnements cochés.</p>
@@ -398,7 +398,7 @@
         cote:              parseFloat(document.getElementById('f-cote').value) || null,
         mise:              document.getElementById('f-mise').value.trim() || null,
         categorie:         document.getElementById('f-categorie').value,
-        abonnement_requis: [...document.querySelectorAll('.f-abo:checked')].map(c => c.value).join(',') || 'spartiate_starter',
+        abonnement_requis: [...document.querySelectorAll('.f-abo:checked')].map(c => c.value).join(',') || 'safe_fun',
         notes:             document.getElementById('f-notes').value.trim() || null,
         statut:            'en_attente',
         created_at:        new Date().toISOString(),
