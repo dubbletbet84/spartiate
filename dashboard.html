@@ -35,8 +35,25 @@
         <input type="text" placeholder="Rechercher un sport, un prono…">
         <span class="search-icon">🔍</span>
       </div>
-      <div class="header-actions">
-        <a href="login.html" class="btn-account">Mon Compte</a>
+      <div class="header-actions" style="position:relative;">
+        <button id="btn-account" class="btn-account" style="cursor:pointer; border:none;">Mon Compte</button>
+        <div id="account-dropdown" style="display:none; position:absolute; top:calc(100% + 8px); right:0; background:#fff; border:1px solid var(--border); border-radius:12px; box-shadow:0 8px 30px rgba(0,0,0,.12); min-width:240px; z-index:500; overflow:hidden;">
+          <div style="padding:1rem 1.2rem; border-bottom:1px solid var(--border); background:#F8FAFC;">
+            <p id="dropdown-name" style="font-weight:800; color:var(--blue-title); font-size:.95rem;">—</p>
+            <p id="dropdown-email" style="font-size:.78rem; color:var(--text-muted); margin-top:.2rem;">—</p>
+            <p id="dropdown-abo" style="font-size:.78rem; color:var(--red); font-weight:700; margin-top:.2rem;">—</p>
+          </div>
+          <div style="padding:.5rem;">
+            <button id="btn-delete-account" style="display:flex; align-items:center; gap:.6rem; width:100%; background:none; border:none; padding:.7rem 1rem; border-radius:8px; color:#DC2626; font-weight:700; font-size:.85rem; cursor:pointer; transition:background .15s; text-align:left;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+              Supprimer mon compte
+            </button>
+            <button id="btn-logout-dropdown" style="display:flex; align-items:center; gap:.6rem; width:100%; background:none; border:none; padding:.7rem 1rem; border-radius:8px; color:var(--text-muted); font-weight:700; font-size:.85rem; cursor:pointer; transition:background .15s; text-align:left;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Déconnexion
+            </button>
+          </div>
+        </div>
         <a href="index.html" class="btn-logout">Déconnexion</a>
       </div>
     </div>
@@ -206,34 +223,6 @@
 
       </div>
       <p style="text-align:center; font-size:.75rem; color:var(--text-muted); margin-top:1.5rem;">⚠️ Les paris sportifs comportent des risques. Jouez de façon responsable. Interdit aux mineurs.</p>
-    </div>
-  </section>
-
-  <!-- ── MON COMPTE ── -->
-  <section class="dash-section">
-    <div class="container">
-      <h2 class="section-title">Mon Compte</h2>
-      <div class="divider"></div>
-
-      <div style="max-width:560px; display:flex; flex-direction:column; gap:1rem; margin-top:1.5rem;">
-
-        <!-- Infos -->
-        <div style="background:var(--white); border:1px solid var(--border); border-radius:12px; padding:1.5rem;">
-          <h4 style="font-weight:800; color:var(--blue-title); margin-bottom:1rem; font-size:.95rem;">Informations du compte</h4>
-          <p style="font-size:.88rem; color:var(--text-muted);">Email : <strong id="account-email" style="color:var(--text);">—</strong></p>
-          <p style="font-size:.88rem; color:var(--text-muted); margin-top:.4rem;">Abonnement : <strong id="account-abo" style="color:var(--text);">—</strong></p>
-        </div>
-
-        <!-- Suppression -->
-        <div style="background:#FEF2F2; border:1px solid #FECACA; border-radius:12px; padding:1.5rem;">
-          <h4 style="font-weight:800; color:#991B1B; margin-bottom:.5rem; font-size:.95rem;">Supprimer mon compte</h4>
-          <p style="font-size:.84rem; color:#7F1D1D; line-height:1.6; margin-bottom:1rem;">Cette action est <strong>irréversible</strong>. Toutes vos données personnelles seront supprimées conformément au RGPD.</p>
-          <button id="btn-delete-account" style="background:#DC2626; color:#fff; border:none; border-radius:8px; padding:.7rem 1.4rem; font-weight:800; font-size:.88rem; cursor:pointer; transition:background .15s;">
-            Supprimer mon compte
-          </button>
-        </div>
-
-      </div>
     </div>
   </section>
 
@@ -420,30 +409,51 @@
       window.location.href = 'index.html';
     });
 
-    // ── Mon Compte ──
-    const emailEl = document.getElementById('account-email');
-    const aboEl   = document.getElementById('account-abo');
-    if (emailEl) emailEl.textContent = userEmail;
-    if (aboEl)   aboEl.textContent   = aboLabels[userAbonnement] || userAbonnement.replace(/_/g, ' ');
+    // ── Dropdown Mon Compte ──
+    const btnAccount  = document.getElementById('btn-account');
+    const dropdown    = document.getElementById('account-dropdown');
+    const dropName    = document.getElementById('dropdown-name');
+    const dropEmail   = document.getElementById('dropdown-email');
+    const dropAbo     = document.getElementById('dropdown-abo');
+
+    if (dropName)  dropName.textContent  = userPrenom ? userPrenom.split(' ')[0] : userEmail;
+    if (dropEmail) dropEmail.textContent = userEmail;
+    if (dropAbo)   dropAbo.textContent   = 'Abonnement ' + (aboLabels[userAbonnement] || userAbonnement.replace(/_/g, ' '));
+
+    if (btnAccount && dropdown) {
+      btnAccount.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+      });
+      document.addEventListener('click', () => { dropdown.style.display = 'none'; });
+    }
 
     // Suppression de compte
     const btnDelete = document.getElementById('btn-delete-account');
     if (btnDelete) {
       btnDelete.addEventListener('click', async () => {
+        dropdown.style.display = 'none';
         const confirmed = confirm('⚠️ Êtes-vous sûr de vouloir supprimer définitivement votre compte ?\n\nToutes vos données seront effacées. Cette action est irréversible.');
         if (!confirmed) return;
         btnDelete.disabled = true;
-        btnDelete.textContent = 'Suppression en cours…';
         const { error } = await supa.from('clients').delete().eq('email', userEmail);
         if (error) {
-          alert('Erreur lors de la suppression : ' + error.message);
+          alert('Erreur : ' + error.message);
           btnDelete.disabled = false;
-          btnDelete.textContent = 'Supprimer mon compte';
         } else {
           localStorage.clear();
           alert('Votre compte a bien été supprimé. À bientôt !');
           window.location.href = 'index.html';
         }
+      });
+    }
+
+    // Déconnexion depuis dropdown
+    const btnLogoutDrop = document.getElementById('btn-logout-dropdown');
+    if (btnLogoutDrop) {
+      btnLogoutDrop.addEventListener('click', () => {
+        localStorage.clear();
+        window.location.href = 'index.html';
       });
     }
 
