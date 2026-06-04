@@ -54,6 +54,10 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
         Mon Dashboard
       </a>
+      <button id="auth-unsub-btn" style="display:flex; align-items:center; gap:.6rem; width:100%; background:none; border:none; padding:.7rem 1rem; border-radius:8px; color:#D97706; font-weight:700; font-size:.85rem; cursor:pointer; transition:background .15s; text-align:left;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+        Se désabonner
+      </button>
       <button id="auth-delete-btn" style="display:flex; align-items:center; gap:.6rem; width:100%; background:none; border:none; padding:.7rem 1rem; border-radius:8px; color:#DC2626; font-weight:700; font-size:.85rem; cursor:pointer; transition:background .15s; text-align:left;">
         <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
         Supprimer mon compte
@@ -75,6 +79,19 @@
     dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
   });
   document.addEventListener('click', () => { dropdown.style.display = 'none'; });
+
+  // Désabonnement
+  dropdown.querySelector('#auth-unsub-btn').addEventListener('click', async () => {
+    dropdown.style.display = 'none';
+    const confirmed = confirm('Se désabonner ?\n\nVotre compte sera conservé mais vous perdrez l\'accès au dashboard et aux pronostics.');
+    if (!confirmed) return;
+    const { error } = await supa.from('clients').update({ paiement: false, abonnement: 'aucun' }).eq('email', email);
+    if (error) { alert('Erreur : ' + error.message); return; }
+    localStorage.removeItem('paiement_ok');
+    localStorage.setItem('user_abonnement', 'aucun');
+    alert('Vous êtes désabonné. Votre compte est conservé.');
+    window.location.href = 'index.html';
+  });
 
   // Déconnexion
   dropdown.querySelector('#auth-logout-btn').addEventListener('click', () => {
