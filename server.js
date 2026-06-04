@@ -53,9 +53,21 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res)
   res.json({ received: true });
 });
 
-// ── Fichiers statiques ──
+// ── Fichiers statiques avec cache ──
 app.use(express.json());
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname), {
+  maxAge: '7d',
+  setHeaders: (res, filePath) => {
+    // HTML jamais mis en cache (contenu dynamique)
+    if (filePath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    }
+    // CSS, JS, images → cache 7 jours
+    else if (/\.(css|js|png|jpg|jpeg|webp|svg|ico|woff2?)$/.test(filePath)) {
+      res.setHeader('Cache-Control', 'public, max-age=604800, immutable');
+    }
+  }
+}));
 
 // ── Fallback (toutes les routes HTML) ──
 app.get('*', (req, res) => {
