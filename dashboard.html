@@ -357,7 +357,7 @@
 
     // Bandeau abonnement
     const elAbo = document.getElementById('welcome-abo');
-    if (elAbo) elAbo.textContent = aboLabels[userAbonnement] || userAbonnement;
+    if (elAbo) elAbo.textContent = aboLabels[userAbonnement] || userAbonnement.replace(/_/g, ' ');
 
     // Bandeau prénom
     if (userPrenom) {
