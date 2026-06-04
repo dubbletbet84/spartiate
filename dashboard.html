@@ -276,77 +276,25 @@
     const userPrenom     = localStorage.getItem('user_prenom');
     let   userAbonnement = localStorage.getItem('user_abonnement') || 'aucun';
 
+    // Si pas connecté → login
     if (!userEmail) { window.location.href = 'login.html'; return; }
 
-    const LOCK_HTML = `
-      <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#F4F6FB;">
-        <div style="background:#fff;border:1px solid #E2E8F0;border-radius:16px;padding:3rem 2.5rem;max-width:440px;width:90%;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.08);">
-          <div style="font-size:3rem;margin-bottom:1rem;">🔒</div>
-          <h2 style="font-size:1.4rem;font-weight:900;color:#1D4ED8;margin-bottom:.6rem;">Abonnement requis</h2>
-          <p style="color:#64748B;font-size:.9rem;line-height:1.6;margin-bottom:1.5rem;">
-            Votre paiement n'a pas encore été confirmé.<br>
-            Complétez votre abonnement pour accéder au dashboard.
-          </p>
-          <a href="login.html" style="background:#CC1414;color:#fff;padding:.75rem 2rem;border-radius:8px;font-weight:700;text-decoration:none;display:inline-block;">
-            Choisir un abonnement →
-          </a>
-        </div>
-      </div>`;
+    // Affichage immédiat — connecté = accès direct
+    document.body.style.visibility = 'visible';
 
-    // Fallback sécurité : afficher la page après 4s max
-    setTimeout(() => { document.body.style.visibility = 'visible'; }, 4000);
-
-    // ── Vérification paiement ──
-    if (localStorage.getItem('paiement_ok') === '1') {
-      // Déjà vérifié → affichage immédiat
-      document.body.style.visibility = 'visible';
-    } else {
-      (async () => {
-        // Si Stripe vient de rediriger → activer le compte en DB
-        const stripePaid  = localStorage.getItem('stripe_paid') === '1';
-        const pendingPlan = localStorage.getItem('pending_plan') || 'spartiate_pro';
-
-        let paiementOk = false;
-
-        if (stripePaid) {
-          // Vient de payer → activer via RPC
-          const { error: updateErr } = await supa.rpc('activer_paiement', {
-            user_email: userEmail,
-            user_plan: pendingPlan
-          });
-          if (!updateErr) {
-            localStorage.removeItem('stripe_paid');
-            localStorage.removeItem('pending_plan');
-            localStorage.setItem('paiement_ok', '1');
-            localStorage.setItem('user_abonnement', pendingPlan);
-            userAbonnement = pendingPlan;
-            paiementOk = true;
-          }
-        }
-
-        if (!paiementOk) {
-          // Vérifier le statut en DB
-          const { data, error } = await supa
-            .from('clients')
-            .select('paiement, abonnement')
-            .eq('email', userEmail)
-            .single();
-
-          if (error || !data) { localStorage.clear(); window.location.href = 'login.html'; return; }
-
-          if (!data.paiement) {
-            document.body.style.visibility = 'visible';
-            document.body.innerHTML = LOCK_HTML;
-            return;
-          }
-
+    // Activation Stripe en arrière-plan si retour paiement
+    const stripePaid  = localStorage.getItem('stripe_paid') === '1';
+    const pendingPlan = localStorage.getItem('pending_plan') || 'groupe_gestion';
+    if (stripePaid) {
+      supa.rpc('activer_paiement', { user_email: userEmail, user_plan: pendingPlan }).then(({ error }) => {
+        if (!error) {
+          localStorage.removeItem('stripe_paid');
+          localStorage.removeItem('pending_plan');
           localStorage.setItem('paiement_ok', '1');
-          userAbonnement = data.abonnement || 'aucun';
-          localStorage.setItem('user_abonnement', userAbonnement);
+          localStorage.setItem('user_abonnement', pendingPlan);
+          userAbonnement = pendingPlan;
         }
-
-        document.body.style.visibility = 'visible';
-      })();
+      });
     }
 
     // ── Helpers ──
