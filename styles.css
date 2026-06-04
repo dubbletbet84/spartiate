@@ -767,12 +767,9 @@ nav.nav {
   border-bottom: 1px solid rgba(255,255,255,.07);
 }
 #mobile-menu nav a:hover { background: rgba(255,255,255,.1); }
-#mobile-menu nav a:last-child {
-  margin-top: 1rem;
-  background: var(--red);
-  text-align: center;
-  border-bottom: none;
-}
+#mobile-menu nav a:last-child { border-bottom: none; }
+#mobile-menu #mobile-logout { color: #FCA5A5; }
+#mobile-menu #mobile-logout:hover { background: rgba(239,68,68,.15); }
 
 /* ─── RESPONSIVE ──────────────────────────────────────── */
 /* ══════════════════════════════════════════
