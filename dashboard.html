@@ -277,10 +277,11 @@
     let   userAbonnement = localStorage.getItem('user_abonnement') || 'aucun';
 
     // Si pas connecté → login
-    if (!userEmail) { window.location.href = 'login.html'; return; }
-
-    // Affichage immédiat — connecté = accès direct
-    document.body.style.visibility = 'visible';
+    if (!userEmail) {
+      window.location.href = 'login.html';
+    } else {
+      // Affichage immédiat — connecté = accès direct
+      document.body.style.visibility = 'visible';
 
     // Activation Stripe en arrière-plan si retour paiement
     const stripePaid  = localStorage.getItem('stripe_paid') === '1';
@@ -296,6 +297,7 @@
         }
       });
     }
+    } // fin else connecté
 
     // ── Helpers ──
     const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
