@@ -37,7 +37,10 @@
   <link rel="preload" as="image" href="logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="dns-prefetch" href="//fonts.googleapis.com">
+  <!-- Font non-bloquante -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap"></noscript>
 
   <!-- ── FAVICON ── -->
   <link rel="icon"             type="image/png" sizes="32x32" href="favicon-32.png">
@@ -553,7 +556,7 @@
       if (el2) el2.textContent = taux + '%';
     })();
   </script>
-  <script src="js/auth-header.js"></script>
+  <script src="js/auth-header.js" defer></script>
   <script>
     function loadYT() {
       const facade = document.getElementById('yt-facade');
@@ -567,7 +570,7 @@
       facade.replaceWith(iframe);
     }
   </script>
-  <script src="js/mobile-menu.js"></script>
-  <script src="js/legal.js"></script>
+  <script src="js/mobile-menu.js" defer></script>
+  <script src="js/legal.js" defer></script>
 </body>
 </html>

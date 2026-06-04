@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap');
+/* Font chargée via <link> dans le HTML pour éviter le render-blocking */
 
 :root {
   --red:        #CC1414;

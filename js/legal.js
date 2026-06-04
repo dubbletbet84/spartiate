@@ -5,6 +5,11 @@
   const page = window.location.pathname;
   if (!page.endsWith('index.html') && page !== '/' && page !== '') return;
   if (localStorage.getItem('age_verified')) return;
+  // Différer après le rendu pour ne pas bloquer le LCP
+  if (document.readyState !== 'complete') {
+    window.addEventListener('load', ageGate);
+    return;
+  }
 
   const overlay = document.createElement('div');
   overlay.id = 'age-gate';
