@@ -380,19 +380,22 @@
     async function loadPronos() {
       const today = new Date().toISOString().slice(0,10);
       const grid  = document.getElementById('prono-grid');
-      const { data, error } = await supa.from('pronos').select('*').eq('date_match', today).eq('statut', 'en_attente');
-      if (error) {
-        grid.innerHTML = '<p style="color:var(--red);padding:1rem;">Erreur de chargement.</p>';
-        return;
-      }
 
-      // Filtrer par abonnement
-      const visibles = (data || []).filter(p => {
+      // Charger pronos en attente + résultats du jour depuis historique
+      const [{ data: pending }, { data: results }] = await Promise.all([
+        supa.from('pronos').select('*').eq('date_match', today).eq('statut', 'en_attente'),
+        supa.from('historique').select('*').eq('date_match', today)
+      ]);
+
+      // Filtrer pronos en attente par abonnement
+      const visibles = (pending || []).filter(p => {
         if (!p.abonnement_requis) return true;
         return p.abonnement_requis.split(',').includes(userAbonnement);
       });
 
-      if (!visibles.length) {
+      const finished = results || [];
+
+      if (!visibles.length && !finished.length) {
         grid.innerHTML = `<p style="color:var(--text-muted);padding:1rem;">
           ${userAbonnement === 'aucun'
             ? 'Vous n\'avez pas d\'abonnement actif. <a href="paiement.html" style="color:var(--red);font-weight:700;">S\'abonner →</a>'
@@ -401,13 +404,18 @@
         return;
       }
 
-      grid.innerHTML = visibles.map(p => {
+      const renderCard = (p, resultat = null) => {
         const equipes = p.match.split(/\s+[-—vs]+\s+/i);
         const eq1 = equipes[0] || p.match;
         const eq2 = equipes[1] || '';
         const icon = SPORT_ICON[p.sport] || '🏅';
+        const resultBadge = resultat === 'gagné'
+          ? `<span class="badge badge-won" style="margin-top:.7rem;display:inline-block;">✓ Gagné</span>`
+          : resultat === 'perdu'
+          ? `<span class="badge badge-lost" style="margin-top:.7rem;display:inline-block;">✗ Perdu</span>`
+          : '';
         return `
-        <div class="prono-card">
+        <div class="prono-card" style="${resultat ? 'opacity:.85;' : ''}">
           <div class="prono-header">
             <span class="prono-competition">${icon} ${p.sport}</span>
             <span class="prono-time" style="font-size:.78rem;color:var(--text-muted);">${p.mise ? 'Mise : '+p.mise : ''}</span>
@@ -425,11 +433,16 @@
               </div>
               <div class="pick-cote">Cote : ${esc(String(p.cote ?? '—'))}</div>
             </div>
-            <div style="margin-top:.9rem;">${CAT_BADGE[p.categorie] ?? ''}</div>
+            <div style="margin-top:.9rem;">${CAT_BADGE[p.categorie] ?? ''}${resultBadge}</div>
             ${p.notes ? `<p style="font-size:.82rem;color:var(--text-muted);margin-top:.7rem;line-height:1.6;">${esc(p.notes)}</p>` : ''}
           </div>
         </div>`;
-      }).join('');
+      };
+
+      grid.innerHTML = [
+        ...visibles.map(p => renderCard(p, null)),
+        ...finished.map(p => renderCard(p, p.resultat))
+      ].join('');
     }
 
     // ── Historique récent ──
