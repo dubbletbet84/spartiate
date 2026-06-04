@@ -36,6 +36,7 @@
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supa.js"></script>
+  <script src="js/crypto.js"></script>
 </head>
 <body>
 
@@ -292,11 +293,12 @@
 
       btn.disabled = true; btn.textContent = 'Connexion…';
 
+      const pwdHash = await hashPassword(pwd);
       const { data, error } = await supa
         .from('clients')
         .select('*')
         .eq('email', email)
-        .eq('mot_de_passe', pwd)
+        .eq('mot_de_passe', pwdHash)
         .single();
 
       btn.disabled = false; btn.textContent = 'Se connecter';
@@ -350,9 +352,10 @@
 
       btn.disabled = true; btn.textContent = 'Création du compte…';
 
+      const pwdHash = await hashPassword(pwd);
       const { error } = await supa.from('clients').insert([{
         prenom, nom, email,
-        mot_de_passe: pwd,
+        mot_de_passe: pwdHash,
         abonnement: 'aucun',
         paiement: false,
         created_at: new Date().toISOString(),
