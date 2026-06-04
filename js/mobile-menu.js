@@ -3,51 +3,60 @@
   const inner = document.querySelector('.header-inner');
   if (!inner) return;
 
-  // Créer le bouton hamburger
+  // Bouton hamburger
   const btn = document.createElement('button');
   btn.id = 'hamburger';
   btn.setAttribute('aria-label', 'Menu');
   btn.innerHTML = `<span></span><span></span><span></span>`;
   inner.appendChild(btn);
 
-  // Créer l'overlay menu
+  // Overlay sombre (clic pour fermer)
   const overlay = document.createElement('div');
-  overlay.id = 'mobile-menu';
-  overlay.innerHTML = `
+  overlay.id = 'mobile-overlay';
+  document.body.appendChild(overlay);
+
+  // Drawer latéral
+  const drawer = document.createElement('div');
+  drawer.id = 'mobile-menu';
+
+  const email  = localStorage.getItem('user_email');
+  const prenom = localStorage.getItem('user_prenom');
+  const authLink = email
+    ? `<a href="dashboard.html">👤 ${prenom || 'Mon Dashboard'}</a>`
+    : `<a href="login.html">Se Connecter</a>`;
+
+  drawer.innerHTML = `
     <nav>
       <a href="index.html">🏠 Accueil</a>
       <a href="historique.html">📊 Historique</a>
       <a href="affiliation.html">🤝 Partenaires</a>
       <a href="dashboard.html">⚡ Mon Dashboard</a>
-      <a href="login.html" id="mobile-auth-link">Se Connecter</a>
+      ${authLink}
     </nav>
   `;
-  document.body.appendChild(overlay);
+  document.body.appendChild(drawer);
 
-  // Si connecté → adapter le lien
-  const email = localStorage.getItem('user_email');
-  const prenom = localStorage.getItem('user_prenom');
-  if (email) {
-    const authLink = overlay.querySelector('#mobile-auth-link');
-    if (authLink) {
-      authLink.textContent = prenom ? '👤 ' + prenom : 'Mon Dashboard';
-      authLink.href = 'dashboard.html';
-    }
+  function openMenu() {
+    btn.classList.add('open');
+    drawer.classList.add('open');
+    overlay.classList.add('open');
   }
 
-  // Toggle menu
+  function closeMenu() {
+    btn.classList.remove('open');
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+  }
+
   btn.addEventListener('click', () => {
-    btn.classList.toggle('open');
-    overlay.classList.toggle('open');
-    document.body.classList.toggle('menu-open');
+    drawer.classList.contains('open') ? closeMenu() : openMenu();
   });
 
+  // Fermer en cliquant l'overlay
+  overlay.addEventListener('click', closeMenu);
+
   // Fermer en cliquant un lien
-  overlay.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      btn.classList.remove('open');
-      overlay.classList.remove('open');
-      document.body.classList.remove('menu-open');
-    });
+  drawer.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', closeMenu);
   });
 })();
