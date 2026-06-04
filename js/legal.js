@@ -1,9 +1,9 @@
 // ── Conformité légale France ──
 
-// ── 1. POPUP VÉRIFICATION D'ÂGE (premier accès) ──
+// ── 1. POPUP VÉRIFICATION D'ÂGE (page d'accueil uniquement) ──
 (function ageGate() {
-  // Ne pas afficher sur les pages protégées (body hidden = dashboard)
-  if (document.body.style.visibility === 'hidden') return;
+  const page = window.location.pathname;
+  if (!page.endsWith('index.html') && page !== '/' && page !== '') return;
   if (localStorage.getItem('age_verified')) return;
 
   const overlay = document.createElement('div');
