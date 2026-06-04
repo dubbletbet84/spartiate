@@ -2,6 +2,8 @@
 
 // ── 1. POPUP VÉRIFICATION D'ÂGE (premier accès) ──
 (function ageGate() {
+  // Ne pas afficher sur les pages protégées (body hidden = dashboard)
+  if (document.body.style.visibility === 'hidden') return;
   if (localStorage.getItem('age_verified')) return;
 
   const overlay = document.createElement('div');
