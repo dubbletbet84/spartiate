@@ -276,7 +276,7 @@
     const userPrenom     = localStorage.getItem('user_prenom');
     let   userAbonnement = localStorage.getItem('user_abonnement') || 'aucun';
 
-    if (!userEmail) { window.location.href = 'login.html'; }
+    if (!userEmail) { window.location.href = 'login.html'; return; }
 
     const LOCK_HTML = `
       <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#F4F6FB;">
@@ -292,6 +292,9 @@
           </a>
         </div>
       </div>`;
+
+    // Fallback sécurité : afficher la page après 4s max
+    setTimeout(() => { document.body.style.visibility = 'visible'; }, 4000);
 
     // ── Vérification paiement ──
     if (localStorage.getItem('paiement_ok') === '1') {
